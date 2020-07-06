@@ -22,12 +22,13 @@ export const ServiceStore = iRendererStore
     busying: false,
     checking: false,
     initializing: false,
+    schemaCached: false,
     schema: types.optional(types.frozen(), null),
     schemaKey: ''
   })
   .views(self => ({
     get loading() {
-      return self.fetching || self.saving || self.busying || self.initializing;
+      return (self.fetching || self.saving || self.busying || self.initializing) && !self.schemaCached;
     }
   }))
   .actions(self => {
@@ -361,6 +362,8 @@ export const ServiceStore = iRendererStore
               (~(api as ApiObject).url.indexOf('?') ? '&' : '?') +
               '_replace=1'
           };
+
+          self.schemaCached = !!(api as any).cache;
         }
 
         const json: Payload = yield (getRoot(self) as IRendererStore).fetcher(

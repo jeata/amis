@@ -33,6 +33,7 @@
 
   &--lg {
     min-height: 300px;
+    max-height: 50rem;
 
     > .#{$ns}MonacoEditor {
       min-height: 300px;
