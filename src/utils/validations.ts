@@ -103,6 +103,9 @@ export const validations: {
   equalsField: function (values, value, field) {
     return value == values[field];
   },
+  notEqualsField: function (values, value, field) {
+    return value != values[field];
+  },
   maxLength: function (values, value, length) {
     return !isExisty(value) || value.length <= length;
   },
@@ -241,6 +244,7 @@ export const validateMessages: {
   isLength: '请输入长度为 $1 的内容',
   notEmptyString: '请不要全输入空白字符',
   equalsField: '输入的数据与 $1 值不一致',
+  notEqualsField: '输入的数据与 $1 值一致',
   equals: '输入的数据与 $1 不一致',
   isPhoneNumber: '请输入合法的手机号码',
   isTelNumber: '请输入合法的电话号码',
