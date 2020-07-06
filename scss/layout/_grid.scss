@@ -157,3 +157,7 @@
 @include media-breakpoint-up(lg) {
   @include make-grid(lg);
 }
+
+@include media-breakpoint-up(xl) {
+  @include make-grid(xl);
+}

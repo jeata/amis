@@ -4,7 +4,7 @@ import {Schema} from '../types';
 import cx from 'classnames';
 import pick from 'lodash/pick';
 
-export const ColProps = ['lg', 'md', 'sm', 'xs'];
+export const ColProps = ['xl', 'lg', 'md', 'sm', 'xs'];
 
 export type Column = Schema & {
   xs?: number;
@@ -31,6 +31,12 @@ export type Column = Schema & {
   lgPull?: number;
   lgPush?: number;
 
+  xl?: number;
+  xlHidden?: boolean;
+  xlOffset?: number;
+  xlPull?: number;
+  xlPush?: number;
+
   mode?: string;
   horizontal?: any;
 };
@@ -50,7 +56,7 @@ export interface GridProps extends RendererProps {
 function fromBsClass(cn: string) {
   if (typeof cn === 'string' && cn) {
     return cn.replace(
-      /\bcol-(xs|sm|md|lg)-(\d+)\b/g,
+      /\bcol-(xs|sm|md|lg|xl)-(\d+)\b/g,
       (_, bp, size) => `Grid-col--${bp}${size}`
     );
   }
