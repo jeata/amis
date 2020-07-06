@@ -597,10 +597,10 @@ export class TreeSelector extends React.Component<
                       : this.handleSelect(item))
                   }
                 >
-                  <Icon
+                  { item[iconField]? null: <Icon
                     icon={childrenItems ? 'folder' : 'file'}
                     className="icon"
-                  />
+                  />}
                 </i>
               ) : null}
 
