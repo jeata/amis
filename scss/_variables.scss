@@ -599,7 +599,7 @@ $ResultBox-icon--onDisabled-color: #ebebeb !default;
 
 // ListMenu
 $ListMenu-bordrColor: $borderColor !default;
-$listMenu--onActive-borderColor: $info !default;
+$listMenu--onActive-borderColor: $borderColor !default;
 $ListMenu-borderWidth: px2rem(1px) !default;
 $ListMenu-borderRadius: px2rem(2px) !default;
 $ListMenu-item-height: px2rem(34px) !default;
@@ -651,7 +651,7 @@ $Form-input-borderRadius: $borderRadius !default;
 $Form-input-borderColor: $borderColor !default;
 $Form-input-borderWidth: px2rem(1px) !default;
 $Form-input-iconColor: $icon-color !default;
-$Form-input-onFocused-borderColor: $info !default;
+$Form-input-onFocused-borderColor: $borderColor !default;
 $Form-input-onFocused-bg: $Form-input-bg !default;
 $Form-input-onError-borderColor: $danger !default;
 $Form-input-onError-bg: $Form-input-bg !default;
@@ -1175,7 +1175,7 @@ $Combo-addBtn-paddingY: (
 
 $Combo--vertical-item-gap: px2rem(5px);
 $Combo--vertical-item-borderColor: $borderColor !default;
-$Combo--vertical-item-onHover-borderColor: $info !default;
+$Combo--vertical-item-onHover-borderColor: $borderColor !default;
 $Combo--vertical-item-borderWidth: $borderWidth !default;
 $Combo--vertical-item-borderRadius: $borderRadius !default;
 $Combo--vertical-item-paddingX: px2rem(10px) !default;
