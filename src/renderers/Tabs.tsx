@@ -3,6 +3,7 @@ import {Renderer, RendererProps} from '../factory';
 import {Action, Schema, SchemaNode} from '../types';
 import find from 'lodash/find';
 import {isVisible, autobind, isDisabled} from '../utils/helper';
+import {filter} from '../utils/tpl';
 import findIndex from 'lodash/findIndex';
 import {Tabs as CTabs, Tab} from '../components/Tabs';
 import {ClassNamesFn} from '../theme';
@@ -11,6 +12,7 @@ export interface TabProps extends Schema {
   title?: string; // 标题
   icon?: string;
   hash?: string; // 通过 hash 来控制当前选择
+  to?:string; // 链接
   tab?: Schema;
   className?: string;
   classnames: ClassNamesFn;
@@ -163,7 +165,7 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
 
   @autobind
   handleSelect(key: any) {
-    const {env} = this.props;
+    const {env, tabs, data} = this.props;
 
     // 是 hash，需要更新到地址栏
     if (typeof key === 'string' && env) {
@@ -176,6 +178,14 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
       activeKey: key,
       prevKey: this.state.activeKey
     });
+
+    // 如果数字查看，检查tab是否是链接
+    if (typeof key === 'number' && Array.isArray(tabs)) {
+      const tab =  tabs[key];
+      if (tab && tab.to) {
+        env.jumpTo(filter(tab.to, data));
+      }
+    }
   }
 
   @autobind
