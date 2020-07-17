@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/panel.json#",
+    "$id": "https://schema.jeata.com/v2/form/panel.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/panel.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/panel.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -32,44 +32,44 @@
             "description": "Panel 格式说明",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "actions": {
                     "items": {
-                        "$ref": "https://houtai.baidu.com/v2/schemas/action.json#"
+                        "$ref": "https://schema.jeata.com/v2/action.json#"
                     },
                     "type": "array"
                 },
                 "body": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/container",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/container",
                     "title": "页面内容区域"
                 },
                 "className": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                     "description": "配置容器 className"
                 },
                 "bodyClassName": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                     "description": "配置body容器 className"
                 },
                 "footer": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/container",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/container",
                     "description": "Footer 区域"
                 },
                 "header": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/container",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/container",
                     "title": "顶部内容区域，跟 title 二选一"
                 },
                 "tabs": {
                     "description": "tabs集合",
                     "items": {
-                        "$ref": "https://houtai.baidu.com/v2/schemas/form/tabs.json#/definitions/tab"
+                        "$ref": "https://schema.jeata.com/v2/form/tabs.json#/definitions/tab"
                     },
                     "type": "array"
                 },
                 "title": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/string",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/string",
                     "description": "Panel 标题"
                 },
                 "affixFooter": {

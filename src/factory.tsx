@@ -913,9 +913,9 @@ const defaultOptions: RenderOptions = {
     return Promise.reject('fetcher is required');
   },
   isCancel() {
-    console.error(
-      'Please implements this. see https://baidu.github.io/amis/docs/getting-started#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8'
-    );
+    // console.error(
+    //   'Please implements this. see https://baidu.github.io/amis/docs/getting-started#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8'
+    // );
     return false;
   },
   alert(msg: string) {

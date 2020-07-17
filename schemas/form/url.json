@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/url.json#",
+    "$id": "https://schema.jeata.com/v2/form/url.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/url.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/url.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -31,18 +31,18 @@
         "common": {
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/item"
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/item"
                 },
                 {
                     "properties": {
                         "$ref": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                             "description": "引用页面中的定义"
                         },
                         "addOn": {
                             "allOf": [
                                 {
-                                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/baseAction"
+                                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/baseAction"
                                 },
                                 {
                                     "properties": {
@@ -100,15 +100,15 @@
                             "type": "string"
                         },
                         "source": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/api",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/api",
                             "description": "可用来通过 API 拉取 options。详情：https://baidu.github.io/amis/docs/api#formitem，也可以从当前作用域拉取数据 $typeOptions"
                         },
                         "autoComplete": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/api",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/api",
                             "description": "跟 source 不同的是，每次用户输入都会去接口获取提示，请不要跟 source 同时使用。"
                         },
                         "options": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/optionsType",
+                            "$ref": "https://schema.jeata.com/v2/form.json#/definitions/optionsType",
                             "description": "选项集合"
                         },
                         "multiple": {

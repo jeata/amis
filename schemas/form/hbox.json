@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/hbox.json#",
+    "$id": "https://schema.jeata.com/v2/form/hbox.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/text.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/text.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -33,14 +33,14 @@
                 {
                     "oneOf": [
                         {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/subRenderer"
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/subRenderer"
                         },
 
                         {
                             "type": "object",
                             "properties": {
                                 "controls": {
-                                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/controls",
+                                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/controls",
                                     "description": "FormItem 集合"
                                 }
                             }
@@ -48,7 +48,7 @@
                     ]
                 },
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/grid.json#/definitions/commonColumn"
+                    "$ref": "https://schema.jeata.com/v2/grid.json#/definitions/commonColumn"
                 }
             ],
             "description": "列"
@@ -56,7 +56,7 @@
         "columns": {
             "description": "列集合",
             "items": {
-                "$ref": "https://houtai.baidu.com/v2/schemas/form/hbox.json#/definitions/column"
+                "$ref": "https://schema.jeata.com/v2/form/hbox.json#/definitions/column"
             },
             "type": "array"
         },
@@ -64,16 +64,16 @@
             "description": "HBox 格式说明",
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/item"
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/item"
                 },
                 {
                     "properties": {
                         "$ref": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                             "description": "引用页面中的定义"
                         },
                         "columns": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/form/hbox.json#/definitions/columns",
+                            "$ref": "https://schema.jeata.com/v2/form/hbox.json#/definitions/columns",
                             "description": "列集合"
                         },
                         "gap": {

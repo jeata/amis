@@ -1,14 +1,14 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/button.json#",
+    "$id": "https://schema.jeata.com/v2/form/button.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/button.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/button.json#/definitions/common"
         },
         {
             "additionalProperties": false,
             "patternProperties": {
-                "^(\\$ref|icon|size|level|iconOnly|href|action|tooltip|tooltipPlacement|disabledTip|actionType|api|target|reload|url|link|dialog|drawer|content|feedback|confirmText|blank|nextCondition|name|value|placeholder|label|remark|labelRemark|desc|description|className|inputClassName|labelClassName|descriptionClassName|disabled|disabledOn|visible|visibleOn|hidden|hiddenOn|required)$": {}
+                "^(\\$ref|icon|size|level|iconOnly|href|action|tooltip|tooltipPlacement|disabledTip|actionType|api|target|reload|url|link|dialog|drawer|content|feedback|confirmText|blank|nextCondition|name|value|placeholder|label|remark|labelRemark|desc|description|className|inputClassName|labelClassName|descriptionClassName|disabled|disabledOn|visible|visibleOn|hidden|hiddenOn|required|autoVisible|autoDisable)$": {}
             },
             "properties": {
                 "$schema": {
@@ -32,15 +32,15 @@
             "description": "按钮格式说明",
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/item"
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/item"
                 },
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/baseAction"
+                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/baseAction"
                 },
                 {
                     "properties": {
                         "$ref": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                             "description": "引用页面中的定义"
                         },
                         "icon": {
@@ -99,6 +99,15 @@
                                 "bottom"
                             ],
                             "type": "string"
+                        },
+                        "autoVisible": {
+                            "description": "API无权限时隐藏",
+                            "type": "boolean"
+                        },
+                        "autoDisable": {
+                            "description": "API无权限时禁用",
+                            "default": true,
+                            "type": "boolean"
                         }
                     },
                     "type": "object"

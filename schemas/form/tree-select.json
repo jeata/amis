@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/tree-select.json#",
+    "$id": "https://schema.jeata.com/v2/form/tree-select.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/tree.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/tree.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -32,12 +32,12 @@
             "description": "TreeSelect 格式说明",
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/item"
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/item"
                 },
                 {
                     "properties": {
                         "$ref": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                             "description": "引用页面中的定义"
                         },
                         "hideRoot": {
@@ -68,11 +68,11 @@
                             "type": "string"
                         },
                         "source": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/api",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/api",
                             "description": "可用来通过 API 拉取 options。详情：https://baidu.github.io/amis/docs/api#formitem"
                         },
                         "options": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/nestedOptionsType",
+                            "$ref": "https://schema.jeata.com/v2/form.json#/definitions/nestedOptionsType",
                             "description": "选项集合"
                         },
                         "cascade": {

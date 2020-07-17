@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/table.json#",
+    "$id": "https://schema.jeata.com/v2/table.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/table.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/table.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -35,90 +35,90 @@
                 "allOf": [
                     {
                         "if": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/tpl.json#/definitions/test"
+                            "$ref": "https://schema.jeata.com/v2/tpl.json#/definitions/test"
                         },
                         "then": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/tpl.json#/definitions/common"
+                            "$ref": "https://schema.jeata.com/v2/tpl.json#/definitions/common"
                         },
                         "else": {
                             "if": {
-                                "$ref": "https://houtai.baidu.com/v2/schemas/image.json#/definitions/test"
+                                "$ref": "https://schema.jeata.com/v2/image.json#/definitions/test"
                             },
                             "then": {
-                                "$ref": "https://houtai.baidu.com/v2/schemas/image.json#/definitions/common"
+                                "$ref": "https://schema.jeata.com/v2/image.json#/definitions/common"
                             },
                             "else": {
                                 "if": {
-                                    "$ref": "https://houtai.baidu.com/v2/schemas/date.json#/definitions/test"
+                                    "$ref": "https://schema.jeata.com/v2/date.json#/definitions/test"
                                 },
                                 "then": {
-                                    "$ref": "https://houtai.baidu.com/v2/schemas/date.json#/definitions/common"
+                                    "$ref": "https://schema.jeata.com/v2/date.json#/definitions/common"
                                 },
                                 "else": {
                                     "if": {
-                                        "$ref": "https://houtai.baidu.com/v2/schemas/status.json#/definitions/test"
+                                        "$ref": "https://schema.jeata.com/v2/status.json#/definitions/test"
                                     },
                                     "then": {
-                                        "$ref": "https://houtai.baidu.com/v2/schemas/status.json#/definitions/common"
+                                        "$ref": "https://schema.jeata.com/v2/status.json#/definitions/common"
                                     },
                                     "else": {
                                         "if": {
-                                            "$ref": "https://houtai.baidu.com/v2/schemas/mapping.json#/definitions/test"
+                                            "$ref": "https://schema.jeata.com/v2/mapping.json#/definitions/test"
                                         },
                                         "then": {
-                                            "$ref": "https://houtai.baidu.com/v2/schemas/mapping.json#/definitions/common"
+                                            "$ref": "https://schema.jeata.com/v2/mapping.json#/definitions/common"
                                         },
                                         "else": {
                                             "if": {
-                                                "$ref": "https://houtai.baidu.com/v2/schemas/progress.json#/definitions/test"
+                                                "$ref": "https://schema.jeata.com/v2/progress.json#/definitions/test"
                                             },
                                             "then": {
-                                                "$ref": "https://houtai.baidu.com/v2/schemas/progress.json#/definitions/common"
+                                                "$ref": "https://schema.jeata.com/v2/progress.json#/definitions/common"
                                             },
                                             "else": {
                                                 "if": {
-                                                    "$ref": "https://houtai.baidu.com/v2/schemas/switch.json#/definitions/test"
+                                                    "$ref": "https://schema.jeata.com/v2/switch.json#/definitions/test"
                                                 },
                                                 "then": {
-                                                    "$ref": "https://houtai.baidu.com/v2/schemas/switch.json#/definitions/common"
+                                                    "$ref": "https://schema.jeata.com/v2/switch.json#/definitions/common"
                                                 },
                                                 "else": {
                                                     "if": {
-                                                        "$ref": "https://houtai.baidu.com/v2/schemas/hbox.json#/definitions/test"
+                                                        "$ref": "https://schema.jeata.com/v2/hbox.json#/definitions/test"
                                                     },
                                                     "then": {
-                                                        "$ref": "https://houtai.baidu.com/v2/schemas/hbox.json#/definitions/common"
+                                                        "$ref": "https://schema.jeata.com/v2/hbox.json#/definitions/common"
                                                     },
                                                     "else": {
                                                         "if": {
-                                                            "$ref": "https://houtai.baidu.com/v2/schemas/grid.json#/definitions/test"
+                                                            "$ref": "https://schema.jeata.com/v2/grid.json#/definitions/test"
                                                         },
                                                         "then": {
-                                                            "$ref": "https://houtai.baidu.com/v2/schemas/grid.json#/definitions/common"
+                                                            "$ref": "https://schema.jeata.com/v2/grid.json#/definitions/common"
                                                         },
                                                         "else": {
                                                             "if": {
-                                                                "$ref": "https://houtai.baidu.com/v2/schemas/json.json#/definitions/test"
+                                                                "$ref": "https://schema.jeata.com/v2/json.json#/definitions/test"
                                                             },
                                                             "then": {
-                                                                "$ref": "https://houtai.baidu.com/v2/schemas/json.json#/definitions/common"
+                                                                "$ref": "https://schema.jeata.com/v2/json.json#/definitions/common"
                                                             },
                                                             "else": {
                                                                 "if": {
-                                                                    "$ref": "https://houtai.baidu.com/v2/schemas/list.json#/definitions/test"
+                                                                    "$ref": "https://schema.jeata.com/v2/list.json#/definitions/test"
                                                                 },
                                                                 "then": {
-                                                                    "$ref": "https://houtai.baidu.com/v2/schemas/list.json#/definitions/common"
+                                                                    "$ref": "https://schema.jeata.com/v2/list.json#/definitions/common"
                                                                 },
                                                                 "else": {
                                                                     "if": {
-                                                                        "$ref": "https://houtai.baidu.com/v2/schemas/operation.json#/definitions/test"
+                                                                        "$ref": "https://schema.jeata.com/v2/operation.json#/definitions/test"
                                                                     },
                                                                     "then": {
-                                                                        "$ref": "https://houtai.baidu.com/v2/schemas/operation.json#/definitions/common"
+                                                                        "$ref": "https://schema.jeata.com/v2/operation.json#/definitions/common"
                                                                     },
                                                                     "else": {
-                                                                        "$ref": "https://houtai.baidu.com/v2/schemas/plain.json#/definitions/common"
+                                                                        "$ref": "https://schema.jeata.com/v2/plain.json#/definitions/common"
                                                                     }
                                                                 }
                                                             }
@@ -221,7 +221,7 @@
             "description": "AMis table 渲染器格式说明。",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "affixHeader": {
@@ -234,7 +234,7 @@
                     "type": "string"
                 },
                 "columns": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/table.json#/definitions/columns"
+                    "$ref": "https://schema.jeata.com/v2/table.json#/definitions/columns"
                 },
                 "columnsTogglable": {
                     "description": "展示列显示开关，自动即：列数量大于或等于5个时自动开启",

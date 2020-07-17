@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/fieldSet.json#",
+    "$id": "https://schema.jeata.com/v2/form/fieldSet.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/fieldSet.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/fieldSet.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -32,15 +32,15 @@
             "description": "AMis FieldSet 渲染器格式说明",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "body": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/container",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/container",
                     "title": "内容区域"
                 },
                 "className": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                     "description": "配置容器 fieldSet className"
                 },
                 "collapsable": {
@@ -53,11 +53,11 @@
                     "type": "boolean"
                 },
                 "controls": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/controls",
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/controls",
                     "description": "FormItem 集合"
                 },
                 "hiddenOn": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/expression",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/expression",
                     "description": "通过 JS 表达式来配置当前表单项是否隐藏。"
                 },
                 "hidden": {
@@ -69,7 +69,7 @@
                     "type": "string"
                 },
                 "visibleOn": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/expression",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/expression",
                     "description": "通过 JS 表达式来配置当前表单项是否显示"
                 },
                 "visible": {

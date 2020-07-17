@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/audio.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/audio.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -32,11 +32,11 @@
             "description": "AMis Audio 渲染器，用来生成音频播放器",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "className": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                     "description": "配置容器 className"
                 },
                 "inline": {
@@ -87,6 +87,6 @@
         }
     },
     "description": "AMis Audio 渲染器，用来生成视频播放器",
-    "id": "https://houtai.baidu.com/v2/schemas/audio.json#",
+    "id": "https://schema.jeata.com/v2/audio.json#",
     "type": "object"
 }

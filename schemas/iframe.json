@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/iframe.json#",
+    "$id": "https://schema.jeata.com/v2/iframe.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/iframe.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/iframe.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -33,7 +33,7 @@
             "description": "AMis iframe 渲染器，格式说明。https://baidu.github.io/amis/docs/renderers#iframe",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "src": {
@@ -66,7 +66,7 @@
                     "description": "样式表"
                 },
                 "className": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                     "description": "配置容器 className"
                 }
             }

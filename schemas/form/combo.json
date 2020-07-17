@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/combo.json#",
+    "$id": "https://schema.jeata.com/v2/form/combo.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/combo.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/combo.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -32,12 +32,12 @@
             "description": "数组输入框框格式说明",
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/item"
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/item"
                 },
                 {
                     "properties": {
                         "$ref": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                             "description": "引用页面中的定义"
                         },
                         "scaffold": {
@@ -62,7 +62,7 @@
                             "type": "string"
                         },
                         "deleteApi": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/api",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/api",
                             "description": "删除时调用的api"
                         },
                         "typeSwitchable": {
@@ -94,7 +94,7 @@
                         "controls": {
                             "description": "数组输入框的子项",
                             "items": {
-                                "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/controlItem"
+                                "$ref": "https://schema.jeata.com/v2/form.json#/definitions/controlItem"
                             },
                             "type": "array"
                         },

@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/button-group.json#",
+    "$id": "https://schema.jeata.com/v2/form/button-group.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/button-group.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/button-group.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -29,37 +29,37 @@
             "description": "按钮组格式说明",
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/item"
+                    "$ref": "https://schema.jeata.com/v2/form.json#/definitions/item"
                 },
                 {
                     "properties": {
                         "$ref": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                             "description": "引用页面中的定义"
                         },
                         "source": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/api",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/api",
                             "description": "获取选项的接口"
                         },
                         "btnActiveClassName": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                             "default": "btn-default active",
                             "description": "配置选中按钮 className"
                         },
                         "btnClassName": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                             "default": "btn-default",
                             "description": "配置按钮 className"
                         },
                         "buttons": {
                             "description": "按钮集合",
                             "items": {
-                                "$ref": "https://houtai.baidu.com/v2/schemas/action.json#"
+                                "$ref": "https://schema.jeata.com/v2/action.json#"
                             },
                             "type": "array"
                         },
                         "className": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                            "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                             "description": "配置 dom className"
                         },
                         "clearable": {
@@ -68,7 +68,7 @@
                             "type": "boolean"
                         },
                         "options": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/form.json#/definitions/optionsType",
+                            "$ref": "https://schema.jeata.com/v2/form.json#/definitions/optionsType",
                             "description": "选项集合"
                         },
                         "multiple": {

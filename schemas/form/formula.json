@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/form/formula.json#",
+    "$id": "https://schema.jeata.com/v2/form/formula.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/form/formula.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/form/formula.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -32,7 +32,7 @@
             "description": "隐藏域格式说明",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "id": {

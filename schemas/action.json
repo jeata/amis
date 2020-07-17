@@ -1,9 +1,9 @@
 {
-    "$id": "https://houtai.baidu.com/v2/schemas/action.json#",
+    "$id": "https://schema.jeata.com/v2/action.json#",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "allOf": [
         {
-            "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/common"
+            "$ref": "https://schema.jeata.com/v2/action.json#/definitions/common"
         },
         {
             "additionalProperties": false,
@@ -37,10 +37,10 @@
             "description": "AMis Action 渲染器，格式说明。https://baidu.github.io/amis/docs/renderers#action",
             "allOf": [
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/baseButton"
+                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/baseButton"
                 },
                 {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/baseAction"
+                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/baseAction"
                 }
             ]
         },
@@ -48,7 +48,7 @@
             "description": "当前 Action 为 ajax 类型，用来发送 ajax 请求。",
             "properties": {
                 "$ref": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/$ref",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/$ref",
                     "description": "引用页面中的定义"
                 },
                 "actionType": {
@@ -59,7 +59,7 @@
                     "type": "string"
                 },
                 "api": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/api",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/api",
                     "description": "当按钮为 ajax 类型时，用来配置 ajax 发送得目标地址"
                 },
                 "confirmText": {
@@ -67,7 +67,7 @@
                     "type": "string"
                 },
                 "feedback": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/dialog.json",
+                    "$ref": "https://schema.jeata.com/v2/dialog.json",
                     "description": "配置 action 结束后的反馈行为。通过配置此属性，可以自动弹出一个 dialog 继续操作。"
                 },
                 "optimistic": {
@@ -94,7 +94,7 @@
                 }
             },
             "then": {
-                "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/ajaxAction"
+                "$ref": "https://schema.jeata.com/v2/action.json#/definitions/ajaxAction"
             },
             "else": {
                 "if": {
@@ -105,7 +105,7 @@
                     }
                 },
                 "then": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/urlAction"
+                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/urlAction"
                 },
                 "else": {
                     "if": {
@@ -116,7 +116,7 @@
                         }
                     },
                     "then": {
-                        "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/dialogAction"
+                        "$ref": "https://schema.jeata.com/v2/action.json#/definitions/dialogAction"
                     },
                     "else": {
                         "if": {
@@ -127,7 +127,7 @@
                             }
                         },
                         "then": {
-                            "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/drawerAction"
+                            "$ref": "https://schema.jeata.com/v2/action.json#/definitions/drawerAction"
                         },
                         "else": {
                             "if": {
@@ -138,7 +138,7 @@
                                 }
                             },
                             "then": {
-                                "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/copyAction"
+                                "$ref": "https://schema.jeata.com/v2/action.json#/definitions/copyAction"
                             },
                             "else": {
                                 "if": {
@@ -149,10 +149,10 @@
                                     }
                                 },
                                 "then": {
-                                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/reloadAction"
+                                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/reloadAction"
                                 },
                                 "else": {
-                                    "$ref": "https://houtai.baidu.com/v2/schemas/action.json#/definitions/otherAction"
+                                    "$ref": "https://schema.jeata.com/v2/action.json#/definitions/otherAction"
                                 }
                             }
                         }
@@ -168,7 +168,7 @@
                     "type": "boolean"
                 },
                 "className": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/className",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/className",
                     "description": "配置容器 className"
                 },
                 "disabled": {
@@ -176,7 +176,7 @@
                     "type": "boolean"
                 },
                 "disabledOn": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/expression",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/expression",
                     "description": "通过 JS 表达式来配置当前表单项的禁用状态。"
                 },
                 "hidden": {
@@ -184,7 +184,7 @@
                     "description": "设置是否隐藏"
                 },
                 "hiddenOn": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/expression",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/expression",
                     "description": "通过 JS 表达式来配置当前表单项是否隐藏。"
                 },
                 "icon": {
@@ -256,7 +256,7 @@
                     "description": "设置是否显示"
                 },
                 "visibleOn": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/expression",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/expression",
                     "description": "通过 JS 表达式来配置当前表单项是否显示"
                 }
             },
@@ -299,7 +299,7 @@
                     "type": "string"
                 },
                 "copy": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/page.json#/definitions/tpl",
+                    "$ref": "https://schema.jeata.com/v2/page.json#/definitions/tpl",
                     "description": "copy 到剪切板的内容"
                 }
             },
@@ -320,7 +320,7 @@
                     "type": "string"
                 },
                 "dialog": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/dialog.json#/definitions/common",
+                    "$ref": "https://schema.jeata.com/v2/dialog.json#/definitions/common",
                     "description": "dialog的展示schema"
                 },
                 "nextCondition": {
@@ -349,7 +349,7 @@
                     "type": "string"
                 },
                 "drawer": {
-                    "$ref": "https://houtai.baidu.com/v2/schemas/drawer.json#/definitions/common",
+                    "$ref": "https://schema.jeata.com/v2/drawer.json#/definitions/common",
                     "description": "drawer的展示schema"
                 },
                 "nextCondition": {
