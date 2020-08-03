@@ -1128,7 +1128,7 @@ $ListControl-item-onHover-borderColor: darken(
 $ListControl-item-onHover-bg: darken($ListControl-item-bg, 7.5%) !default;
 $ListControl-item-onHover-color: $ListControl-item-color !default;
 
-$ListControl-item-onActive-bg: $primary !default;
+$ListControl-item-onActive-bg: $info !default;
 $ListControl-item-onActive-borderColor: darken(
   $ListControl-item-onActive-bg,
   10%

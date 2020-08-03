@@ -20,6 +20,7 @@ export interface ChartProps extends RendererProps {
   api?: Api;
   source?: string;
   config?: object;
+  chartTheme?: string;
   initFetch?: boolean;
   store: IServiceStore;
   clickAction?: Action;
@@ -99,7 +100,7 @@ export class Chart extends React.Component<ChartProps> {
   }
 
   refFn(ref: any) {
-    const chartRef = this.props.chartRef;
+    const {chartRef, chartTheme} = this.props;
     if (ref) {
       (require as any)(
         [
@@ -107,12 +108,13 @@ export class Chart extends React.Component<ChartProps> {
           'echarts/extension/dataTool',
           'echarts/extension/bmap/bmap',
           'echarts/map/js/china',
-          'echarts/map/js/world'
+          'echarts/map/js/world',
+          'echarts/theme/macarons'
         ],
         (echarts: any, dataTool: any) => {
           (window as any).echarts = echarts;
           echarts.dataTool = dataTool;
-          this.echarts = echarts.init(ref);
+          this.echarts = echarts.init(ref, (chartTheme)?chartTheme:'macarons');
           this.echarts.on('click', this.handleClick);
           this.unSensor = resizeSensor(ref, () => {
             const width = ref.offsetWidth;

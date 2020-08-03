@@ -40,6 +40,12 @@
       margin-left: $ButtonGroup-divider-width;
     }
   }
+
+
+  .#{$ns}Button--primary:not(:disabled):not(.is-disabled):active, .#{$ns}Button--primary:not(:disabled):not(.is-disabled).is-active {
+    background-color: $info;
+    border-color: $info;
+  }
 }
 
 .#{$ns}ButtonToolbar {
