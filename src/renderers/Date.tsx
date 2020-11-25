@@ -1,6 +1,7 @@
 import React from 'react';
 import {Renderer, RendererProps} from '../factory';
 import moment from 'moment';
+import {filter} from "..";
 
 export interface DateProps extends RendererProps {
   className?: string;
@@ -56,15 +57,17 @@ export class DateField extends React.Component<DateProps, DateState> {
       fromNow,
       className,
       classnames: cx,
-      translate: __
+      translate: __,
+      data,
     } = this.props;
     let viewValue: React.ReactNode = (
       <span className="text-muted">{placeholder}</span>
     );
 
     if (value) {
-      let ISODate = moment(value, moment.ISO_8601);
-      let NormalDate = moment(value, valueFormat);
+      let v = (typeof value == 'string')?filter(value, data):value;
+      let ISODate = moment(v, moment.ISO_8601);
+      let NormalDate = moment(v, valueFormat);
 
       viewValue = ISODate.isValid()
         ? ISODate.format(format)

@@ -48,6 +48,7 @@ export interface ActionProps {
   actionType?: string;
   label?: string;
   icon?: string;
+  btnLabel?: string;
   iconClassName?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   level?: 'info' | 'success' | 'warning' | 'danger' | 'link';
@@ -106,6 +107,7 @@ export class Action extends React.Component<ActionProps> {
     const {
       type,
       label,
+      btnLabel,
       icon,
       iconClassName,
       primary,
@@ -169,8 +171,9 @@ export class Action extends React.Component<ActionProps> {
         block={block}
         iconOnly={!!(icon && !label && level !== 'link')}
       >
-        {label ? <span>{filter(label, data)}</span> : null}
-        {icon ? <i className={cx('Button-icon', icon, iconClassName)} /> : null}
+        {!btnLabel && label ? <span>{filter(label, data)}</span> : null}
+        {btnLabel ? <span>{filter(btnLabel, data)}</span> : null}
+        {icon ? <i className={cx('Button-icon', filter(icon, data), iconClassName)} /> : null}
       </Button>
     );
   }

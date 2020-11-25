@@ -20,14 +20,14 @@ export class MappingField extends React.Component<MappingProps, object> {
   };
 
   render() {
-    const {className, placeholder, map, render, classnames: cx} = this.props;
+    const {className, placeholder, map, render, classnames: cx, data} = this.props;
     let key = this.props.value;
 
     let viewValue: React.ReactNode = (
       <span className="text-muted">{placeholder}</span>
     );
 
-    key = typeof key === 'string' ? key.trim() : key; // trim 一下，干掉一些空白字符。
+    key = typeof key === 'string' ? filter(key.trim(), data) : key; // trim 一下，干掉一些空白字符。
 
     if (typeof key !== 'undefined' && map && (map[key] ?? map['*'])) {
       viewValue = render(

@@ -98,8 +98,8 @@ export function getNameFromUrl(url: string) {
 
 export default class FileControl extends React.Component<FileProps, FileState> {
   static defaultProps: Partial<FileProps> = {
-    maxSize: 0,
-    maxLength: 0,
+    maxSize: 10240,
+    maxLength: 5,
     placeholder: '',
     btnLabel: '文件上传',
     reciever: '/api/upload/file',
@@ -108,7 +108,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
     extractValue: false,
     delimiter: ',',
     downloadUrl: '', // '/api/file/'
-    useChunk: 'auto',
+    useChunk: false,
     chunkSize: 5 * 1024 * 1024, // 文件大于5M， 自动分块上传
     startChunkApi: '/api/upload/startChunk',
     chunkApi: '/api/upload/chunk',

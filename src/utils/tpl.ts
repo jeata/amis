@@ -67,7 +67,7 @@ export function evalExpression(expression: string, data?: object): boolean {
     const fn = new Function(
       'data',
       'utils',
-      `with(data) {${debug ? 'debugger;' : ''}return !!(${expression});}`
+      `with(data) {var window, document, top, self, parent, postMessage, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB;${debug ? 'debugger;' : ''}return !!(${expression});}`
     );
     data = data || {};
     return fn.call(data, data, getFilters());
@@ -94,7 +94,7 @@ export function evalJS(js: string, data: object): any {
     const fn = new Function(
       'data',
       'utils',
-      `with(data) {${/^\s*return\b/.test(js) ? '' : 'return '}${js};}`
+      `with(data) {var window, document, top, self, parent, postMessage, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB;${/^\s*return\b/.test(js) ? '' : 'return '}${js};}`
     );
     data = data || {};
     return fn.call(data, data, getFilters());
