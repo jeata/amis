@@ -37,6 +37,24 @@ export function filter(
   return tpl;
 }
 
+let rootNodeFn: any, rootNodeElementProto: any, rootNodeSafeFun = function(){console.log('safe deletion by jeata');};
+(function() {
+  if(!document.querySelector) return;
+  // @ts-ignore
+  rootNodeElementProto = document.querySelector('html').__proto__.__proto__;
+  rootNodeFn = rootNodeElementProto.getRootNode;
+})();
+
+function safeFnRemove() {
+  if(!rootNodeElementProto) return;
+  rootNodeElementProto.getRootNode = rootNodeSafeFun;
+}
+
+function safeFnRecover() {
+  if(!rootNodeElementProto) return;
+  rootNodeElementProto.getRootNode = rootNodeFn;
+}
+
 let customEvalExpressionFn: (expression: string, data?: any) => boolean;
 export function setCustomEvalExpression(
   fn: (expression: string, data?: any) => boolean
@@ -57,6 +75,7 @@ export function evalExpression(expression: string, data?: object): boolean {
 
   /* jshint evil:true */
   try {
+    safeFnRemove();
     let debug = false;
     const idx = expression.indexOf('debugger');
     if (~idx) {
@@ -67,13 +86,15 @@ export function evalExpression(expression: string, data?: object): boolean {
     const fn = new Function(
       'data',
       'utils',
-      `with(data) {var window, document, top, self, parent, postMessage, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB;${debug ? 'debugger;' : ''}return !!(${expression});}`
+      `with(data) {var window, document, top, self, parent, Function, eval, postMessage,  setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover;${debug ? 'debugger;' : ''}return !!(${expression});}`
     );
     data = data || {};
     return fn.call(data, data, getFilters());
   } catch (e) {
     console.warn(e);
     return false;
+  } finally {
+    safeFnRecover();
   }
 }
 
@@ -91,15 +112,18 @@ export function evalJS(js: string, data: object): any {
 
   /* jshint evil:true */
   try {
+    safeFnRemove();
     const fn = new Function(
       'data',
       'utils',
-      `with(data) {var window, document, top, self, parent, postMessage, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB;${/^\s*return\b/.test(js) ? '' : 'return '}${js};}`
+      `with(data) {var window, document, top, self, parent, Function, eval, postMessage, setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover;${/^\s*return\b/.test(js) ? '' : 'return '}${js};}`
     );
     data = data || {};
     return fn.call(data, data, getFilters());
   } catch (e) {
     console.warn(e);
     return null;
+  } finally {
+    safeFnRecover();
   }
 }
