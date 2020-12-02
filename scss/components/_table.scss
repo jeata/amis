@@ -13,26 +13,46 @@
   &-fixedRight {
     position: absolute;
     background: $Table-bg;
-    z-index: 5;
-    top: -999999px;
-
-    &.in {
-      top: auto;
-    }
+    z-index: $Table-fixed-zIndex;
+    top: auto;
+    box-shadow: none;
   }
 
   &-fixedLeft {
-    box-shadow: $Table-fixedLeft-boxShadow;
     left: 0;
+
+    &.in {
+      box-shadow: $Table-fixedLeft-boxShadow;
+    }
+
+    & > .#{$ns}Table-table {
+      > thead > tr > th:last-child,
+      > tbody > tr > td:last-child {
+        padding-right: $TableCell-paddingX;
+      }
+
+      // > thead > tr > th:last-child {
+      //   border-right: $Table-thead-borderWidth solid $Table-thead-borderColor;
+      // }
+    }
   }
 
   &-fixedRight {
-    box-shadow: $Table-fixedRight-boxShadow;
     right: 0;
 
-    .#{$ns}Table-table > thead > tr > th:first-child,
-    .#{$ns}Table-table > tbody > tr > td:first-child {
-      padding-left: $TableCell-paddingX;
+    &.in {
+      box-shadow: $Table-fixedRight-boxShadow;
+    }
+
+    & > .#{$ns}Table-table {
+      > thead > tr > th:first-child,
+      > tbody > tr > td:first-child {
+        padding-left: $TableCell-paddingX;
+      }
+
+      // > thead > tr > th:first-child {
+      //   border-left: $Table-thead-borderWidth solid $Table-thead-borderColor;
+      // }
     }
   }
 
@@ -173,7 +193,7 @@
 
   &-table {
     width: 100%;
-    max-width: 100%;
+    min-width: 100%;
     margin-bottom: 0;
     font-size: $Table-fontSize;
     color: $Table-color;
@@ -243,10 +263,10 @@
         font-weight: $fontWeightNormal;
         white-space: nowrap;
 
-        .#{$ns}TableCell--title {
-          display: flex;
-          align-items: center;
-        }
+        // .#{$ns}TableCell--title {
+        //   display: flex;
+        //   align-items: center;
+        // }
         .#{$ns}Remark {
           margin-left: $gap-xs;
         }
@@ -270,6 +290,7 @@
       }
 
       > th {
+        text-align: left;
         background-color: $Table-thead-bg;
         // font-size: $Table-thead-fontSize;
         color: $Table-thead-color;
@@ -438,6 +459,7 @@
     > tbody > tr > td.#{$ns}Table-checkCell {
       border-right: 0;
       width: px2rem(1px);
+      padding-right: $TableCell-paddingX;
 
       .#{$ns}Checkbox {
         margin: 0;
@@ -549,8 +571,14 @@
       &.is-active {
         color: $text--muted-color;
         &:hover {
-          color: $icon-onHover-color;
+          color: $text-color;
         }
+      }
+    }
+    &--up,
+    &--down {
+      &.is-active {
+        color: $TableCell-sortBtn--onActive-color;
       }
     }
   }
@@ -571,6 +599,9 @@
 
     &:hover {
       color: $text-color;
+    }
+    &.is-active {
+      color: $TableCell-searchBtn--onActive-color;
     }
   }
 
@@ -600,6 +631,10 @@
 
     &:hover {
       color: $text-color;
+    }
+
+    &.is-active {
+      color: $TableCell-filterBtn--onActive-color;
     }
 
     .#{$ns}Remark {
@@ -644,6 +679,7 @@
   &-itemActions-wrap {
     position: absolute;
     width: 100%;
+    z-index: $Table-fixed-zIndex + 1;
     left: 0;
     top: 0;
     min-height: 30px;
@@ -781,6 +817,10 @@
   > .#{$ns}Button,
   > .#{$ns}Button--disabled-wrap > .#{$ns}Button {
     margin: px2rem(3px);
+  }
+
+  > .#{$ns}Button--disabled-wrap > .#{$ns}Button--link {
+    padding: 0;
   }
 
   > .#{$ns}Button--link {

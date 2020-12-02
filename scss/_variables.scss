@@ -123,8 +123,8 @@ $zindex-affix: 900 !default;
 $zindex-dropdown: 1000 !default;
 $zindex-sticky: 1100 !default;
 $zindex-fixed: 1200 !default;
-$zindex-modal: 1300 !default;
-$zindex-popover: 1400 !default;
+$zindex-popover: 1300 !default;
+$zindex-modal: 1400 !default;
 $zindex-contextmenu: 1500 !default;
 $zindex-tooltip: 1600 !default;
 $zindex-toast: 2000 !default;
@@ -137,6 +137,7 @@ $gap-lg: px2rem(30px) !default;
 
 $icon-color: $gray600 !default;
 $icon-onHover-color: $gray900 !default;
+$icon-onDisabled-color: $gray500 !default;
 
 $label--default-bg: $gray700 !default;
 $label--primary-bg: $primary !default;
@@ -215,7 +216,7 @@ $Modal-bg: $background !default;
 $Modal-overlay-bg: rgba(0, 0, 0, 0.6) !default;
 $Modal-content-startMarginTop: px2rem(60px) !default;
 $Modal-content-stepMarginTop: px2rem(30px) !default;
-$Modal-content-minHeight: px2rem(200px) !default;
+$Modal-content-minHeight: unset !default;
 $Modal-content-borderWidth: $borderWidth !default;
 $Modal-content-borderColor: $borderColor !default;
 $Modal-content-borderRadius: $borderRadius !default;
@@ -454,6 +455,7 @@ $Table-lineHeight: $lineHeightBase !default;
 $Table-borderColor: $borderColor !default;
 $Table-borderWidth: $borderWidth !default;
 $Table-borderRadius: $borderRadius !default;
+$Table-fixed-zIndex: 5 !default;
 $Table-fixedTop-boxShadow: $boxShadow !default;
 $Table-fixedLeft-boxShadow: 0.42rem 0 0.42rem -0.28rem rgba($black, 0.15) !default;
 $Table-fixedRight-boxShadow: -0.42rem 0 0.42rem -0.28rem rgba($black, 0.15) !default;
@@ -506,6 +508,10 @@ $Table-expandBtn-color: $info !default;
 $TableCell-sortBtn-width: px2rem(8px) !default;
 $TableCell-sortBtn--default-opacity: 0 !default;
 $TableCell-sortBtn--default-onActive-opacity: 1 !default;
+
+$TableCell-searchBtn--onActive-color: $primary !default;
+$TableCell-filterBtn--onActive-color: $primary !default;
+$TableCell-sortBtn--onActive-color: $primary !default;
 
 // Cards
 $Cards-fixedTop-boxShadow: $boxShadow !default;
@@ -580,12 +586,12 @@ $PopOver-bg: white !default;
 $Remark-width: 1rem !default;
 $Remark-icon-fontSize: $fontSizeBase !default;
 $Remark-iconColor: $icon-color !default;
-$Remark-onHover-iconColor: $icon-onHover-color !default;
-$Remark-bg: transparent !default;
-$Remark-onHover-bg: transparent !default;
-$Remark-borderWidth: 0 !default;
+$Remark-onHover-iconColor: #fff !default;
+$Remark-bg: #fff !default;
+$Remark-onHover-bg: $primary !default;
+$Remark-borderWidth: px2rem(1px) !default;
 $Remark-borderColor: $borderColor !default;
-$Remark-onHover-borderColor: $borderColor !default;
+$Remark-onHover-borderColor: $primary !default;
 $Remark-marginLeft: $gap-sm !default;
 
 // ResultBox
@@ -1016,12 +1022,12 @@ $ColorPicker-paddingY: (
   )/2 - $ColorPicker-borderWidth !default;
 $ColorPicker-placeholderColor: $Form-input-placeholderColor !default;
 $ColorPicker-onFocused-borderColor: $Form-input-onFocused-borderColor !default;
-$DatePicker-onHover-borderColor: $Form-input-borderColor !default;
 
 // datepicker
 $DatePicker-color: $Form-input-color !default;
 $DatePicker-bg: $white !default;
-$DatePicker-onHover-bg: darken($DatePicker-bg, 5%) !default;
+$DatePicker-onHover-borderColor: $Form-input-onFocused-borderColor !default;
+$DatePicker-onHover-bg: $DatePicker-bg !default;
 $DatePicker-borderWidth: $Form-input-borderWidth !default;
 $DatePicker-borderColor: $Form-input-borderColor !default;
 $DatePicker-borderRadius: $Form-input-borderRadius !default;
@@ -1335,6 +1341,7 @@ $Wizard-steps-bg--isComplete: #f1f5f9 !default;
 
 // Page
 $Page-aside-width: px2rem(200px) !default;
+$Page-aside-maxWidth: px2rem(300px) !default;
 $Page-aside-bg: desaturate(darken($light, 3%), 2.5%) !default;
 $Page-content-paddingY: 0 !default;
 $Page-content-paddingX: 0 !default;
@@ -1371,7 +1378,7 @@ $Panel-footerBorderRadius: 0 0 px2rem(2px) px2rem(2px) !default;
 $Panel-footerBg: $white !default;
 $Panel-footerPadding: px2rem(10px) px2rem(15px) !default;
 $Panel-borderWidth: px2rem(1px) !default;
-$Panel-footerButtomMarginLeft: $gap-sm !default;
+$Panel-footerButtonMarginLeft: $gap-sm !default;
 $Panel-btnToolbarTextAlign: right !default;
 $Panel-fixedBottom-boxShadow: 0 -0.5rem 1rem rgba($black, 0.15) !default;
 $Panel-fixedBottom-borderTop: none !default;

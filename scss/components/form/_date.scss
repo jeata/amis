@@ -33,7 +33,7 @@
   &.is-disabled {
     background: $gray200;
 
-    > &-input {
+    > .#{$ns}DatePicker-input {
       color: $text--muted-color;
     }
   }
@@ -369,4 +369,11 @@ td.rdtYear {
       color: #999;
     }
   }
+}
+
+.#{$ns}DateCalendar {
+  display: inline-block;
+  border: $DatePicker-borderWidth solid $DatePicker-borderColor;
+  background-color: $DatePicker-bg;
+  border-radius: $DatePicker-borderRadius;
 }

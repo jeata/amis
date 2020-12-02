@@ -3,7 +3,12 @@ import cx from 'classnames';
 import Overlay from '../../components/Overlay';
 import PopOver from '../../components/PopOver';
 
-import {OptionsControl, OptionsControlProps, Option} from './Options';
+import {
+  OptionsControl,
+  OptionsControlProps,
+  Option,
+  FormOptionsControl
+} from './Options';
 import {Icon} from '../../components/icons';
 import TreeSelector from '../../components/Tree';
 // @ts-ignore
@@ -15,6 +20,55 @@ import {isEffectiveApi} from '../../utils/api';
 import Spinner from '../../components/Spinner';
 import ResultBox from '../../components/ResultBox';
 import {autobind} from '../../utils/helper';
+import {findDOMNode} from 'react-dom';
+
+/**
+ * Tree 下拉选择框。
+ * 文档：https://baidu.gitee.io/amis/docs/components/form/tree
+ */
+export interface TreeSelectControlSchema extends FormOptionsControl {
+  type: 'tree-select';
+
+  /**
+   * 是否隐藏顶级
+   */
+  hideRoot?: boolean;
+
+  /**
+   * 顶级选项的名称
+   */
+  rootLabel?: string;
+
+  /**
+   * 顶级选项的值
+   */
+  rootValue?: any;
+
+  /**
+   * 显示图标
+   */
+  showIcon?: boolean;
+
+  /**
+   * 父子之间是否完全独立。
+   */
+  cascade?: boolean;
+
+  /**
+   * 选父级的时候是否把子节点的值也包含在内。
+   */
+  withChildren?: boolean;
+
+  /**
+   * 选父级的时候，是否只把子节点的值包含在内
+   */
+  onlyChildren?: boolean;
+
+  /**
+   * 顶级节点是否可以创建子节点
+   */
+  rootCreatable?: boolean;
+}
 
 export interface TreeSelectProps extends OptionsControlProps {
   placeholder?: any;
@@ -46,12 +100,16 @@ export default class TreeSelectControl extends React.Component<
   };
 
   container: React.RefObject<HTMLDivElement> = React.createRef();
-  target: React.RefObject<any> = React.createRef();
+
   input: React.RefObject<any> = React.createRef();
 
   cache: {
     [propName: string]: any;
   } = {};
+
+  target: HTMLElement | null;
+  targetRef = (ref: any) =>
+    (this.target = ref ? (findDOMNode(ref) as HTMLElement) : null);
 
   constructor(props: TreeSelectProps) {
     super(props);
@@ -327,10 +385,16 @@ export default class TreeSelectControl extends React.Component<
       extractValue,
       delimiter,
       valueField,
-      onChange
+      onChange,
+      multiple
     } = this.props;
 
     let newValue: any = Array.isArray(value) ? value.concat() : [];
+
+    if (!multiple && !newValue.length) {
+      onChange('');
+      return;
+    }
 
     if (joinValues || extractValue) {
       newValue = value.map(item => item[valueField || 'value']);
@@ -376,6 +440,7 @@ export default class TreeSelectControl extends React.Component<
       autoComplete,
       maxLength,
       minLength,
+      labelField,
       translate: __
     } = this.props;
 
@@ -387,16 +452,14 @@ export default class TreeSelectControl extends React.Component<
     return (
       <Overlay
         container={popOverContainer || (() => this.container.current)}
-        target={() => this.target.current}
+        target={() => this.target}
         show
       >
         <PopOver
           classPrefix={ns}
           className={`${ns}TreeSelect-popover`}
           style={{
-            minWidth: this.target.current
-              ? this.target.current.offsetWidth
-              : undefined
+            minWidth: this.target ? this.target.offsetWidth : undefined
           }}
           onHide={this.close}
           overlay
@@ -404,6 +467,7 @@ export default class TreeSelectControl extends React.Component<
           <TreeSelector
             classPrefix={ns}
             onlyChildren={onlyChildren}
+            labelField={labelField}
             valueField={valueField}
             disabled={disabled}
             onChange={this.handleChange}
@@ -425,7 +489,6 @@ export default class TreeSelectControl extends React.Component<
             foldedField="collapsed"
             hideRoot
             value={value || ''}
-            labelField="label"
             maxLength={maxLength}
             minLength={minLength}
           />
@@ -456,7 +519,7 @@ export default class TreeSelectControl extends React.Component<
       <div ref={this.container} className={cx(`TreeSelectControl`, className)}>
         <ResultBox
           disabled={disabled}
-          ref={this.target}
+          ref={this.targetRef}
           placeholder={__(placeholder || '空')}
           className={cx(`TreeSelect`, {
             'TreeSelect--inline': inline,

@@ -55,7 +55,7 @@ register('en', {
   '清空': 'Clear',
   '当前选择': 'Selected',
   '添加一级节点': 'Add root node',
-  '添加孩子节点': 'Add child',
+  '添加子节点': 'Add child',
   '编辑该节点': 'Edit this node',
   '移除该节点': 'Remove this node',
   '请输入': 'Enter',
@@ -146,6 +146,7 @@ register('en', {
   '当前有 {{moved}} 条记录修改了顺序, 但并没有提交。请选择:':
     'There are currently {{moved}} records that have changed the order, but have not been committed. Please select:',
   '点击开始排序': 'Click to start sorting',
+  '点击选择显示列': 'Click to select columns to display',
   '请拖动左边的按钮进行排序': 'Please drag the button on the left to sort',
   '排序': 'Sort',
   '正序': 'Asc',
@@ -202,8 +203,10 @@ register('en', {
   '可拖拽排序': 'Drag and drop sorting',
   '上一步': 'Prev',
   '下一步': 'Next',
+  '导出 CSV': 'Export CSV',
   '保存并下一步': 'Save & Next',
   '完成': 'Finish',
   '点击选择图片或者将图片拖入该区域':
-    'Click to select the picture or drag the picture into the area'
+    'Click to select the picture or drag the picture into the area',
+  '重置': 'Reset'
 });

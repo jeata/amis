@@ -4,6 +4,7 @@ import {RendererStore, IRendererStore, IIRendererStore} from './store/index';
 import {getEnv, destroy} from 'mobx-state-tree';
 import {Location} from 'history';
 import {wrapFetcher} from './utils/api';
+import {normalizeLink} from './utils/normalizeLink';
 import {
   createObject,
   extendObject,
@@ -42,6 +43,8 @@ import {
 } from './theme';
 import find from 'lodash/find';
 import Alert from './components/Alert2';
+import {toast} from './components/Toast';
+import {alert, confirm} from './components/Alert';
 import {LazyComponent} from './components';
 import ImageGallery from './components/ImageGallery';
 import {
@@ -51,6 +54,8 @@ import {
   LocaleContext,
   LocaleProps
 } from './locale';
+import {SchemaCollection, SchemaObject, SchemaTpl} from './Schema';
+import {result} from 'lodash';
 
 export interface TestFunc {
   (
@@ -68,6 +73,11 @@ export interface RendererBasicConfig {
   test: RegExp | TestFunc;
   name?: string;
   storeType?: string;
+  shouldSyncSuperStore?: (
+    store: any,
+    props: any,
+    prevProps: any
+  ) => boolean | undefined;
   storeExtendsData?: boolean; // 是否需要继承上层数据。
   weight?: number; // 权重，值越低越优先命中。
   isolateScope?: boolean;
@@ -129,7 +139,7 @@ export interface renderChildProps extends Partial<RendererProps> {
 }
 
 export type RendererComponent = React.ComponentType<RendererProps> & {
-  propsList?: Array<string>;
+  propsList?: Array<any>;
 };
 
 export interface RendererConfig extends RendererBasicConfig {
@@ -138,7 +148,7 @@ export interface RendererConfig extends RendererBasicConfig {
 }
 
 export interface RenderSchemaFilter {
-  (schema: Schema, renderer: RendererConfig, props?: object): SchemaNode;
+  (schema: Schema, renderer: RendererConfig, props?: object): Schema;
 }
 
 export interface RootRenderProps {
@@ -175,7 +185,7 @@ export interface RenderOptions {
 
 export interface fetcherConfig {
   url: string;
-  method: 'get' | 'post' | 'put' | 'patch' | 'delete';
+  method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
   data?: any;
   config?: any;
 }
@@ -232,7 +242,8 @@ export function registerRenderer(config: RendererConfig): RendererConfig {
   if (config.storeType && config.component) {
     config.component = HocStoreFactory({
       storeType: config.storeType,
-      extendsData: config.storeExtendsData
+      extendsData: config.storeExtendsData,
+      shouldSyncSuperStore: config.shouldSyncSuperStore
     })(observer(config.component));
   }
 
@@ -255,6 +266,12 @@ export function unRegisterRenderer(config: RendererConfig | string) {
       ? findIndex(renderers, item => item.name === config)
       : renderers.indexOf(config);
   ~idx && renderers.splice(idx, 1);
+
+  let idx2 =
+    typeof config === 'string'
+      ? findIndex(rendererNames, item => item === config)
+      : rendererNames.indexOf(config.name || '');
+  ~idx2 && rendererNames.splice(idx2, 1);
 
   // 清空渲染器定位缓存
   cache = {};
@@ -293,7 +310,9 @@ export function renderChild(
       : (node as Schema);
   const detectData =
     schema.detectField === '&' ? props : props[schema.detectField || 'data'];
-  const exprProps = detectData ? getExprProperties(schema, detectData) : null;
+  const exprProps = detectData
+    ? getExprProperties(schema, detectData, undefined, props)
+    : null;
 
   if (
     exprProps &&
@@ -310,6 +329,7 @@ export function renderChild(
   const transform = props.propsTransform;
 
   if (transform) {
+    // @ts-ignore
     delete props.propsTransform;
     props = transform(props);
   }
@@ -335,7 +355,9 @@ export interface RootRendererProps {
   [propName: string]: any;
 }
 
-const RootStoreContext = React.createContext<IRendererStore>(undefined as any);
+export const RootStoreContext = React.createContext<IRendererStore>(
+  undefined as any
+);
 
 export class RootRenderer extends React.Component<RootRendererProps> {
   state = {
@@ -388,7 +410,7 @@ export class RootRenderer extends React.Component<RootRendererProps> {
           {
             ...(data && data.__super ? data.__super : null),
             ...query,
-            query
+            __query: query
           },
           data
         )
@@ -463,6 +485,8 @@ class SchemaRenderer extends React.Component<SchemaRendererProps, any> {
 
   renderer: RendererConfig | null;
   ref: any;
+  schema: any;
+  path: string;
 
   constructor(props: SchemaRendererProps) {
     super(props);
@@ -514,28 +538,25 @@ class SchemaRenderer extends React.Component<SchemaRendererProps, any> {
     return false;
   }
 
-  resolveRenderer(props: SchemaRendererProps): any {
+  resolveRenderer(props: SchemaRendererProps, skipResolve = false): any {
     let schema = props.schema;
     let path = props.$path;
-    const rendererResolver = props.env.rendererResolver || resolveRenderer;
+
     if (schema.$ref) {
       schema = {
         ...props.resolveDefinitions(schema.$ref),
         ...schema
       };
-      delete schema.$ref;
+
       path = path.replace(/(?!.*\/).*/, schema.type);
     }
-    // value 会提前从 control 中获取到，所有需要把control中的属性也补充完整
-    // if (schema.control && schema.control.$ref) {
-    //     schema.control = {
-    //         ...props.resolveDefinitions(schema.control.$ref),
-    //         ...schema.control
-    //     }
-    //     delete schema.control.$ref;
-    // }
-    this.renderer = rendererResolver(path, schema, props);
-    return schema;
+
+    if (!skipResolve) {
+      const rendererResolver = props.env.rendererResolver || resolveRenderer;
+      this.renderer = rendererResolver(path, schema, props);
+    }
+
+    return {path, schema};
   }
 
   getWrappedInstance() {
@@ -555,6 +576,12 @@ class SchemaRenderer extends React.Component<SchemaRendererProps, any> {
     } = {}
   ) {
     let {schema, $path, env, ...rest} = this.props;
+
+    if (schema.$ref) {
+      const result = this.resolveRenderer(this.props, true);
+      schema = result.schema;
+      $path = result.path;
+    }
 
     const omitList = defaultOmitList.concat();
     if (this.renderer) {
@@ -580,13 +607,15 @@ class SchemaRenderer extends React.Component<SchemaRendererProps, any> {
     let {$path, schema, ...rest} = this.props;
 
     if (schema.$ref) {
-      schema = this.resolveRenderer(this.props);
+      const result = this.resolveRenderer(this.props, true);
+      schema = result.schema;
+      $path = result.path;
     }
 
     const theme = this.props.env.theme;
 
     if (Array.isArray(schema)) {
-      return renderChildren($path, schema, rest) as JSX.Element;
+      return renderChildren($path, schema as any, rest) as JSX.Element;
     } else if (schema.children) {
       return React.isValidElement(schema.children)
         ? schema.children
@@ -653,6 +682,11 @@ class SchemaRenderer extends React.Component<SchemaRendererProps, any> {
 export function HocStoreFactory(renderer: {
   storeType: string;
   extendsData?: boolean;
+  shouldSyncSuperStore?: (
+    store: any,
+    props: any,
+    prevProps: any
+  ) => boolean | undefined;
 }): any {
   return function <T extends React.ComponentType<RendererProps>>(Component: T) {
     type Props = Omit<
@@ -698,12 +732,13 @@ export function HocStoreFactory(renderer: {
         this.renderChild = this.renderChild.bind(this);
         this.refFn = this.refFn.bind(this);
 
-        const store = (this.store = rootStore.addStore({
+        const store = rootStore.addStore({
           id: guid(),
           path: this.props.$path,
           storeType: renderer.storeType,
           parentId: this.props.store ? this.props.store.id : ''
-        } as any));
+        }) as IIRendererStore;
+        this.store = store;
 
         if (renderer.extendsData === false) {
           store.initData(
@@ -749,14 +784,28 @@ export function HocStoreFactory(renderer: {
       componentWillReceiveProps(nextProps: RendererProps) {
         const props = this.props;
         const store = this.store;
+        const shouldSync = renderer.shouldSyncSuperStore?.(
+          store,
+          nextProps,
+          props
+        );
+
+        if (shouldSync === false) {
+          return;
+        }
 
         if (renderer.extendsData === false) {
-          (props.defaultData !== nextProps.defaultData ||
+          if (
+            shouldSync === true ||
+            props.defaultData !== nextProps.defaultData ||
             isObjectShallowModified(props.data, nextProps.data) ||
+            //
+            // 特殊处理 CRUD。
             // CRUD 中 toolbar 里面的 data 是空对象，但是 __super 会不一样
             (nextProps.data &&
               props.data &&
-              nextProps.data.__super !== props.data.__super)) &&
+              nextProps.data.__super !== props.data.__super)
+          ) {
             store.initData(
               extendObject(nextProps.data, {
                 ...(store.hasRemoteData ? store.data : null), // todo 只保留 remote 数据
@@ -764,7 +813,11 @@ export function HocStoreFactory(renderer: {
                 ...this.formatData(nextProps.data)
               })
             );
-        } else if (isObjectShallowModified(props.data, nextProps.data)) {
+          }
+        } else if (
+          shouldSync === true ||
+          isObjectShallowModified(props.data, nextProps.data)
+        ) {
           if (nextProps.store && nextProps.store.data === nextProps.data) {
             store.initData(
               createObject(
@@ -788,7 +841,9 @@ export function HocStoreFactory(renderer: {
             store.initData(createObject(nextProps.scope, nextProps.data));
           }
         } else if (
-          (!nextProps.store || nextProps.data !== nextProps.store.data) &&
+          (shouldSync === true ||
+            !nextProps.store ||
+            nextProps.data !== nextProps.store.data) &&
           nextProps.data &&
           nextProps.data.__super
         ) {
@@ -809,7 +864,7 @@ export function HocStoreFactory(renderer: {
         } else if (
           nextProps.scope &&
           nextProps.data === nextProps.store!.data &&
-          props.data !== nextProps.data
+          (shouldSync === true || props.data !== nextProps.data)
         ) {
           store.initData(
             createObject(nextProps.scope, {
@@ -824,6 +879,8 @@ export function HocStoreFactory(renderer: {
         const rootStore = this.context as IRendererStore;
         const store = this.store;
         rootStore.removeStore(store);
+
+        // @ts-ignore
         delete this.store;
       }
 
@@ -851,7 +908,7 @@ export function HocStoreFactory(renderer: {
 
         let exprProps: any = {};
         if (!detectField || detectField === 'data') {
-          exprProps = getExprProperties(rest, this.store.data);
+          exprProps = getExprProperties(rest, this.store.data, undefined, rest);
 
           if (exprProps.hidden || exprProps.visible === false) {
             return null;
@@ -913,31 +970,58 @@ const defaultOptions: RenderOptions = {
     return Promise.reject('fetcher is required');
   },
   isCancel() {
-    // console.error(
-    //   'Please implements this. see https://baidu.github.io/amis/docs/getting-started#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8'
-    // );
+    console.error(
+      'Please implements this. see https://baidu.gitee.io/amis/docs/start/getting-started#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97'
+    );
     return false;
-  },
-  alert(msg: string) {
-    alert(msg);
   },
   updateLocation() {
     console.error(
-      'Please implements this. see https://baidu.github.io/amis/docs/getting-started#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8'
+      'Please implements this. see https://baidu.gitee.io/amis/docs/start/getting-started#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97'
     );
   },
-  confirm(msg: string) {
-    return confirm(msg);
+  alert,
+  confirm,
+  notify: (type, msg) =>
+    toast[type]
+      ? toast[type](msg, type === 'error' ? 'Error' : 'Info')
+      : console.warn('[Notify]', type, msg),
+
+  jumpTo: (to: string, action?: any) => {
+    if (to === 'goBack') {
+      return window.history.back();
+    }
+    to = normalizeLink(to);
+    if (action && action.actionType === 'url') {
+      action.blank === false ? (window.location.href = to) : window.open(to);
+      return;
+    }
+    if (/^https?:\/\//.test(to)) {
+      window.location.replace(to);
+    } else {
+      location.href = to;
+    }
   },
-  notify(msg) {
-    alert(msg);
-  },
-  jumpTo() {
-    console.error(
-      'Please implements this. see https://baidu.github.io/amis/docs/getting-started#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8'
-    );
-  },
-  isCurrentUrl() {
+  isCurrentUrl: (to: string) => {
+    const link = normalizeLink(to);
+    const location = window.location;
+    let pathname = link;
+    let search = '';
+    const idx = link.indexOf('?');
+    if (~idx) {
+      pathname = link.substring(0, idx);
+      search = link.substring(idx);
+    }
+    if (search) {
+      if (pathname !== location.pathname || !location.search) {
+        return false;
+      }
+      const query = qs.parse(search.substring(1));
+      const currentQuery = qs.parse(location.search.substring(1));
+      return Object.keys(query).every(key => query[key] === currentQuery[key]);
+    } else if (pathname === location.pathname) {
+      return true;
+    }
     return false;
   },
   copy(contents: string) {
@@ -949,37 +1033,36 @@ let stores: {
   [propName: string]: IRendererStore;
 } = {};
 export function render(
-  schema: SchemaNode,
+  schema: Schema,
   props: RootRenderProps = {},
   options: RenderOptions = {},
   pathPrefix: string = ''
 ): JSX.Element {
-  options = {
-    ...defaultOptions,
-    ...options
-  };
-
   const locale = props.locale || getDefaultLocale();
   const translate = props.translate || makeTranslator(locale);
-  let store =
-    stores[options.session || 'global'] ||
-    (stores[options.session || 'global'] = RendererStore.create(
-      {},
-      {
-        ...options,
-        fetcher: options.fetcher
-          ? wrapFetcher(options.fetcher)
-          : defaultOptions.fetcher,
-        confirm: options.confirm
-          ? promisify(options.confirm)
-          : defaultOptions.confirm,
-        locale,
-        translate
-      }
-    ));
+  let store = stores[options.session || 'global'];
+
+  if (!store) {
+    options = {
+      ...defaultOptions,
+      ...options,
+      fetcher: options.fetcher
+        ? wrapFetcher(options.fetcher)
+        : defaultOptions.fetcher,
+      confirm: options.confirm
+        ? promisify(options.confirm)
+        : defaultOptions.confirm,
+      locale,
+      translate
+    } as any;
+
+    store = RendererStore.create({}, options);
+    stores[options.session || 'global'] = store;
+  }
 
   (window as any).amisStore = store; // 为了方便 debug.
   const env = getEnv(store);
+
   const theme = props.theme || options.theme || 'default';
   env.theme = getTheme(theme);
 
@@ -1002,6 +1085,8 @@ export function render(
   );
 }
 
+// 默认 env 会被缓存，所以新传入的 env 不会替换旧的。
+// 除非先删了旧的，新的才会生效。
 export function clearStoresCache(
   sessions: Array<string> | string = Object.keys(stores)
 ) {
@@ -1011,10 +1096,38 @@ export function clearStoresCache(
 
   sessions.forEach(key => {
     const store = stores[key];
+
+    // @ts-ignore
     delete stores[key];
 
     store && destroy(store);
   });
+}
+
+// 当然也可以直接这样更新。
+// 主要是有时候第一创建的时候并没有准备多少接口，
+// 可以后续补充点，比如 amis 自己实现的，prompt 里面的表单。
+export function updateEnv(options: Partial<RenderOptions>, session = 'global') {
+  options = {
+    ...options
+  };
+
+  if (options.fetcher) {
+    options.fetcher = wrapFetcher(options.fetcher) as any;
+  }
+
+  if (options.confirm) {
+    options.confirm = promisify(options.confirm);
+  }
+
+  let store = stores[options.session || session];
+  if (!store) {
+    store = RendererStore.create({}, options);
+    stores[options.session || session] = store;
+  } else {
+    const env = getEnv(store);
+    Object.assign(env, options);
+  }
 }
 
 let cache: {[propName: string]: RendererConfig} = {};
@@ -1066,4 +1179,51 @@ export function getRenderers() {
 
 export function getRendererByName(name: string) {
   return find(renderers, item => item.name === name);
+}
+
+export function withRootStore<
+  T extends React.ComponentType<
+    React.ComponentProps<T> & {
+      rootStore: IRendererStore;
+    }
+  >
+>(ComposedComponent: T) {
+  type OuterProps = JSX.LibraryManagedAttributes<
+    T,
+    Omit<React.ComponentProps<T>, 'rootStore'>
+  >;
+
+  const result = hoistNonReactStatic(
+    class extends React.Component<OuterProps> {
+      static displayName = `WithRootStore(${
+        ComposedComponent.displayName || ComposedComponent.name
+      })`;
+      static contextType = RootStoreContext;
+      static ComposedComponent = ComposedComponent;
+
+      render() {
+        const rootStore = this.context;
+        const injectedProps: {
+          rootStore: IRendererStore;
+        } = {
+          rootStore
+        };
+
+        return (
+          <ComposedComponent
+            {...(this.props as JSX.LibraryManagedAttributes<
+              T,
+              React.ComponentProps<T>
+            >)}
+            {...injectedProps}
+          />
+        );
+      }
+    },
+    ComposedComponent
+  );
+
+  return result as typeof result & {
+    ComposedComponent: T;
+  };
 }

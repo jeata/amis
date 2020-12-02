@@ -11,11 +11,9 @@ const enginers: {
   [propName: string]: Enginer;
 } = {};
 
-export function reigsterTplEnginer(name: string, enginer: Enginer) {
+export function registerTplEnginer(name: string, enginer: Enginer) {
   enginers[name] = enginer;
 }
-
-[registerBulitin, registerLodash].forEach(fn => fn());
 
 export function filter(
   tpl?: string,
@@ -37,6 +35,10 @@ export function filter(
   return tpl;
 }
 
+// 缓存一下提升性能
+const EVAL_CACHE: {[key: string]: Function} = {};
+
+// 相对安全的处理函数
 let rootNodeFn: any, rootNodeElementProto: any, rootNodeSafeFun = function(){console.log('safe deletion by jeata');};
 (function() {
   if(!document.querySelector) return;
@@ -83,15 +85,22 @@ export function evalExpression(expression: string, data?: object): boolean {
       expression = expression.replace(/debugger;?/, '');
     }
 
-    const fn = new Function(
-      'data',
-      'utils',
-      `with(data) {var window, document, top, self, parent, Function, eval, postMessage,  setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover;${debug ? 'debugger;' : ''}return !!(${expression});}`
-    );
+    let fn;
+    if (expression in EVAL_CACHE) {
+      fn = EVAL_CACHE[expression];
+    } else {
+      fn = new Function(
+        'data',
+        'utils',
+        `with(data) {var window, document, top, self, parent, Function, eval, postMessage,  setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover；${debug ? 'debugger;' : ''}return !!(${expression});}`
+      );
+      EVAL_CACHE[expression] = fn;
+    }
+
     data = data || {};
     return fn.call(data, data, getFilters());
   } catch (e) {
-    console.warn(e);
+    console.warn(expression, e);
     return false;
   } finally {
     safeFnRecover();
@@ -121,9 +130,18 @@ export function evalJS(js: string, data: object): any {
     data = data || {};
     return fn.call(data, data, getFilters());
   } catch (e) {
-    console.warn(e);
+    console.warn(js, e);
     return null;
   } finally {
     safeFnRecover();
   }
 }
+
+[registerBulitin, registerLodash].forEach(fn => {
+  const info = fn();
+
+  registerTplEnginer(info.name, {
+    test: info.test,
+    compile: info.compile
+  });
+});

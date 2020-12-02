@@ -3,7 +3,7 @@
     "outDir": "output/",
     "module": "commonjs",
     "target": "es5",
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "dom", "ES2015"],
     "sourceMap": true,
     "jsx": "react",
     "moduleResolution": "node",
@@ -22,13 +22,6 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest"
-  ],
+  "exclude": ["node_modules", "acceptance-tests", "webpack", "jest"],
   "types": ["typePatches"]
 }

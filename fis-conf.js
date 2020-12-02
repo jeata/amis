@@ -4,17 +4,44 @@
 const path = require('path');
 const fs = require('fs');
 const package = require('./package.json');
-const parserMarkdown = require('./build/md-parser');
-fis.get('project.ignore').push('public/**', 'gh-pages/**', '.*/**');
+const parserMarkdown = require('./scripts/md-parser');
+fis.get('project.ignore').push('public/**', 'npm/**', 'gh-pages/**');
 // 配置只编译哪些文件。
 
+const Resource = fis.require('postpackager-loader/lib/resource.js');
+
+Resource.extend({
+  buildResourceMap: function () {
+    return 'amis.' + this.__super();
+  },
+
+  calculate: function () {
+    this.__super.apply(this);
+
+    // 标记这个文件，肯定是异步资源，即便是同步加载了。
+    Object.keys(this.loaded).forEach(id => {
+      const file = this.getFileById(id);
+
+      if (file && file.subpath === '/examples/loadMonacoEditor.ts') {
+        this.loaded[id] = true;
+      }
+    });
+  }
+});
+
 fis.set('project.files', [
+  'schema.json',
   'scss/**.scss',
   '/examples/*.html',
   '/examples/*.tpl',
+  '/examples/static/*.png',
   '/src/**.html',
   'mock/**'
 ]);
+
+fis.match('/schema.json', {
+  release: '/$0'
+});
 
 fis.match('/mock/**', {
   useCompile: false
@@ -25,7 +52,7 @@ fis.match('mod.js', {
 });
 
 fis.match('*.scss', {
-  parser: fis.plugin('node-sass', {
+  parser: fis.plugin('sass', {
     sourceMap: true
   }),
   rExt: '.css'
@@ -69,6 +96,15 @@ fis.match('tinymce/plugins/*/index.js', {
   ignoreDependencies: false
 });
 
+fis.match(/(?:flv\.js)/, {
+  ignoreDependencies: true
+});
+
+fis.match('monaco-editor/min/**.js', {
+  isMod: false,
+  ignoreDependencies: true
+});
+
 fis.match('/docs/**.md', {
   rExt: 'js',
   parser: [
@@ -103,19 +139,29 @@ fis.on('compile:parser', function (file) {
   }
 });
 
-fis.match('monaco-editor/esm/**.js', {
-  parser: fis.plugin('typescript', {
-    importHelpers: true,
-    esModuleInterop: true,
-    experimentalDecorators: true,
-    sourceMap: false
-  }),
-  preprocessor: fis.plugin('js-require-css')
+fis.on('compile:optimizer', function (file) {
+  if (file.isJsLike && file.isMod) {
+    var contents = file.getContent();
+
+    if (
+      typeof contents === 'string' &&
+      contents.substring(0, 7) === 'define('
+    ) {
+      contents = 'amis.' + contents;
+
+      contents = contents.replace(
+        'function(require, exports, module)',
+        'function(require, exports, module, define)'
+      );
+
+      file.setContent(contents);
+    }
+  }
 });
 
 fis.match('{*.ts,*.jsx,*.tsx,/src/**.js,/src/**.ts}', {
   parser: [
-    docsGennerator,
+    // docsGennerator,
     fis.plugin('typescript', {
       importHelpers: true,
       esModuleInterop: true,
@@ -145,22 +191,14 @@ fis.hook('node_modules', {
   // shutup: true
 });
 fis.hook('commonjs', {
-  extList: ['.js', '.jsx', '.tsx', '.ts']
+  sourceMap: false,
+  extList: ['.js', '.jsx', '.tsx', '.ts'],
+  paths: {
+    'monaco-editor': '/examples/loadMonacoEditor'
+  }
 });
 
 fis.media('dev').match('::package', {
-  prepackager: fis.plugin('stand-alone-pack', {
-    '/pkg/editor.worker.js': 'monaco-editor/esm/vs/editor/editor.worker.js',
-    '/pkg/json.worker.js': 'monaco-editor/esm/vs/language/json/json.worker',
-    '/pkg/css.worker.js': 'monaco-editor/esm/vs/language/css/css.worker',
-    '/pkg/html.worker.js': 'monaco-editor/esm/vs/language/html/html.worker',
-    '/pkg/ts.worker.js': 'monaco-editor/esm/vs/language/typescript/ts.worker',
-
-    // 替换这些文件里面的路径引用。
-    // 如果不配置，源码中对于打包文件的引用是不正确的。
-    'replaceFiles': ['src/components/Editor.tsx']
-  }),
-
   postpackager: fis.plugin('loader', {
     useInlineMap: false,
     resourceType: 'mod'
@@ -169,6 +207,10 @@ fis.media('dev').match('::package', {
 
 fis.media('dev').match('/node_modules/**.js', {
   packTo: '/pkg/npm.js'
+});
+
+fis.match('monaco-editor/**', {
+  packTo: null
 });
 
 if (fis.project.currentMedia() === 'publish') {
@@ -188,12 +230,13 @@ if (fis.project.currentMedia() === 'publish') {
 
   publishEnv.match('/src/**.{jsx,tsx,js,ts}', {
     parser: [
-      docsGennerator,
+      // docsGennerator,
       fis.plugin('typescript', {
         importHelpers: true,
         sourceMap: true,
         experimentalDecorators: true,
-        esModuleInterop: true
+        esModuleInterop: true,
+        allowUmdGlobalAccess: true
       }),
       function (contents) {
         return contents.replace(
@@ -271,7 +314,7 @@ if (fis.project.currentMedia() === 'publish') {
   env.get('project.ignore').push('sdk/**');
   env.set('project.files', ['examples/sdk-placeholder.html']);
 
-  env.match('/{examples,scss}/(**)', {
+  env.match('/{examples,scss,src}/(**)', {
     release: '/$1'
   });
 
@@ -288,14 +331,14 @@ if (fis.project.currentMedia() === 'publish') {
   });
 
   env.match('*.scss', {
-    parser: fis.plugin('node-sass', {
+    parser: fis.plugin('sass', {
       sourceMap: false
     })
   });
 
   env.match('{*.ts,*.jsx,*.tsx,/src/**.js,/src/**.ts}', {
     parser: [
-      docsGennerator,
+      // docsGennerator,
       fis.plugin('typescript', {
         importHelpers: true,
         esModuleInterop: true,
@@ -312,8 +355,9 @@ if (fis.project.currentMedia() === 'publish') {
     rExt: '.js'
   });
 
-  env.match('/examples/sdk-mod.js', {
-    isMod: false
+  env.match('/examples/mod.js', {
+    isMod: false,
+    optimizer: fis.plugin('uglify-js')
   });
 
   env.match('*.{js,jsx,ts,tsx}', {
@@ -333,10 +377,10 @@ if (fis.project.currentMedia() === 'publish') {
   env.match('::package', {
     packager: fis.plugin('deps-pack', {
       'sdk.js': [
-        'examples/sdk-mod.js',
+        'examples/mod.js',
         'examples/embed.tsx',
         'examples/embed.tsx:deps',
-        '!monaco-editor/**',
+        'examples/loadMonacoEditor.ts',
         '!flv.js/**',
         '!hls.js/**',
         '!froala-editor/**',
@@ -344,7 +388,13 @@ if (fis.project.currentMedia() === 'publish') {
         '!jquery/**',
         '!zrender/**',
         '!echarts/**',
-        '!docsearch.js/**'
+        '!papaparse/**',
+        '!exceljs/**',
+        '!docsearch.js/**',
+        '!monaco-editor/**.css',
+        '!src/components/RichText.tsx',
+        '!src/components/Tinymce.tsx',
+        '!src/lib/renderers/Form/CityDB.js'
       ],
 
       'rich-text.js': [
@@ -355,12 +405,11 @@ if (fis.project.currentMedia() === 'publish') {
 
       'tinymce.js': ['src/components/Tinymce.tsx', 'tinymce/**'],
 
-      'charts.js': ['zrender/**', 'echarts/**'],
+      'papaparse.js': ['papaparse/**'],
 
-      'editor.js': [
-        'monaco-editor/esm/vs/editor/editor.main.js',
-        'monaco-editor/esm/vs/editor/editor.main.js:deps'
-      ],
+      'exceljs.js': ['exceljs/**'],
+
+      'charts.js': ['zrender/**', 'echarts/**'],
 
       'rest.js': [
         '*.js',
@@ -371,7 +420,9 @@ if (fis.project.currentMedia() === 'publish') {
         '!src/components/RichText.tsx',
         '!jquery/**',
         '!zrender/**',
-        '!echarts/**'
+        '!echarts/**',
+        '!papaparse/**',
+        '!exceljs/**'
       ]
     }),
     postpackager: [
@@ -380,8 +431,16 @@ if (fis.project.currentMedia() === 'publish') {
         resourceType: 'mod'
       }),
 
-      require('./build/embed-packager')
+      require('./scripts/embed-packager')
     ]
+  });
+
+  env.match('{*.min.js,monaco-editor/min/**.js}', {
+    optimizer: null
+  });
+
+  env.match('monaco-editor/**.css', {
+    standard: false
   });
 
   fis.on('compile:optimizer', function (file) {
@@ -390,7 +449,10 @@ if (fis.project.currentMedia() === 'publish') {
 
       // 替换 worker 地址的路径，让 sdk 加载同目录下的文件。
       // 如果 sdk 和 worker 不是部署在一个地方，请通过指定 MonacoEnvironment.getWorkerUrl
-      if (file.subpath === '/src/components/Editor.tsx') {
+      if (
+        file.subpath === '/src/components/Editor.tsx' ||
+        file.subpath === '/examples/loadMonacoEditor.ts'
+      ) {
         contents = contents.replace(
           /function\sfilterUrl\(url\)\s\{\s*return\s*url;/m,
           function () {
@@ -404,18 +466,6 @@ if (fis.project.currentMedia() === 'publish') {
       return _path + url.substring(1);`;
           }
         );
-      }
-
-      if (
-        typeof contents === 'string' &&
-        contents.substring(0, 7) === 'define('
-      ) {
-        contents = 'amis.' + contents;
-
-        contents = contents.replace(
-          'function(require, exports, module)',
-          'function(require, exports, module, define)'
-        );
 
         file.setContent(contents);
       }
@@ -424,40 +474,6 @@ if (fis.project.currentMedia() === 'publish') {
 
   env.match('/examples/loader.ts', {
     isMod: false
-  });
-
-  env.match('::packager', {
-    prepackager: [
-      fis.plugin('stand-alone-pack', {
-        '/pkg/editor.worker.js': 'monaco-editor/esm/vs/editor/editor.worker.js',
-        '/pkg/json.worker.js': 'monaco-editor/esm/vs/language/json/json.worker',
-        '/pkg/css.worker.js': 'monaco-editor/esm/vs/language/css/css.worker',
-        '/pkg/html.worker.js': 'monaco-editor/esm/vs/language/html/html.worker',
-        '/pkg/ts.worker.js':
-          'monaco-editor/esm/vs/language/typescript/ts.worker',
-
-        // 替换这些文件里面的路径引用。
-        // 如果不配置，源码中对于打包文件的引用是不正确的。
-        'replaceFiles': ['src/components/Editor.tsx']
-      }),
-      function (ret) {
-        const root = fis.project.getProjectPath();
-        [
-          '/pkg/editor.worker.js',
-          '/pkg/json.worker.js',
-          '/pkg/css.worker.js',
-          '/pkg/html.worker.js',
-          '/pkg/ts.worker.js'
-        ].forEach(function (pkgFile) {
-          const packedFile = fis.file.wrap(path.join(root, pkgFile));
-          const file = ret.pkg[packedFile.subpath];
-          let contents = file.getContent();
-
-          contents = contents.replace(/amis\.define/g, 'define');
-          file.setContent(contents);
-        });
-      }
-    ]
   });
 
   env.match('*', {
@@ -490,6 +506,13 @@ if (fis.project.currentMedia() === 'publish') {
   });
 } else if (fis.project.currentMedia() === 'gh-pages') {
   const ghPages = fis.media('gh-pages');
+
+  ghPages.match('*.scss', {
+    parser: fis.plugin('sass', {
+      sourceMap: false
+    }),
+    rExt: '.css'
+  });
 
   ghPages.match('/docs/**.md', {
     rExt: 'js',
@@ -559,17 +582,6 @@ if (fis.project.currentMedia() === 'publish') {
   });
 
   ghPages.match('::package', {
-    prepackager: fis.plugin('stand-alone-pack', {
-      '/pkg/editor.worker.js': 'monaco-editor/esm/vs/editor/editor.worker.js',
-      '/pkg/json.worker.js': 'monaco-editor/esm/vs/language/json/json.worker',
-      '/pkg/css.worker.js': 'monaco-editor/esm/vs/language/css/css.worker',
-      '/pkg/html.worker.js': 'monaco-editor/esm/vs/language/html/html.worker',
-      '/pkg/ts.worker.js': 'monaco-editor/esm/vs/language/typescript/ts.worker',
-
-      // 替换这些文件里面的路径引用。
-      // 如果不配置，源码中对于打包文件的引用是不正确的。
-      'replaceFiles': ['src/components/Editor.tsx']
-    }),
     packager: fis.plugin('deps-pack', {
       'pkg/npm.js': [
         '/examples/mod.js',
@@ -581,7 +593,9 @@ if (fis.project.currentMedia() === 'publish') {
         '!tinymce/**',
         '!jquery/**',
         '!zrender/**',
-        '!echarts/**'
+        '!echarts/**',
+        '!papaparse/**',
+        '!exceljs/**'
       ],
       'pkg/rich-text.js': [
         'src/components/RichText.js',
@@ -590,29 +604,27 @@ if (fis.project.currentMedia() === 'publish') {
       ],
       'pkg/tinymce.js': ['src/components/Tinymce.tsx', 'tinymce/**'],
       'pkg/charts.js': ['zrender/**', 'echarts/**'],
+      'pkg/papaparse.js': ['papaparse/**'],
+      'pkg/exceljs.js': ['exceljs/**'],
       'pkg/api-mock.js': ['mock/*.ts'],
       'pkg/app.js': [
-        '/examples/components/App.jsx',
-        '/examples/components/App.jsx:deps'
-      ],
-
-      'pkg/editor.js': [
-        'monaco-editor/esm/vs/editor/editor.main.js',
-        'monaco-editor/esm/vs/editor/editor.main.js:deps'
+        '/examples/components/App.tsx',
+        '/examples/components/App.tsx:deps'
       ],
 
       'pkg/rest.js': [
         '**.{js,jsx,ts,tsx}',
         '!static/mod.js',
         '!monaco-editor/**',
-        '!echarts/**',
         '!flv.js/**',
         '!hls.js/**',
         '!froala-editor/**',
         '!jquery/**',
         '!src/components/RichText.js',
         '!zrender/**',
-        '!echarts/**'
+        '!echarts/**',
+        '!papaparse/**',
+        '!exceljs/**'
       ],
 
       'pkg/npm.css': ['node_modules/*/**.css', '!monaco-editor/**'],
@@ -624,6 +636,7 @@ if (fis.project.currentMedia() === 'publish') {
         '!/scss/themes/*.scss',
         // 要切换主题，不能打在一起。'/scss/*.scss',
         '!/examples/style.scss',
+        '!monaco-editor/**',
         '/examples/style.scss' // 让它在最下面
       ]
     }),
@@ -635,11 +648,16 @@ if (fis.project.currentMedia() === 'publish') {
       }),
       function (ret) {
         const indexHtml = ret.src['/examples/index.html'];
-        const appJs = ret.src['/examples/components/App.jsx'];
-        const DocJs = ret.src['/examples/components/Doc.jsx'];
+        const appJs = ret.src['/examples/components/App.tsx'];
+        const DocJs = ret.src['/examples/components/Doc.tsx'];
+        const ExampleJs = ret.src['/examples/components/Example.tsx'];
 
         const pages = [];
-        const source = [appJs.getContent(), DocJs.getContent()].join('\n');
+        const source = [
+          appJs.getContent(),
+          DocJs.getContent(),
+          ExampleJs.getContent()
+        ].join('\n');
         source.replace(/\bpath\b\s*\:\s*('|")(.*?)\1/g, function (
           _,
           qutoa,
@@ -690,7 +708,7 @@ if (fis.project.currentMedia() === 'publish') {
       return fis.util.md5('amis' + path);
     },
     parser: [
-      docsGennerator,
+      // docsGennerator,
       fis.plugin('typescript', {
         sourceMap: false,
         importHelpers: true,
@@ -699,7 +717,7 @@ if (fis.project.currentMedia() === 'publish') {
     ]
   });
   ghPages.match('*', {
-    domain: 'https://bce.bdstatic.com/fex/amis-gh-pages',
+    domain: '/amis',
     deploy: [
       fis.plugin('skip-packed'),
       fis.plugin('local-deliver', {
@@ -707,87 +725,90 @@ if (fis.project.currentMedia() === 'publish') {
       })
     ]
   });
-  ghPages.match('{*.min.js}', {
+  ghPages.match('{*.min.js,monaco-editor/min/**.js}', {
     optimizer: null
   });
-}
-
-function docsGennerator(contents, file) {
-  if (file.subpath !== '/examples/components/Doc.jsx') {
-    return contents;
-  }
-
-  return contents.replace('// {{renderer-docs}}', function () {
-    const dir = path.join(__dirname, 'docs/renderers');
-    const files = [];
-
-    let fn = (dir, colleciton, prefix = '') => {
-      const entries = fs.readdirSync(dir);
-
-      entries.forEach(entry => {
-        const subdir = path.join(dir, entry);
-
-        if (fs.lstatSync(subdir).isDirectory()) {
-          let files = [];
-          fn(subdir, files, path.join(prefix, entry));
-          colleciton.push({
-            name: entry,
-            children: files,
-            path: path.join(prefix, entry)
-          });
-        } else if (/\.md$/.test(entry)) {
-          colleciton.push({
-            name: path.basename(entry, '.md'),
-            path: path.join(prefix, entry)
-          });
-        }
-      });
-    };
-
-    let fn2 = item => {
-      if (item.children) {
-        const child = item.children.find(
-          child => child.name === `${item.name}.md`
-        );
-        return `{
-                  label: '${item.name}',
-                  ${
-                    child
-                      ? `path: '/docs/renderers/${child.path.replace(
-                          /\.md$/,
-                          ''
-                        )}',`
-                      : ''
-                  }
-                  children: [
-                      ${item.children.map(fn2).join(',\n')}
-                  ]
-              }`;
-      }
-
-      return `{
-              label: '${item.name}',
-              path: '/docs/renderers/${item.path.replace(/\.md$/, '')}',
-                getComponent: (location, cb) =>
-                require(['../../docs/renderers/${item.path}'], doc => {
-                  cb(null, makeMarkdownRenderer(doc));
-                })
-          }`;
-    };
-
-    fn(dir, files);
-
-    return `{
-          label: '渲染器手册',
-          icon: 'fa fa-diamond',
-          path: '/docs/renderers',
-          getComponent: (location, cb) =>
-          require(['../../docs/renderers.md'], doc => {
-            cb(null, makeMarkdownRenderer(doc));
-          }),
-          children: [
-              ${files.map(fn2).join(',\n')}
-          ]
-      },`;
+  ghPages.match('docs.json', {
+    domain: null
   });
 }
+
+// function docsGennerator(contents, file) {
+//   if (file.subpath !== '/examples/components/Doc.tsx') {
+//     return contents;
+//   }
+
+//   return contents.replace('// {{renderer-docs}}', function () {
+//     const dir = path.join(__dirname, 'docs/renderers');
+//     const files = [];
+
+//     let fn = (dir, colleciton, prefix = '') => {
+//       const entries = fs.readdirSync(dir);
+
+//       entries.forEach(entry => {
+//         const subdir = path.join(dir, entry);
+
+//         if (fs.lstatSync(subdir).isDirectory()) {
+//           let files = [];
+//           fn(subdir, files, path.join(prefix, entry));
+//           colleciton.push({
+//             name: entry,
+//             children: files,
+//             path: path.join(prefix, entry)
+//           });
+//         } else if (/\.md$/.test(entry)) {
+//           colleciton.push({
+//             name: path.basename(entry, '.md'),
+//             path: path.join(prefix, entry)
+//           });
+//         }
+//       });
+//     };
+
+//     let fn2 = item => {
+//       if (item.children) {
+//         const child = item.children.find(
+//           child => child.name === `${item.name}.md`
+//         );
+//         return `{
+//                   label: '${item.name}',
+//                   ${
+//                     child
+//                       ? `path: '/docs/renderers/${child.path.replace(
+//                           /\.md$/,
+//                           ''
+//                         )}',`
+//                       : ''
+//                   }
+//                   children: [
+//                       ${item.children.map(fn2).join(',\n')}
+//                   ]
+//               }`;
+//       }
+
+//       return `{
+//               label: '${item.name}',
+//               path: '/docs/renderers/${item.path.replace(/\.md$/, '')}',
+//                 getComponent: (location, cb) =>
+//                 require(['../../docs/renderers/${item.path}'], doc => {
+//                   cb(null, makeMarkdownRenderer(doc));
+//                 })
+//           }`;
+//     };
+
+//     fn(dir, files);
+
+//     return `{
+//           label: '渲染器手册',
+//           icon: 'fa fa-diamond',
+//           path: '/docs/renderers',
+//           getComponent: (location, cb) =>
+//           require(['../../docs/renderers.md'], doc => {
+//             cb(null, makeMarkdownRenderer(doc));
+//           }),
+//           children: [
+//               ${files.map(fn2).join(',\n')}
+//           ]
+//       },`;
+//   });
+// }

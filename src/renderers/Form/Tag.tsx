@@ -1,5 +1,10 @@
 import React from 'react';
-import {OptionsControl, OptionsControlProps, Option} from './Options';
+import {
+  OptionsControl,
+  OptionsControlProps,
+  Option,
+  FormOptionsControl
+} from './Options';
 import Downshift from 'downshift';
 import find from 'lodash/find';
 import {findDOMNode} from 'react-dom';
@@ -9,6 +14,24 @@ import Spinner from '../../components/Spinner';
 import Overlay from '../../components/Overlay';
 import PopOver from '../../components/PopOver';
 import ListMenu from '../../components/ListMenu';
+
+/**
+ * Tag 输入框
+ * 文档：https://baidu.gitee.io/amis/docs/components/form/tag
+ */
+export interface TagControlSchema extends FormOptionsControl {
+  type: 'tag';
+
+  /**
+   * 选项提示信息
+   */
+  optionsTip?: string;
+
+  /**
+   * 是否为下拉模式
+   */
+  dropdown?: boolean;
+}
 
 // declare function matchSorter(items:Array<any>, input:any, options:any): Array<any>;
 
@@ -176,9 +199,9 @@ export default class TagControl extends React.PureComponent<
   }
 
   @autobind
-  renderItem(item: Option) {
+  renderItem(item: Option): any {
     const {labelField} = this.props;
-    return item[labelField || 'label'];
+    return `${item[labelField || 'label']}`;
   }
 
   @autobind

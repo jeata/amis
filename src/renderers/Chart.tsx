@@ -12,24 +12,151 @@ import {isApiOutdated, isEffectiveApi} from '../utils/api';
 import {ScopedContext, IScopedContext} from '../Scoped';
 import {createObject} from '../utils/helper';
 import Spinner from '../components/Spinner';
+import {
+  BaseSchema,
+  SchemaApi,
+  SchemaExpression,
+  SchemaFunction,
+  SchemaName,
+  SchemaTokenizeableString
+} from '../Schema';
+import {ActionSchema} from './Action';
 
-export interface ChartProps extends RendererProps {
+/**
+ * Chart 图表渲染器。
+ * 文档：https://baidu.gitee.io/amis/docs/components/carousel
+ */
+export interface ChartSchema extends BaseSchema {
+  /**
+   * 指定为 chart 类型
+   */
+  type: 'chart';
+
+  /**
+   * 图表配置接口
+   */
+  api?: SchemaApi;
+
+  /**
+   * 是否初始加载。
+   * @deprecated 建议直接配置 api 的 sendOn
+   */
+  initFetch?: boolean;
+
+  /**
+   * 是否初始加载用表达式来配置
+   * @deprecated 建议用 api.sendOn 属性。
+   */
+  initFetchOn?: SchemaExpression;
+
+  /**
+   * 配置echart的config
+   */
+  config?: any;
+
+  /**
+   * 宽度设置
+   */
+  width?: number;
+
+  /**
+   * 高度设置
+   */
+  height?: number;
+
+  /**
+   * 刷新时间
+   */
+  interval?: number;
+
+  name?: SchemaName;
+
+  /**
+   * style样式
+   */
+  style?: {
+    [propName: string]: any;
+  };
+
+  dataFilter?: SchemaFunction;
+
+  source?: SchemaTokenizeableString;
+
+  /**
+   * 点击行为配置，可以用来满足下钻操作等。
+   */
+  clickAction?: ActionSchema;
+
+  /**
+   * 默认配置时追加的，如果更新配置想完全替换配置请配置为 true.
+   */
+  replaceChartOption?: boolean;
+
+  /**
+   * 不可见的时候隐藏
+   */
+  unMountOnHidden?: boolean;
+  
+  /**
+   * 主题
+   */
+  chartTheme?: string;
+}
+
+/**
+ * 深度查找具有某个 key 名字段的对象
+ * @param obj
+ * @param key
+ */
+function findObjectsWithKey(obj: any, key: string) {
+  let objects: any[] = [];
+  for (const k in obj) {
+    if (!obj.hasOwnProperty(k)) continue;
+    if (typeof obj[k] === 'object') {
+      objects = objects.concat(findObjectsWithKey(obj[k], key));
+    } else if (k === key) {
+      objects.push(obj);
+    }
+  }
+  return objects;
+}
+
+const EVAL_CACHE: {[key: string]: Function} = {};
+/**
+ * ECharts 中有些配置项可以写函数，但 JSON 中无法支持，为了实现这个功能，需要将看起来像函数的字符串转成函数类型
+ * 目前 ECharts 中可能有函数的配置项有如下：interval、formatter、color、min、max、labelFormatter、pageFormatter、optionToContent、contentToOption、animationDelay、animationDurationUpdate、animationDelayUpdate、animationDuration、position、sort
+ * 其中用得最多的是 formatter、sort，所以目前先只支持它们
+ * @param config ECharts 配置
+ */
+function recoverFunctionType(config: object) {
+  ['formatter', 'sort'].forEach((key: string) => {
+    const objects = findObjectsWithKey(config, key);
+    for (const object of objects) {
+      const code = object[key];
+      if (typeof code === 'string' && code.trim().startsWith('function ')) {
+        try {
+          if (!(code in EVAL_CACHE)) {
+            EVAL_CACHE[code] = eval('(' + code + ')');
+          }
+          object[key] = EVAL_CACHE[code];
+        } catch (e) {
+          console.warn(code, e);
+        }
+      }
+    }
+  });
+}
+
+export interface ChartProps extends RendererProps, ChartSchema {
   chartRef?: (echart: any) => void;
   onDataFilter?: (config: any, echarts: any) => any;
-  dataFilter?: string;
-  api?: Api;
-  source?: string;
-  config?: object;
-  chartTheme?: string;
-  initFetch?: boolean;
   store: IServiceStore;
-  clickAction?: Action;
-  replaceChartOption: boolean;
 }
 export class Chart extends React.Component<ChartProps> {
   static defaultProps: Partial<ChartProps> = {
     offsetY: 50,
-    replaceChartOption: false
+    replaceChartOption: false,
+    unMountOnHidden: true
   };
 
   static propsList: Array<string> = [];
@@ -40,7 +167,7 @@ export class Chart extends React.Component<ChartProps> {
   pending?: object;
   timer: NodeJS.Timeout;
   mounted: boolean;
-  reloadCancel: Function;
+  reloadCancel?: Function;
 
   constructor(props: ChartProps) {
     super(props);
@@ -221,6 +348,7 @@ export class Chart extends React.Component<ChartProps> {
 
     if (config) {
       try {
+        recoverFunctionType(config);
         this.echarts.setOption(config, this.props.replaceChartOption);
       } catch (e) {
         console.warn(e);
@@ -229,7 +357,13 @@ export class Chart extends React.Component<ChartProps> {
   }
 
   render() {
-    const {className, width, height, classPrefix: ns} = this.props;
+    const {
+      className,
+      width,
+      height,
+      classPrefix: ns,
+      unMountOnHidden
+    } = this.props;
     let style = this.props.style || {};
 
     width && (style.width = width);
@@ -237,7 +371,7 @@ export class Chart extends React.Component<ChartProps> {
 
     return (
       <LazyComponent
-        unMountOnHidden
+        unMountOnHidden={unMountOnHidden}
         placeholder={
           <div className={cx(`${ns}Chart`, className)} style={style}>
             <div className={`${ns}Chart-placeholder`}>

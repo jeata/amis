@@ -1,18 +1,43 @@
 import React from 'react';
 import {Renderer, RendererProps} from '../factory';
-import {ServiceStore, IServiceStore} from '../store/service';
-import {Api, SchemaNode} from '../types';
-import {filter} from '../utils/tpl';
-import cx from 'classnames';
 
 import JSONTree from 'react-json-tree';
 import {autobind} from '../utils/helper';
+import {BaseSchema} from '../Schema';
+import {resolveVariableAndFilter, isPureVariable} from '../utils/tpl-builtin';
+/**
+ * JSON 数据展示控件。
+ * 文档：https://baidu.gitee.io/amis/docs/components/json
+ */
+export interface JsonSchema extends BaseSchema {
+  /**
+   * 指定为Json展示类型
+   */
+  type: 'json' | 'static-json';
 
-export interface JSONProps extends RendererProps {
+  /**
+   * 默认展开的级别
+   */
+  levelExpand?: number;
+
+  /**
+   * 是否隐藏根节点
+   */
+  hideRoot?: boolean;
+
+  /**
+   * 支持从数据链取值
+   */
+  source?: string;
+}
+
+export interface JSONProps extends RendererProps, JsonSchema {
+  levelExpand: number;
   className?: string;
   placeholder?: string;
-  levelExpand: number;
   jsonTheme: string;
+  hideRoot?: boolean;
+  source?: string;
 }
 
 const twilight = {
@@ -96,7 +121,9 @@ export class JSONField extends React.Component<JSONProps, object> {
   static defaultProps: Partial<JSONProps> = {
     placeholder: '-',
     levelExpand: 1,
-    jsonTheme: 'twilight'
+    jsonTheme: 'twilight',
+    hideRoot: false,
+    source: ''
   };
 
   @autobind
@@ -106,6 +133,7 @@ export class JSONField extends React.Component<JSONProps, object> {
       return (
         <a
           className={cx('JsonField-nodeValue')}
+          rel="noopener"
           href={raw.replace(/^\"(.*)\"$/, '$1')}
           target="_blank"
         >
@@ -122,11 +150,19 @@ export class JSONField extends React.Component<JSONProps, object> {
   };
 
   render() {
-    const {className, value, jsonTheme, classnames: cx} = this.props;
+    const {
+      className,
+      value,
+      jsonTheme,
+      classnames: cx,
+      hideRoot,
+      source
+    } = this.props;
 
     let data = value;
-
-    if (typeof value === 'string') {
+    if (source !== undefined && isPureVariable(source)) {
+      data = resolveVariableAndFilter(source, this.props.data, '| raw');
+    } else if (typeof value === 'string') {
       try {
         data = JSON.parse(value);
       } catch (e) {
@@ -145,6 +181,7 @@ export class JSONField extends React.Component<JSONProps, object> {
           theme={theme}
           shouldExpandNode={this.shouldExpandNode}
           valueRenderer={this.valueRenderer}
+          hideRoot={hideRoot}
         />
       </div>
     );

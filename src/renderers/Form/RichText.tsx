@@ -1,8 +1,23 @@
 import React from 'react';
-import {FormItem, FormControlProps} from './Item';
+import {FormItem, FormControlProps, FormBaseControl} from './Item';
 import cx from 'classnames';
 import LazyComponent from '../../components/LazyComponent';
 import {noop} from '../../utils/helper';
+
+/**
+ * RichText
+ * 文档：https://baidu.gitee.io/amis/docs/components/form/rich-text
+ */
+export interface RichTextControlSchema extends FormBaseControl {
+  type: 'rich-text';
+
+  vendor?: 'froala' | 'tinymce';
+
+  reciever?: string;
+  videoReciever?: string;
+
+  options?: any;
+}
 
 export interface RichTextProps extends FormControlProps {
   options?: any;
@@ -117,6 +132,7 @@ export default class RichTextControl extends React.Component<
       props.vendor || (props.env.richTextToken ? 'froala' : 'tinymce');
     this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
     if (finnalVendor === 'froala') {
       this.config = {
@@ -210,6 +226,20 @@ export default class RichTextControl extends React.Component<
     });
   }
 
+  handleChange(
+    value: any,
+    submitOnChange?: boolean,
+    changeImmediately?: boolean
+  ) {
+    const {onChange, disabled} = this.props;
+
+    if (disabled) {
+      return;
+    }
+
+    onChange?.(value, submitOnChange, changeImmediately);
+  }
+
   render() {
     const {
       className,
@@ -236,7 +266,7 @@ export default class RichTextControl extends React.Component<
         <LazyComponent
           getComponent={loadRichText(finnalVendor)}
           model={value}
-          onModelChange={disabled ? noop : onChange}
+          onModelChange={this.handleChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           config={this.config}

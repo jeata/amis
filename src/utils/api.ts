@@ -53,7 +53,7 @@ export function buildApi(
   api.config = {
     ...rest
   };
-  api.method = api.method || (options as any).method || 'get';
+  api.method = (api.method || (options as any).method || 'get').toLowerCase();
 
   if (!data) {
     return api;
@@ -96,9 +96,25 @@ export function buildApi(
   if (api.method === 'get') {
     if (!~raw.indexOf('$') && !api.data && autoAppend) {
       api.data = data;
+    } else if (
+      api.attachDataToQuery === false &&
+      api.data &&
+      !~raw.indexOf('$') &&
+      autoAppend
+    ) {
+      const idx = api.url.indexOf('?');
+      if (~idx) {
+        let params = {
+          ...qs.parse(api.url.substring(idx + 1)),
+          ...data
+        };
+        api.url = api.url.substring(0, idx) + '?' + qsstringify(params);
+      } else {
+        api.url += '?' + qsstringify(data);
+      }
     }
 
-    if (api.data) {
+    if (api.data && api.attachDataToQuery !== false) {
       const idx = api.url.indexOf('?');
       if (~idx) {
         let params = {
@@ -152,9 +168,8 @@ function responseAdaptor(ret: fetcherResult) {
   if (!data) {
     throw new Error('Response is empty!');
   } else if (!data.hasOwnProperty('status')) {
-    throw new Error(
-      '接口返回格式不符合，请参考 http://amis.baidu.com/v2/docs/api'
-    );
+    // 兼容不返回 status 字段的情况
+    data.status = 0;
   }
 
   const payload: Payload = {
@@ -162,7 +177,7 @@ function responseAdaptor(ret: fetcherResult) {
     status: data.status,
     msg: data.msg,
     msgTimeout: data.msgTimeout,
-    data: data.data
+    data: !data.data && !data.hasOwnProperty('status') ? data : data.data // 兼容直接返回数据的情况
   };
 
   if (payload.status == 422) {
@@ -217,10 +232,18 @@ export function wrapAdaptor(promise: Promise<fetcherResult>, api: ApiObject) {
   const adaptor = api.adaptor;
   return adaptor
     ? promise
-        .then(response => ({
-          ...response,
-          data: adaptor((response as any).data, response, api)
-        }))
+        .then(async response => {
+          let result = adaptor((response as any).data, response, api);
+
+          if (result?.then) {
+            result = await result;
+          }
+
+          return {
+            ...response,
+            data: result
+          };
+        })
         .then(responseAdaptor)
     : promise.then(responseAdaptor);
 }
@@ -230,7 +253,7 @@ export function isApiOutdated(
   nextApi: Api | undefined,
   prevData: any,
   nextData: any
-): boolean {
+): nextApi is Api {
   const url: string =
     (nextApi && (nextApi as ApiObject).url) || (nextApi as string);
 

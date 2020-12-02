@@ -20,13 +20,16 @@
   padding-top: $Form-label-paddingTop;
   padding-bottom: $Form-label-paddingTop;
   margin-bottom: 0;
+
+  .#{$ns}Form-item--inline > .#{$ns}Form-value > & {
+    display: inline-block;
+    vertical-align: top;
+  }
 }
 
 .#{$ns}Form-label {
   font-weight: $fontWeightNormal;
   margin-bottom: px2rem(5px);
-  display: inline-block;
-  max-width: 100%;
   position: relative;
 
   > span {
@@ -69,9 +72,6 @@
   }
 
   .#{$ns}Form--inline > &--inline {
-    margin-bottom: $Form-item-gap/2;
-    margin-right: $Form-item-gap/2;
-
     &:last-child {
       margin-right: 0;
       margin-bottom: 0;
@@ -79,8 +79,13 @@
   }
 
   .#{$ns}Form-remark {
-    margin-top: ($Form-input-height - $fontSizeBase) / 2;
+    padding-top: $Form-label-paddingTop;
     vertical-align: top;
+  }
+
+  &--inline {
+    margin-bottom: $Form-item-gap/2;
+    margin-right: $Form-item-gap/2;
   }
 
   &--horizontal {
@@ -119,6 +124,11 @@
 }
 
 @include media-breakpoint-up(sm) {
+  .#{$ns}Form-label {
+    display: inline-block;
+    max-width: 100%;
+  }
+
   .#{$ns}Form-control--sizeXs {
     // min-width: $Form-control-widthXs;
     // width: auto;
@@ -203,6 +213,7 @@
       .#{$ns}Form-itemColumn--xs,
       .#{$ns}Form-itemColumn--sm,
       .#{$ns}Form-itemColumn--normal,
+      .#{$ns}Form-itemColumn--auto,
       .#{$ns}Form-itemColumn--md,
       .#{$ns}Form-itemColumn--lg {
         flex-grow: unset;
@@ -240,6 +251,10 @@
         width: $Form--horizontal-label-widthLg;
       }
 
+      .#{$ns}Form-itemColumn--auto {
+        width: auto;
+      }
+
       @for $i from (1) through $Form--horizontal-columns {
         .#{$ns}Form-itemColumn--#{$i} {
           flex: 0 0 percentage($i / $Form--horizontal-columns);
@@ -253,6 +268,10 @@
       display: inline-block;
       vertical-align: top;
 
+      .#{$ns}TextControl {
+        width: $Form-control-widthBase;
+      }
+
       > .#{$ns}Form-label {
         padding-top: $Form-label-paddingTop;
         margin-bottom: 0;
@@ -264,7 +283,8 @@
       }
 
       > .#{$ns}Form-value {
-        display: inline;
+        display: inline-block;
+        vertical-align: top;
 
         > .#{$ns}Form-control {
           vertical-align: top;
@@ -318,9 +338,13 @@
       flex-basis: 0;
       flex-grow: 1;
 
-      &:not(.#{$ns}Form-control--withSize) {
-        min-width: unset;
-      }
+      // &:not(.#{$ns}Form-control--withSize) {
+      //   width: $Form-control-widthBase;
+      // }
     }
   }
+}
+
+.#{$ns}Form--quickEdit {
+  min-width: $Form-control-widthSm;
 }
