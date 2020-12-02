@@ -145,6 +145,7 @@ export default class TextControl extends React.PureComponent<
           );
 
           if (formItem.value) {
+            // @ts-ignore
             setVariable(data, name!, formItem.value);
           }
         }, 'init');

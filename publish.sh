@@ -14,9 +14,9 @@ cp -rf sdk npm
 
 cd npm
 
-sed -i '' -e 's/\"name\": \"amis\"/\"name\": \"@fex\/amis\"/g' ./package.json
+sed -i '' -e 's/\"name\": \"amis\"/\"name\": \"@jeata\/amis\"/g' ./package.json
 
-npm publish --registry=https://nexus.jitalab.com/repository/npm/
-
+# npm publish --registry=https://nexus.jitalab.com/repository/npm/
+npm publish
 cd ..
 # rm -rf npm

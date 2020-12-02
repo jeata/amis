@@ -92,7 +92,7 @@ export function evalExpression(expression: string, data?: object): boolean {
       fn = new Function(
         'data',
         'utils',
-        `with(data) {var window, document, top, self, parent, Function, eval, postMessage,  setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover；${debug ? 'debugger;' : ''}return !!(${expression});}`
+        `with(data) {var window, document, top, self, parent, Function, eval, postMessage,  setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover; ${debug ? 'debugger;' : ''}return !!(${expression});}`
       );
       EVAL_CACHE[expression] = fn;
     }
@@ -125,7 +125,7 @@ export function evalJS(js: string, data: object): any {
     const fn = new Function(
       'data',
       'utils',
-      `with(data) {var window, document, top, self, parent, Function, eval, postMessage, setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover;${/^\s*return\b/.test(js) ? '' : 'return '}${js};}`
+      `with(data) {var window, document, top, self, parent, Function, eval, postMessage, setInterval, setTimeout, XMLHttpRequest, ActiveXObject, localStorage, sessionStorage, openDatabase, indexedDB, safeFnRecover; ${/^\s*return\b/.test(js) ? '' : 'return '}${js};}`
     );
     data = data || {};
     return fn.call(data, data, getFilters());
