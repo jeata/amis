@@ -5,17 +5,86 @@ import {SchemaNode, Schema, Action} from '../types';
 import {filter} from '../utils/tpl';
 import Modal from '../components/Modal';
 import findLast from 'lodash/findLast';
-import {guid, isVisible} from '../utils/helper';
+import {guid, isVisible, autobind} from '../utils/helper';
 import {reaction} from 'mobx';
 import {Icon} from '../components/icons';
 import {ModalStore, IModalStore} from '../store/modal';
 import {findDOMNode} from 'react-dom';
 import {Spinner} from '../components';
+import {IServiceStore} from '../store/service';
+import {
+  BaseSchema,
+  SchemaClassName,
+  SchemaCollection,
+  SchemaName,
+  SchemaTpl
+} from '../Schema';
+import {ActionSchema} from './Action';
+import {isAlive} from 'mobx-state-tree';
 
-export interface DialogProps extends RendererProps {
-  title?: string; // 标题
-  size?: 'md' | 'lg' | 'sm' | 'xl' | 'full';
+/**
+ * Dialog 弹框渲染器。
+ * 文档：https://baidu.gitee.io/amis/docs/components/dialog
+ */
+export interface DialogSchema extends BaseSchema {
+  type: 'dialog';
+
+  /**
+   * 默认不用填写，自动会创建确认和取消按钮。
+   */
+  actions?: Array<ActionSchema>;
+
+  /**
+   * 内容区域
+   */
+  body?: SchemaCollection;
+
+  /**
+   * 配置 Body 容器 className
+   */
+  bodyClassName?: SchemaClassName;
+
+  /**
+   * 是否支持按 ESC 关闭 Dialog
+   */
   closeOnEsc?: boolean;
+
+  name?: SchemaName;
+
+  /**
+   * Dialog 大小
+   */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+  /**
+   * 请通过配置 title 设置标题
+   */
+  title?: SchemaCollection;
+
+  header?: SchemaCollection;
+  headerClassName?: SchemaClassName;
+
+  footer?: SchemaCollection;
+
+  /**
+   * 影响自动生成的按钮，如果自己配置了按钮这个配置无效。
+   */
+  confirm?: boolean;
+
+  /**
+   * 是否显示关闭按钮
+   */
+  showCloseButton?: boolean;
+
+  /**
+   * 是否显示错误信息
+   */
+  showErrorMsg?: boolean;
+}
+
+export type DialogSchemaBase = Omit<DialogSchema, 'type'>;
+
+export interface DialogProps extends RendererProps, DialogSchema {
   onClose: () => void;
   onConfirm: (
     values: Array<object>,
@@ -25,18 +94,9 @@ export interface DialogProps extends RendererProps {
   ) => void;
   children?: React.ReactNode | ((props?: any) => React.ReactNode);
   store: IModalStore;
-  className?: string;
-  header?: SchemaNode;
-  body?: SchemaNode;
-  headerClassName?: string;
-  bodyClassName?: string;
-  footer?: SchemaNode;
-  confirm?: boolean;
   show?: boolean;
   lazyRender?: boolean;
-  wrapperComponent: React.ReactType;
-  showCloseButton?: boolean;
-  showErrorMsg?: boolean;
+  wrapperComponent: React.ElementType;
 }
 
 export interface DialogState {
@@ -121,14 +181,14 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
     this.isDead = true;
   }
 
-  buildActions(): Array<Action> {
+  buildActions(): Array<ActionSchema> {
     const {actions, confirm, translate: __} = this.props;
 
     if (typeof actions !== 'undefined') {
       return actions;
     }
 
-    let ret: Array<Action> = [];
+    let ret: Array<ActionSchema> = [];
     ret.push({
       type: 'button',
       actionType: 'cancel',
@@ -248,7 +308,8 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
 
   handleExited() {
     const {store} = this.props;
-    store.reset();
+    isAlive(store) && store.setFormData({});
+
     this.state.entered &&
       this.setState({
         entered: false
@@ -294,6 +355,13 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
     });
   }
 
+  @autobind
+  getPopOverContainer() {
+    return (findDOMNode(this) as HTMLElement).querySelector(
+      `.${this.props.classPrefix}Modal-content`
+    );
+  }
+
   renderBody(body: SchemaNode, key?: any): React.ReactNode {
     let {render, store} = this.props;
 
@@ -306,6 +374,7 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
       disabled: (body && (body as any).disabled) || store.loading,
       onAction: this.handleAction,
       onFinished: this.handleChildFinished,
+      popOverContainer: this.getPopOverContainer,
       affixOffsetTop: 0,
       onChange: this.handleFormChange,
       onInit: this.handleFormInit,
@@ -452,7 +521,9 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
           : null}
 
         {!this.state.entered && lazyRender ? (
-          <div className={cx('Modal-body', bodyClassName)} />
+          <div className={cx('Modal-body', bodyClassName)}>
+            <Spinner overlay show size="lg" />
+          </div>
         ) : body ? (
           <div className={cx('Modal-body', bodyClassName)}>
             {this.renderBody(body, 'body')}
@@ -510,7 +581,9 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
   storeType: ModalStore.name,
   storeExtendsData: false,
   name: 'dialog',
-  isolateScope: true
+  isolateScope: true,
+  shouldSyncSuperStore: (store: IServiceStore, props: any) =>
+    store.dialogOpen || props.show
 })
 export class DialogRenderer extends Dialog {
   static contextType = ScopedContext;

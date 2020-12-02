@@ -82,19 +82,15 @@ export const ServiceStore = iRendererStore
         }
 
         (options && options.silent) || markFetching(true);
-        const json: Payload = yield (getRoot(self) as IRendererStore).fetcher(
-          api,
-          data,
-          {
-            ...options,
-            cancelExecutor: (executor: Function) => (fetchCancel = executor)
-          }
-        );
+        const json: Payload = yield getEnv(self).fetcher(api, data, {
+          ...options,
+          cancelExecutor: (executor: Function) => (fetchCancel = executor)
+        });
         fetchCancel = null;
 
         if (!json.ok) {
           updateMessage(json.msg || (options && options.errorMessage), true);
-          (getRoot(self) as IRendererStore).notify(
+          getEnv(self).notify(
             'error',
             json.msg,
             json.msgTimeout !== undefined
@@ -126,25 +122,25 @@ export const ServiceStore = iRendererStore
           // 配置了获取成功提示后提示，默认是空不会提示。
           options &&
             options.successMessage &&
-            (getRoot(self) as IRendererStore).notify('success', self.msg);
+            getEnv(self).notify('success', self.msg);
         }
 
         markFetching(false);
         return json;
       } catch (e) {
-        const root = getRoot(self) as IRendererStore;
-        if (!isAlive(root) || root.storeType !== 'RendererStore') {
-          // 已经销毁了，不管这些数据了。
+        const env = getEnv(self);
+
+        if (!isAlive(self) || self.disposed) {
           return;
         }
 
-        if (root.isCancel(e)) {
+        if (env.isCancel(e)) {
           return;
         }
 
         markFetching(false);
         e.stack && console.error(e.stack);
-        root.notify('error', e.message || e);
+        env.notify('error', e.message || e);
         return;
       }
     });
@@ -170,7 +166,7 @@ export const ServiceStore = iRendererStore
         }
 
         (options && options.silent) || markFetching(true);
-        const json: Payload = yield ((getRoot(
+        const json: Payload = yield ((getEnv(
           self
         ) as IRendererStore) as IRendererStore).fetcher(api, data, {
           ...options,
@@ -193,7 +189,7 @@ export const ServiceStore = iRendererStore
 
         if (!json.ok) {
           updateMessage(json.msg || (options && options.errorMessage), true);
-          (getRoot(self) as IRendererStore).notify(
+          getEnv(self).notify(
             'error',
             self.msg,
             json.msgTimeout !== undefined
@@ -217,25 +213,25 @@ export const ServiceStore = iRendererStore
           // 配置了获取成功提示后提示，默认是空不会提示。
           options &&
             options.successMessage &&
-            (getRoot(self) as IRendererStore).notify('success', self.msg);
+            getEnv(self).notify('success', self.msg);
         }
 
         markFetching(false);
         return json;
       } catch (e) {
-        const root = getRoot(self) as IRendererStore;
-        if (!isAlive(root) || root.storeType !== 'RendererStore') {
-          // 已经销毁了，不管这些数据了。
+        const env = getEnv(self);
+
+        if (!isAlive(self) || self.disposed) {
           return;
         }
 
-        if (root.isCancel(e)) {
+        if (env.isCancel(e)) {
           return;
         }
 
         markFetching(false);
         e.stack && console.error(e.stack);
-        root.notify('error', e.message || e);
+        env.notify('error', e.message || e);
         return;
       }
     });
@@ -260,11 +256,7 @@ export const ServiceStore = iRendererStore
         }
         markSaving(true);
 
-        const json: Payload = yield (getRoot(self) as IRendererStore).fetcher(
-          api,
-          data,
-          options
-        );
+        const json: Payload = yield getEnv(self).fetcher(api, data, options);
 
         if (!isEmpty(json.data) || json.ok) {
           self.updatedAt = Date.now();
@@ -295,18 +287,22 @@ export const ServiceStore = iRendererStore
           }
 
           updateMessage(json.msg || (options && options.successMessage));
-          self.msg &&
-            (getRoot(self) as IRendererStore).notify('success', self.msg);
+          self.msg && getEnv(self).notify('success', self.msg);
         }
 
         markSaving(false);
         return json.data;
       } catch (e) {
         self.saving = false;
+
+        if (!isAlive(self) || self.disposed) {
+          return;
+        }
+
         // console.log(e.stack);
         if (e.type === 'ServerError') {
           const result = (e as ServerError).response;
-          (getRoot(self) as IRendererStore).notify(
+          getEnv(self).notify(
             'error',
             e.message,
             result.msgTimeout !== undefined
@@ -317,7 +313,7 @@ export const ServiceStore = iRendererStore
               : undefined
           );
         } else {
-          (getRoot(self) as IRendererStore).notify('error', e.message);
+          getEnv(self).notify('error', e.message);
         }
 
         throw e;
@@ -366,11 +362,7 @@ export const ServiceStore = iRendererStore
           self.schemaCached = !!(api as any).cache;
         }
 
-        const json: Payload = yield (getRoot(self) as IRendererStore).fetcher(
-          api,
-          data,
-          options
-        );
+        const json: Payload = yield getEnv(self).fetcher(api, data, options);
         fetchSchemaCancel = null;
 
         if (!json.ok) {
@@ -380,7 +372,7 @@ export const ServiceStore = iRendererStore
               self.__('获取失败，请重试'),
             true
           );
-          (getRoot(self) as IRendererStore).notify(
+          getEnv(self).notify(
             'error',
             self.msg,
             json.msgTimeout !== undefined
@@ -406,25 +398,25 @@ export const ServiceStore = iRendererStore
           // 配置了获取成功提示后提示，默认是空不会提示。
           options &&
             options.successMessage &&
-            (getRoot(self) as IRendererStore).notify('success', self.msg);
+            getEnv(self).notify('success', self.msg);
         }
 
         self.initializing = false;
+        return json.data;
       } catch (e) {
-        const root = getRoot(self) as IRendererStore;
-        if (!isAlive(root) || root.storeType !== 'RendererStore') {
-          // 已经销毁了，不管这些数据了。
+        const env = getEnv(self);
+
+        self.initializing = false;
+        if (!isAlive(self) || self.disposed) {
           return;
         }
 
-        self.initializing = false;
-
-        if (root.isCancel(e)) {
+        if (env.isCancel(e)) {
           return;
         }
 
         e.stack && console.error(e.stack);
-        root.notify('error', e.message || e);
+        env.notify('error', e.message || e);
       }
     });
 
@@ -443,11 +435,7 @@ export const ServiceStore = iRendererStore
 
       try {
         self.checking = true;
-        const json: Payload = yield (getRoot(self) as IRendererStore).fetcher(
-          api,
-          data,
-          options
-        );
+        const json: Payload = yield getEnv(self).fetcher(api, data, options);
         json.ok &&
           self.updateData(
             json.data,

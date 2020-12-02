@@ -46,6 +46,9 @@
     background-color: $info;
     border-color: $info;
   }
+  &--block {
+    display: block;
+  }
 }
 
 .#{$ns}ButtonToolbar {

@@ -63,6 +63,8 @@
 
   &-itemLabel {
     display: flex;
+    align-items: center;
+
     &:hover {
       background: $Tree-item-onHover-bg;
     }
@@ -94,6 +96,9 @@
 
   &-itemInput {
     padding-left: $Tree-itemArrowWidth;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 
     > a {
       display: inline-block;
@@ -108,6 +113,8 @@
     }
 
     > input {
+      flex-grow: 1;
+      width: 100%;
       outline: none;
       background-color: $Form-input-bg;
       border: $Form-input-borderWidth solid $Form-input-borderColor;
@@ -155,7 +162,7 @@
       width: $svgSize;
       height: $svgSize;
       top: $svgSize * 0.125;
-      margin-right: $Tree-itemArrowWidth - px2rem(14px); // icon 的宽度是14px
+      margin-right: $gap-xs;
     }
   }
 
@@ -218,7 +225,6 @@
     > .#{$ns}Checkbox {
       line-height: 1;
       display: inline-block;
-      padding-top: $Form-label-paddingTop - px2rem(1px);
     }
   }
 

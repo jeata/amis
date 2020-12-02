@@ -3,19 +3,98 @@ import {Renderer, RendererProps} from '../factory';
 import {RootCloseWrapper} from 'react-overlays';
 import Overlay from '../components/Overlay';
 import PopOver from '../components/PopOver';
-import cx from 'classnames';
+import TooltipWrapper from '../components/TooltipWrapper';
+import type {TooltipObject, Trigger} from '../components/TooltipWrapper';
 import {isVisible, noop} from '../utils/helper';
 import {filter} from '../utils/tpl';
 import {Icon} from '../components/icons';
+import {
+  BaseSchema,
+  SchemaClassName
+} from '../Schema';
+import {ActionSchema} from './Action';
+import {DividerSchema} from './Divider';
 
-export interface DropDownButtonProps extends RendererProps {
+/**
+ * 下拉按钮渲染器。
+ * 文档：https://baidu.gitee.io/amis/docs/components/dropdown-button
+ */
+export interface DropdownButtonSchema extends BaseSchema {
+  /**
+   * 指定为 DropDown Button 类型
+   */
+  type: 'dropdown-button';
+
+  /**
+   * 是否独占一行 `display: block`
+   */
   block?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
-  align?: 'left' | 'right';
-  buttons?: Array<any>;
-  iconOnly?: boolean;
-  defaultIsOpened?: boolean;
+
+  /**
+   * 给 Button 配置 className。
+   */
+  btnClassName?: SchemaClassName;
+
+  /**
+   * 按钮集合
+   */
+  buttons?: Array<ActionSchema | DividerSchema | 'divider'>;
+
+  /**
+   * 按钮文字
+   */
+  label?: string;
+
+  /**
+   * 按钮级别，样式
+   */
+  level?: 'info' | 'success' | 'danger' | 'warning' | 'primary' | 'link';
+
+  /**
+   * 按钮提示文字，hover 时显示
+   */
+  // tooltip?: SchemaTooltip;
+
+  /**
+   * 点击外部是否关闭
+   */
   closeOnOutside?: boolean;
+
+  /**
+   * 点击内容是否关闭
+   */
+  closeOnClick?: boolean;
+
+  /**
+   * 按钮大小
+   */
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+
+  /**
+   * 对齐方式
+   */
+  align?: 'left' | 'right';
+
+  /**
+   * 是否只显示图标。
+   */
+  iconOnly?: boolean;
+}
+
+export interface DropDownButtonProps
+  extends RendererProps,
+    Omit<DropdownButtonSchema, 'type'> {
+  disabledTip?: string | TooltipObject;
+  /**
+   * 按钮提示文字，hover focus 时显示
+   */
+  tooltip?: string | TooltipObject;
+  placement?: 'top' | 'right' | 'bottom' | 'left';
+  tooltipContainer?: any;
+  tooltipTrigger?: Trigger | Array<Trigger>;
+  tooltipRootClose?: boolean;
+  defaultIsOpened?: boolean;
+  label?: any;
 }
 
 export interface DropDownButtonState {
@@ -30,7 +109,16 @@ export default class DropDownButton extends React.Component<
     isOpened: false
   };
 
-  static defaultProps = {};
+  static defaultProps: Pick<
+    DropDownButtonProps,
+    | 'placement'
+    | 'tooltipTrigger'
+    | 'tooltipRootClose'
+  > = {
+    placement: 'top',
+    tooltipTrigger: ['hover', 'focus'],
+    tooltipRootClose: false
+  };
 
   target: any;
   constructor(props: DropDownButtonProps) {
@@ -101,7 +189,7 @@ export default class DropDownButton extends React.Component<
             ? children
             : Array.isArray(buttons)
             ? buttons.map((button, index) => {
-                if (!isVisible(button, data)) {
+                if (typeof button !== 'string' && !isVisible(button, data)) {
                   return null;
                 } else if (button === 'divider' || button.type === 'divider') {
                   return <li key={index} className={cx('DropDown-divider')} />;
@@ -111,7 +199,7 @@ export default class DropDownButton extends React.Component<
                   <li key={index}>
                     {render(`button/${index}`, {
                       type: 'button',
-                      ...button,
+                      ...(button as any),
                       isMenuItem: true
                     })}
                   </li>
@@ -143,6 +231,12 @@ export default class DropDownButton extends React.Component<
 
   render() {
     const {
+      tooltip,
+      placement,
+      tooltipContainer,
+      tooltipTrigger,
+      tooltipRootClose,
+      disabledTip,
       block,
       disabled,
       btnDisabled,
@@ -167,38 +261,45 @@ export default class DropDownButton extends React.Component<
         })}
         ref={this.domRef}
       >
-        <button
-          onClick={this.toogle}
-          disabled={disabled || btnDisabled}
-          className={cx(
-            'Button',
-            className,
-            typeof level === 'undefined'
-              ? 'Button--default'
-              : level
-              ? `Button--${level}`
-              : '',
-            {
-              'Button--block': block,
-              'Button--primary': primary,
-              'Button--iconOnly': iconOnly
-            },
-            size ? `Button--${size}` : ''
-          )}
+        <TooltipWrapper
+          placement={placement}
+          tooltip={disabled ? disabledTip : tooltip}
+          container={tooltipContainer}
+          trigger={tooltipTrigger}
+          rootClose={tooltipRootClose}
         >
-          {icon ? (
-            typeof icon === 'string' ? (
-              <i className={cx(icon, 'm-r-xs')} />
-            ) : (
-              icon
-            )
-          ) : null}
-          {typeof label === 'string' ? filter(label, data) : label}
-          <span className={cx('DropDown-caret')}>
-            <Icon icon="caret" className="icon" />
-          </span>
-        </button>
-
+          <button
+            onClick={this.toogle}
+            disabled={disabled || btnDisabled}
+            className={cx(
+              'Button',
+              className,
+              typeof level === 'undefined'
+                ? 'Button--default'
+                : level
+                ? `Button--${level}`
+                : '',
+              {
+                'Button--block': block,
+                'Button--primary': primary,
+                'Button--iconOnly': iconOnly
+              },
+              size ? `Button--${size}` : ''
+            )}
+          >
+            {icon ? (
+              typeof icon === 'string' ? (
+                <i className={cx(icon, 'm-r-xs')} />
+              ) : (
+                icon
+              )
+            ) : null}
+            {typeof label === 'string' ? filter(label, data) : label}
+            <span className={cx('DropDown-caret')}>
+              <Icon icon="caret" className="icon" />
+            </span>
+          </button>
+        </TooltipWrapper>
         {this.state.isOpened ? this.renderOuter() : null}
       </div>
     );

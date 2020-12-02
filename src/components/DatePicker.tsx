@@ -242,7 +242,7 @@ export interface DateProps extends LocaleProps, ThemeProps {
   defaultValue?: any;
   utc?: boolean;
   onChange: (value: any) => void;
-  value: any;
+  value?: any;
   shortcuts: string | Array<ShortCuts>;
   overlayPlacement: string;
   minTime?: moment.Moment;
@@ -250,6 +250,9 @@ export interface DateProps extends LocaleProps, ThemeProps {
   dateFormat?: string;
   timeConstraints?: any;
   popOverContainer?: any;
+
+  // 是否为内嵌模式，如果开启就不是 picker 了，直接页面点选。
+  embed?: boolean;
 
   // 下面那个千万不要写，写了就会导致 keyof DateProps 得到的结果是 string | number;
   // [propName: string]: any;
@@ -259,6 +262,14 @@ export interface DatePickerState {
   isOpened: boolean;
   isFocused: boolean;
   value: moment.Moment | undefined;
+}
+
+function normalizeValue(value: any, format?: string) {
+  if (!value || value === '0') {
+    return undefined;
+  }
+  const v = moment(value, format, true);
+  return v.isValid() ? v : undefined;
 }
 
 export class DatePicker extends React.Component<DateProps, DatePickerState> {
@@ -271,9 +282,7 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
   state: DatePickerState = {
     isOpened: false,
     isFocused: false,
-    value: this.props.value
-      ? moment(this.props.value, this.props.format)
-      : undefined
+    value: normalizeValue(this.props.value, this.props.format)
   };
   constructor(props: DateProps) {
     super(props);
@@ -299,9 +308,7 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
   componentWillReceiveProps(nextProps: DateProps) {
     if (this.props.value !== nextProps.value) {
       this.setState({
-        value: nextProps.value
-          ? moment(nextProps.value, nextProps.format)
-          : undefined
+        value: normalizeValue(nextProps.value, nextProps.format)
       });
     }
   }
@@ -505,12 +512,43 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
       shortcuts,
       utc,
       overlayPlacement,
-      locale
+      locale,
+      format,
+      embed
     } = this.props;
 
     const __ = this.props.translate;
     const isOpened = this.state.isOpened;
     let date: moment.Moment | undefined = this.state.value;
+
+    if (embed) {
+      return (
+        <div
+          className={cx(
+            `${ns}DateCalendar`,
+            {
+              'is-disabled': disabled
+            },
+            className
+          )}
+        >
+          <Calendar
+            value={date}
+            onChange={this.handleChange}
+            requiredConfirm={false}
+            dateFormat={dateFormat}
+            timeFormat={timeFormat}
+            isValidDate={this.checkIsValidDate}
+            viewMode={viewMode}
+            timeConstraints={timeConstraints}
+            input={false}
+            onClose={this.close}
+            locale={locale}
+            // utc={utc}
+          />
+        </div>
+      );
+    }
 
     return (
       <div
@@ -539,7 +577,7 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
           </span>
         )}
 
-        {clearable && !disabled && value ? (
+        {clearable && !disabled && normalizeValue(value, format) ? (
           <a className={`${ns}DatePicker-clear`} onClick={this.clearValue}>
             <Icon icon="close" className="icon" />
           </a>
@@ -571,6 +609,7 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
                 onChange={this.handleChange}
                 requiredConfirm={!!(dateFormat && timeFormat)}
                 dateFormat={dateFormat}
+                inputFormat={inputFormat}
                 timeFormat={timeFormat}
                 isValidDate={this.checkIsValidDate}
                 viewMode={viewMode}

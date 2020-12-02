@@ -1,7 +1,15 @@
 import React from 'react';
+import {saveAs} from 'file-saver';
 import PropTypes from 'prop-types';
 import {Renderer, RendererProps} from '../factory';
-import {SchemaNode, Schema, Action, Api, ApiObject} from '../types';
+import {
+  SchemaNode,
+  Schema,
+  Action,
+  Api,
+  ApiObject,
+  PlainObject
+} from '../types';
 import {CRUDStore, ICRUDStore} from '../store/crud';
 import {
   createObject,
@@ -30,53 +38,274 @@ import findIndex from 'lodash/findIndex';
 import Html from '../components/Html';
 import {Spinner} from '../components';
 import {Icon} from '../components/icons';
+import {
+  BaseSchema,
+  SchemaApi,
+  SchemaClassName,
+  SchemaCollection,
+  SchemaExpression,
+  SchemaMessage,
+  SchemaName,
+  SchemaObject,
+  SchemaTokenizeableString,
+  SchemaTpl
+} from '../Schema';
+import {ActionSchema} from './Action';
+import {CardsSchema} from './Cards';
+import {ListSchema} from './List';
+import {TableSchema} from './Table';
 
-export interface CRUDProps extends RendererProps {
-  api?: Api;
-  filter?: Schema;
-  store: ICRUDStore;
-  defaultParams: object;
-  syncLocation?: boolean;
-  primaryField?: string;
+export type CRUDBultinToolbarType =
+  | 'columns-toggler'
+  | 'drag-toggler'
+  | 'pagination'
+  | 'bulkActions'
+  | 'bulk-actions'
+  | 'statistics'
+  | 'switch-per-page'
+  | 'load-more'
+  | 'filter-toggler'
+  | 'export-csv'
+  | 'export-excel';
+
+export interface CRUDBultinToolbar extends Omit<BaseSchema, 'type'> {
+  type: CRUDBultinToolbarType;
+}
+
+export type CRUDToolbarChild = SchemaObject | CRUDBultinToolbar;
+
+export type CRUDToolbarObject = {
+  /**
+   * 对齐方式
+   */
+  align?: 'left' | 'right';
+};
+
+export interface CRUDCommonSchema extends BaseSchema {
+  /**
+   *  指定为 CRUD 渲染器。
+   */
+  type: 'crud';
+
+  /**
+   * 指定内容区的展示模式。
+   */
   mode?: 'table' | 'grid' | 'cards' | /* grid 的别名*/ 'list';
-  toolbarInline?: boolean;
-  toolbar?: SchemaNode; // 不推荐，但是还是要兼容老用法。
-  headerToolbar?: SchemaNode;
-  footerToolbar?: SchemaNode;
-  bulkActions?: Array<Action>;
-  itemActions?: Array<Action>;
-  orderField?: string;
-  saveOrderApi?: Api;
-  quickSaveApi?: Api;
-  quickSaveItemApi?: Api;
+
+  /**
+   * 初始化数据 API
+   */
+  api?: SchemaApi;
+
+  /**
+   * 批量操作
+   */
+  bulkActions?: Array<ActionSchema>;
+
+  /**
+   * 单条操作
+   */
+  itemActions?: Array<ActionSchema>;
+
+  /**
+   * 可以默认给定初始参数如： {\"perPage\": 24}
+   */
+  defaultParams?: PlainObject;
+
+  /**
+   * 是否可通过拖拽排序
+   */
+  draggable?: boolean;
+
+  /**
+   * 是否可通过拖拽排序，通过表达式来配置
+   */
+  draggableOn?: SchemaExpression;
+
+  name?: SchemaName;
+
+  /**
+   * 过滤器表单
+   */
+  filter?: any; // todo
+
+  /**
+   * 初始是否拉取
+   * @deprecated 建议用 api 的 sendOn 代替。
+   */
   initFetch?: boolean;
-  perPageAvailable?: Array<number | string>;
-  messages: {
-    fetchFailed?: string;
-    fetchSuccess?: string;
-    saveFailed?: string;
-    saveSuccess?: string;
-  };
-  pickerMode?: boolean; // 选择模式，用做表单中的选择操作
-  pageField?: string;
-  perPageField?: string;
-  hideQuickSaveBtn?: boolean;
-  autoJumpToTopOnPagerChange?: boolean; // 是否自动跳顶部，当切分页的时候。
+
+  /**
+   * 初始是否拉取，用表达式来配置。
+   * @deprecated 建议用 api 的 sendOn 代替。
+   */
+  initFetchOn?: SchemaExpression;
+
+  /**
+   * 配置内部 DOM 的 className
+   */
+  innerClassName?: SchemaClassName;
+
+  /**
+   * 设置自动刷新时间
+   */
   interval?: number;
+
+  /**
+   * 设置用来确定位置的字段名，设置后新的顺序将被赋值到该字段中。
+   */
+  orderField?: string;
+
+  /**
+   * 设置分页页码字段名。
+   * @default page
+   */
+  pageField?: string;
+
+  /**
+   * 设置分页一页显示的多少条数据的字段名。
+   * @default perPage
+   */
+  perPageField?: string;
+
+  /**
+   * 快速编辑后用来批量保存的 API
+   */
+  quickSaveApi?: SchemaApi;
+
+  /**
+   * 快速编辑配置成及时保存时使用的 API
+   */
+  quickSaveItemApi?: SchemaApi;
+
+  /**
+   * 保存排序的 api
+   */
+  saveOrderApi?: SchemaApi;
+
+  /**
+   * 是否将过滤条件的参数同步到地址栏,默认为true
+   * @default true
+   */
+  syncLocation?: boolean;
+
+  /**
+   * 顶部工具栏
+   */
+  headerToolbar?: Array<
+    (CRUDToolbarChild & CRUDToolbarObject) | CRUDBultinToolbarType
+  >;
+
+  /**
+   * 底部工具栏
+   */
+  footerToolbar?: Array<
+    (CRUDToolbarChild & CRUDToolbarObject) | CRUDBultinToolbarType
+  >;
+
+  /**
+   * 每页显示多少个空间成员的配置如： [10, 20, 50, 100]。
+   */
+  perPageAvailable?: Array<number>;
+
+  messages?: SchemaMessage;
+
+  /**
+   * 是否隐藏快速编辑的按钮。
+   */
+  hideQuickSaveBtn?: boolean;
+
+  /**
+   * 是否自动跳顶部，当切分页的时候。
+   */
+  autoJumpToTopOnPagerChange?: boolean;
+
+  /**
+   * 静默拉取
+   */
   silentPolling?: boolean;
-  stopAutoRefreshWhen?: string;
+  stopAutoRefreshWhen?: SchemaExpression;
+
   stopAutoRefreshWhenModalIsOpen?: boolean;
   filterTogglable?: boolean;
   filterDefaultVisible?: boolean;
+
+  /**
+   * 是否将接口返回的内容自动同步到地址栏，前提是开启了同步地址栏。
+   */
   syncResponse2Query?: boolean;
+
+  /**
+   * 分页的时候是否保留用户选择。
+   */
   keepItemSelectionOnPageChange?: boolean;
+
+  /**
+   * 当配置 keepItemSelectionOnPageChange 时有用，用来配置已勾选项的文案。
+   */
+  labelTpl?: SchemaTpl;
+
+  /**
+   * 是否为前端单次加载模式，可以用来实现前端分页。
+   */
   loadDataOnce?: boolean;
-  loadDataOnceFetchOnFilter?: boolean; // 在开启loadDataOnce时，filter时是否去重新请求api
-  source?: string;
+
+  /**
+   * 在开启loadDataOnce时，filter时是否去重新请求api
+   */
+  loadDataOnceFetchOnFilter?: boolean;
+
+  /**
+   * 也可以直接从环境变量中读取，但是不太推荐。
+   */
+  source?: SchemaTokenizeableString;
+
+  /**
+   * 如果时内嵌模式，可以通过这个来配置默认的展开选项。
+   */
+  expandConfig?: {
+    /**
+     * 默认是展开第一个、所有、还是都不展开。
+     */
+    expand?: 'first' | 'all' | 'none';
+
+    /**
+     * 是否显示全部切换按钮
+     */
+    expandAll?: boolean;
+
+    /**
+     * 是否为手风琴模式
+     */
+    accordion?: boolean;
+  };
+}
+
+export type CRUDCardsSchema = CRUDCommonSchema & {
+  mode: 'cards';
+} & Omit<CardsSchema, 'type'>;
+
+export type CRUDListSchema = CRUDCommonSchema & {
+  mode: 'list';
+} & Omit<ListSchema, 'type'>;
+
+export type CRUDTableSchem = CRUDCommonSchema & {
+  mode?: 'table';
+} & Omit<TableSchema, 'type'>;
+
+/**
+ * CRUD 增删改查渲染器。
+ * 文档：https://baidu.gitee.io/amis/docs/components/crud
+ */
+export type CRUDSchema = CRUDCardsSchema | CRUDListSchema | CRUDTableSchem;
+
+export interface CRUDProps extends RendererProps, CRUDCommonSchema {
+  store: ICRUDStore;
+  pickerMode?: boolean; // 选择模式，用做表单中的选择操作
 }
 
 export default class CRUD extends React.Component<CRUDProps, any> {
-  static propsList: Array<string> = [
+  static propsList: Array<keyof CRUDProps> = [
     'bulkActions',
     'itemActions',
     'mode',
@@ -168,7 +397,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
     this.handleChildPopOverClose = this.handleChildPopOverClose.bind(this);
     this.search = this.search.bind(this);
     this.silentSearch = this.silentSearch.bind(this);
-    this.handlQuery = this.handlQuery.bind(this);
+    this.handleQuery = this.handleQuery.bind(this);
     this.renderHeaderToolbar = this.renderHeaderToolbar.bind(this);
     this.renderFooterToolbar = this.renderFooterToolbar.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
@@ -362,6 +591,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
           redirect && !action.blank && env.jumpTo(redirect, action);
           action.reload
             ? this.reloadTarget(action.reload, data)
+            : redirect
+            ? null
             : this.search(undefined, undefined, true, true);
           action.close && this.closeTarget(action.close);
         })
@@ -790,7 +1021,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
       env,
       pageField,
       perPageField,
-      autoJumpToTopOnPagerChange
+      autoJumpToTopOnPagerChange,
+      affixOffsetTop
     } = this.props;
 
     let query: any = {
@@ -803,9 +1035,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
 
     store.updateQuery(
       query,
-      syncLocation && env && env.updateLocation
-        ? env.updateLocation
-        : undefined,
+      syncLocation && env?.updateLocation ? env.updateLocation : undefined,
       pageField,
       perPageField
     );
@@ -815,7 +1045,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
     if (autoJumpToTopOnPagerChange && this.control) {
       (findDOMNode(this.control) as HTMLElement).scrollIntoView();
       const scrolledY = window.scrollY;
-      scrolledY && window.scroll(0, scrolledY - 50);
+      const offsetTop = affixOffsetTop ?? env?.affixOffsetTop ?? 50;
+      scrolledY && window.scroll(0, scrolledY - offsetTop);
     }
   }
 
@@ -824,7 +1055,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
     diff: Array<object> | object,
     indexes: Array<number>,
     unModifiedItems?: Array<any>,
-    rowsOrigin?: Array<object> | object
+    rowsOrigin?: Array<object> | object,
+    resetOnFailed?: boolean
   ) {
     const {
       store,
@@ -866,7 +1098,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
         })
         .then(() => {
           reload && this.reloadTarget(reload, data);
-          this.search();
+          this.search(undefined, undefined, true, true);
         })
         .catch(() => {});
     } else {
@@ -886,9 +1118,11 @@ export default class CRUD extends React.Component<CRUDProps, any> {
         .saveRemote(quickSaveItemApi, sendData)
         .then(() => {
           reload && this.reloadTarget(reload, data);
-          this.search();
+          this.search(undefined, undefined, true, true);
         })
-        .catch(() => {});
+        .catch(() => {
+          resetOnFailed && this.control.reset();
+        });
     }
   }
 
@@ -995,7 +1229,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
         .saveRemote(saveOrderApi, model)
         .then(() => {
           reload && this.reloadTarget(reload, model);
-          this.search();
+          this.search(undefined, undefined, true, true);
         })
         .catch(() => {});
   }
@@ -1021,8 +1255,9 @@ export default class CRUD extends React.Component<CRUDProps, any> {
         const idx = findIndex(
           oldItems,
           a =>
-            a[primaryField || 'id'] &&
-            a[primaryField || 'id'] == item[primaryField || 'id']
+            a === item ||
+            (a[primaryField || 'id'] &&
+              a[primaryField || 'id'] == item[primaryField || 'id'])
         );
 
         if (~idx) {
@@ -1030,21 +1265,35 @@ export default class CRUD extends React.Component<CRUDProps, any> {
         } else {
           oldItems.push(item);
         }
+
+        const idx2 = findIndex(
+          oldUnselectedItems,
+          a =>
+            a === item ||
+            (a[primaryField || 'id'] &&
+              a[primaryField || 'id'] == item[primaryField || 'id'])
+        );
+
+        if (~idx2) {
+          oldUnselectedItems.splice(idx2, 1);
+        }
       });
 
       unSelectedItems.forEach(item => {
         const idx = findIndex(
           oldUnselectedItems,
           a =>
-            a[primaryField || 'id'] &&
-            a[primaryField || 'id'] == item[primaryField || 'id']
+            a === item ||
+            (a[primaryField || 'id'] &&
+              a[primaryField || 'id'] == item[primaryField || 'id'])
         );
 
         const idx2 = findIndex(
           oldItems,
           a =>
-            a[primaryField || 'id'] &&
-            a[primaryField || 'id'] == item[primaryField || 'id']
+            a === item ||
+            (a[primaryField || 'id'] &&
+              a[primaryField || 'id'] == item[primaryField || 'id'])
         );
 
         if (~idx) {
@@ -1112,7 +1361,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
     }
   }
 
-  handlQuery(values: object, forceReload: boolean = false) {
+  handleQuery(values: object, forceReload: boolean = false) {
     const {store, syncLocation, env, pageField, perPageField} = this.props;
 
     store.updateQuery(
@@ -1138,7 +1387,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
   }
 
   receive(values: object) {
-    this.handlQuery(values, true);
+    this.handleQuery(values, true);
   }
 
   reloadTarget(target: string, data: any) {
@@ -1195,8 +1444,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
       return false;
     }
 
-    let bulkBtns: Array<Action> = [];
-    let itemBtns: Array<Action> = [];
+    let bulkBtns: Array<ActionSchema> = [];
+    let itemBtns: Array<ActionSchema> = [];
     const ctx = store.mergedData;
 
     if (bulkActions && bulkActions.length) {
@@ -1241,8 +1490,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
     const selectedItems = store.selectedItems;
     const unSelectedItems = store.unSelectedItems;
 
-    let bulkBtns: Array<Action> = [];
-    let itemBtns: Array<Action> = [];
+    let bulkBtns: Array<ActionSchema> = [];
+    let itemBtns: Array<ActionSchema> = [];
 
     const ctx = store.mergedData;
 
@@ -1450,6 +1699,30 @@ export default class CRUD extends React.Component<CRUDProps, any> {
     );
   }
 
+  renderExportCSV() {
+    const {store, classPrefix: ns, classnames: cx, translate: __} = this.props;
+
+    return (
+      <Button
+        classPrefix={ns}
+        onClick={() => {
+          (require as any)(['papaparse'], (papaparse: any) => {
+            const csvText = papaparse.unparse(store.data.items);
+            if (csvText) {
+              const blob = new Blob([csvText], {
+                type: 'text/plain;charset=utf-8'
+              });
+              saveAs(blob, 'data.csv');
+            }
+          });
+        }}
+        size="sm"
+      >
+        {__('导出 CSV')}
+      </Button>
+    );
+  }
+
   renderToolbar(
     toolbar?: SchemaNode,
     index: number = 0,
@@ -1474,6 +1747,8 @@ export default class CRUD extends React.Component<CRUDProps, any> {
       return this.renderLoadMore();
     } else if (type === 'filter-toggler') {
       return this.renderFilterToggler();
+    } else if (type === 'export-csv') {
+      return this.renderExportCSV();
     } else if (Array.isArray(toolbar)) {
       const children: Array<any> = toolbar
         .map((toolbar, index) => ({
@@ -1542,6 +1817,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
       lastPage: store.lastPage,
       perPage: store.perPage,
       total: store.total,
+      onQuery: this.handleQuery,
       onAction: this.handleAction,
       onChangePage: this.handleChangePage,
       onBulkAction: this.handleBulkAction,
@@ -1567,7 +1843,12 @@ export default class CRUD extends React.Component<CRUDProps, any> {
       }
     }
 
-    return this.renderToolbar(headerToolbar, 0, childProps, toolbarRenderer);
+    return this.renderToolbar(
+      headerToolbar || [],
+      0,
+      childProps,
+      toolbarRenderer
+    );
   }
 
   renderFooterToolbar(
@@ -1728,7 +2009,7 @@ export default class CRUD extends React.Component<CRUDProps, any> {
             onAction: this.handleAction,
             onSave: this.handleSave,
             onSaveOrder: this.handleSaveOrder,
-            onQuery: this.handlQuery,
+            onQuery: this.handleQuery,
             onSelect: this.handleSelect,
             onPopOverOpened: this.handleChildPopOverOpen,
             onPopOverClosed: this.handleChildPopOverClose,

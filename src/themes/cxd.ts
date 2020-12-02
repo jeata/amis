@@ -27,7 +27,6 @@ theme('cxd', {
     },
 
     'remark': {
-      icon: 'iconfont icon-warning-mark',
       placement: 'right'
     },
 

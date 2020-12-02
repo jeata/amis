@@ -57,6 +57,9 @@ interface TreeSelectorProps extends ThemeProps, LocaleProps {
   hideRoot?: boolean;
   rootLabel?: string;
   rootValue?: any;
+
+  // 这个配置名字没取好，目前的含义是，如果这个配置成true，点父级的时候，子级点不会自选中。
+  // 否则点击父级，子节点选中。
   cascade?: boolean;
   selfDisabledAffectChildren?: boolean;
   minLength?: number;
@@ -120,7 +123,7 @@ export class TreeSelector extends React.Component<
     cascade: false,
     selfDisabledAffectChildren: true,
     rootCreateTip: '添加一级节点',
-    createTip: '添加孩子节点',
+    createTip: '添加子节点',
     editTip: '编辑该节点',
     removeTip: '移除该节点'
   };
@@ -247,16 +250,18 @@ export class TreeSelector extends React.Component<
 
         if (onlyChildren) {
           // 父级选中的时候，子节点也都选中，但是自己不选中
-          !~idx && children.length && value.shift();
+          !~idx && children.length && value.pop();
 
           while (children.length) {
             let child = children.shift();
             let index = value.indexOf(child);
 
+            if (!~index && child.value !== 'undefined') {
+              value.push(child);
+            }
+
             if (child.children) {
               children.push.apply(children, child.children);
-            } else {
-              ~index || value.push(child);
             }
           }
         } else {
@@ -279,7 +284,7 @@ export class TreeSelector extends React.Component<
           }
         }
       }
-    } else if (!checked) {
+    } else {
       ~idx && value.splice(idx, 1);
 
       if (!props.cascade && (props.withChildren || onlyChildren)) {
@@ -344,13 +349,18 @@ export class TreeSelector extends React.Component<
 
   @autobind
   handleEdit(item: Option) {
-    const labelField = this.props.labelField;
-    this.setState({
-      isEditing: true,
-      isAdding: false,
-      editingItem: item,
-      inputValue: item[labelField]
-    });
+    const {bultinCUD, onEdit, labelField, options} = this.props;
+
+    if (!bultinCUD) {
+      onEdit?.(item);
+    } else {
+      this.setState({
+        isEditing: true,
+        isAdding: false,
+        editingItem: item,
+        inputValue: item[labelField]
+      });
+    }
   }
 
   @autobind
@@ -394,7 +404,7 @@ export class TreeSelector extends React.Component<
             (addingParent &&
               findTreeIndex(options, item => item === addingParent)) ||
             [];
-          onAdd(idx.concat(0), {[labelField]: value}, true);
+          onAdd(idx, {[labelField]: value}, true);
         } else if (isEditing && onEdit) {
           onEdit(
             {
@@ -535,7 +545,7 @@ export class TreeSelector extends React.Component<
           size="sm"
           disabled={nodeDisabled}
           checked={checked}
-          onChange={this.handleCheck.bind(this, item)}
+          onChange={this.handleCheck.bind(this, item, !selfChecked)}
         />
       ) : showRadio ? (
         <Checkbox
@@ -614,8 +624,8 @@ export class TreeSelector extends React.Component<
                 }
               >
                 {highlightTxt
-                  ? highlight(item[labelField], highlightTxt)
-                  : item[labelField]}
+                  ? highlight(`${item[labelField]}`, highlightTxt)
+                  : `${item[labelField]}`}
               </span>
 
               {!nodeDisabled && !isAdding && !isEditing ? (
@@ -763,6 +773,7 @@ export class TreeSelector extends React.Component<
                         <a
                           onClick={this.handleAdd.bind(this, null)}
                           data-tooltip={rootCreateTip}
+                          data-position="left"
                         >
                           <Icon icon="plus" className="icon" />
                         </a>

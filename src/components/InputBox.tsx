@@ -8,6 +8,7 @@ export interface InputBoxProps
   extends ThemeProps,
     Omit<React.DOMAttributes<HTMLInputElement>, 'prefix' | 'onChange'> {
   value?: string;
+  readOnly?: boolean;
   onChange?: (value: string) => void;
   onClear?: (e: React.MouseEvent<any>) => void;
   clearable?: boolean;
@@ -102,6 +103,7 @@ export class InputBox extends React.Component<InputBoxProps, InputBoxState> {
           placeholder={placeholder}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
+          size={12}
         />
 
         {children}

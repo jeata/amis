@@ -4,19 +4,54 @@ import {ServiceStore, IServiceStore} from '../store/service';
 import {Api, SchemaNode, PlainObject} from '../types';
 import {filter} from '../utils/tpl';
 import cx from 'classnames';
+import {BaseSchema, SchemaClassName} from '../Schema';
 
-export interface ProgressProps extends RendererProps {
-  className?: string;
+/**
+ * 进度展示控件。
+ * 文档：https://baidu.gitee.io/amis/docs/components/progress
+ */
+export interface ProgressSchema extends BaseSchema {
+  type: 'progress';
+
+  /**
+   * 关联字段名。
+   */
+  name?: string;
+
+  /**
+   * 进度条 CSS 类名
+   */
+  progressClassName?: SchemaClassName;
+
+  /**
+   * 进度外层 CSS 类名
+   */
+  progressBarClassName?: SchemaClassName;
+
+  /**
+   * 配置不通的值段，用不通的样式提示用户
+   */
+  map?: Array<SchemaClassName>;
+
+  /**
+   * 是否显示值
+   */
+  showLabel?: boolean;
+
+  /**
+   * 占位符
+   */
   placeholder?: string;
-  format?: string;
-  valueFormat?: string;
-  map: PlainObject;
+}
+
+export interface ProgressProps extends RendererProps, ProgressSchema {
+  map: Array<SchemaClassName>;
 }
 
 export class ProgressField extends React.Component<ProgressProps, object> {
   static defaultProps = {
     placeholder: '-',
-    progressClassName: 'progress-xs progress-striped active m-b-none',
+    progressClassName: '',
     progressBarClassName: '',
     map: ['bg-danger', 'bg-warning', 'bg-info', 'bg-success', 'bg-success'],
     showLabel: true
@@ -51,10 +86,10 @@ export class ProgressField extends React.Component<ProgressProps, object> {
 
     if (typeof value === 'number') {
       viewValue = [
-        <div key="progress" className={cx('progress', progressClassName)}>
+        <div key="progress" className={cx('Progress', progressClassName)}>
           <div
             className={cx(
-              'progress-bar',
+              'Progress-bar',
               progressBarClassName || this.autoClassName(value)
             )}
             title={`${value}%`}

@@ -209,17 +209,15 @@ export default {
         }
       },
       {
+        type: 'text',
         name: 'grade',
         label: 'CSS grade',
         quickEdit: {
+          saveImmediately: true,
           mode: 'inline',
           type: 'select',
-          inputClassName: 'w-xs',
-          options: ['A', 'B', 'C', 'D', 'X'],
-          saveImmediately: true
-        },
-        type: 'text',
-        toggled: true
+          options: ['A', 'B', 'C', 'D', 'X']
+        }
       },
       {
         type: 'operation',

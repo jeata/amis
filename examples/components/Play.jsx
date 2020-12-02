@@ -1,13 +1,16 @@
 import React from 'react';
 import {toast} from '../../src/components/Toast';
 import {render} from '../../src/index';
+import {normalizeLink} from '../../src/utils/normalizeLink';
+import {alert, confirm} from '../../src/components/Alert';
 import axios from 'axios';
 import Frame from 'react-frame-component';
 import stripJsonComments from 'strip-json-comments';
 import CodeEditor from '../../src/components/Editor';
+import copy from 'copy-to-clipboard';
 
 const DEFAULT_CONTENT = `{
-    "$schema": "https://houtai.baidu.com/v2/schemas/page.json#",
+    "$schema": "/schemas/page.json#",
     "type": "page",
     "title": "Title",
     "body": "Body",
@@ -58,14 +61,16 @@ export default class PlayGround extends React.Component {
   startX = 0;
   oldContents = '';
   frameTemplate;
+  iframeRef;
 
   static defaultProps = {
-    useIFrame: false,
     vertical: false
   };
 
   constructor(props) {
     super(props);
+    this.iframeRef = React.createRef();
+    const {router} = props;
 
     const schema = this.buildSchema(props.code || DEFAULT_CONTENT, props);
     this.state = {
@@ -85,7 +90,28 @@ export default class PlayGround extends React.Component {
       }
     };
     this.env = {
-      updateLocation: () => {},
+      session: 'doc',
+      updateLocation: (location, replace) => {
+        router[replace ? 'replace' : 'push'](normalizeLink(location));
+      },
+      isCurrentUrl: to => {
+        const link = normalizeLink(to);
+        return router.isActive(link);
+      },
+      jumpTo: (to, action) => {
+        to = normalizeLink(to);
+
+        if (action && action.actionType === 'url') {
+          action.blank === true ? window.open(to) : (window.location.href = to);
+          return;
+        }
+
+        if (/^https?:\/\//.test(to)) {
+          window.location.replace(to);
+        } else {
+          router.push(to);
+        }
+      },
       fetcher: config => {
         config = {
           dataType: 'json',
@@ -100,18 +126,40 @@ export default class PlayGround extends React.Component {
 
         return axios[config.method](config.url, config.data, config);
       },
+      isCancel: value => axios.isCancel(value),
       notify: (type, msg) =>
         toast[type]
           ? toast[type](msg, type === 'error' ? '系统错误' : '系统消息')
-          : console.warn('[Notify]', type, msg)
+          : console.warn('[Notify]', type, msg),
+      alert,
+      confirm,
+      copy: content => {
+        copy(content);
+        toast.success('内容已复制到粘贴板');
+      }
     };
 
-    const links = [].slice
-      .call(document.head.querySelectorAll('link,style'))
-      .map(item => item.outerHTML);
-    this.frameTemplate = `<!DOCTYPE html><html><head>${links.join(
-      ''
-    )}</head><body><div></div></body></html>`;
+    this.watchIframeReady = this.watchIframeReady.bind(this);
+    window.addEventListener('message', this.watchIframeReady, false);
+  }
+
+  watchIframeReady(event) {
+    // iframe 里面的 amis 初始化了就可以发数据
+    if (event.data && event.data === 'amisReady') {
+      this.updateIframe();
+    }
+  }
+
+  updateIframe() {
+    if (this.iframeRef && this.iframeRef.current) {
+      this.iframeRef.current.contentWindow.postMessage(
+        {
+          schema: this.state.schema,
+          props: {theme: this.props.theme, locale: this.props.locale}
+        },
+        '*'
+      );
+    }
   }
 
   componentWillReceiveProps(nextprops) {
@@ -135,6 +183,7 @@ export default class PlayGround extends React.Component {
 
   componentWillUnmount() {
     this.props.setAsideFolded && this.props.setAsideFolded(false);
+    window.removeEventListener('message', this.watchIframeReady, false);
   }
 
   buildSchema(schemaContent, props = this.props) {
@@ -155,7 +204,11 @@ export default class PlayGround extends React.Component {
         '$1'
       ); // 去掉注释
 
-      return JSON.parse(schemaContent);
+      const json = {
+        ...JSON.parse(schemaContent)
+      };
+
+      return json;
     } catch (e) {
       console.error(this.formatMessage(e.message, schemaContent));
     }
@@ -179,33 +232,45 @@ export default class PlayGround extends React.Component {
   renderPreview() {
     const schema = this.state.schema;
 
-    if (!this.props.useIFrame) {
-      return render(schema, this.schemaProps, this.env);
+    const props = {
+      ...this.schemaProps,
+      theme: this.props.theme,
+      locale: this.props.locale,
+      affixHeader: false,
+      affixFooter: false
+    };
+
+    if (this.props.viewMode === 'mobile') {
+      return (
+        <iframe
+          width="375"
+          height="100%"
+          frameBorder={0}
+          className="mobile-frame"
+          ref={this.iframeRef}
+          // @ts-ignore
+          src={__uri('../mobile.html')}
+        ></iframe>
+      );
     }
 
-    return (
-      <Frame
-        width="100%"
-        height="100%"
-        frameBorder={0}
-        initialContent={this.frameTemplate}
-      >
-        {render(schema, this.schemaProps, this.env)}
-      </Frame>
-    );
+    return render(schema, props, this.env);
   }
 
   handleChange(value) {
     this.setState({
       schemaCode: value
     });
-
     try {
       const schema = JSON.parse(value);
-
-      this.setState({
-        schema
-      });
+      this.setState(
+        {
+          schema
+        },
+        () => {
+          this.updateIframe();
+        }
+      );
     } catch (e) {
       //ignore
     }
@@ -240,11 +305,61 @@ export default class PlayGround extends React.Component {
     window.removeEventListener('mousemove', this.handleMouseMove);
   }
 
+  editorDidMount = (editor, monaco) => {
+    this.editor = editor;
+    this.monaco = monaco;
+
+    let host = `${window.location.protocol}//${window.location.host}`;
+
+    // 如果在 gh-pages 里面
+    if (/^\/amis/.test(window.location.pathname)) {
+      host += '/amis';
+    }
+
+    const schemaUrl = `${host}/schema.json`;
+
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      schemas: [
+        {
+          uri: schemaUrl,
+          fileMatch: ['*']
+        }
+      ],
+      validate: true,
+      enableSchemaRequest: true,
+      allowComments: true
+    });
+  };
+
+  // editorFactory = (containerElement, monaco, options) => {
+  //   this.model = monaco.editor.createModel(
+  //     this.state.schemaCode,
+  //     'json',
+  //     monaco.Uri.parse(`isuda://schemas/page.json`)
+  //   );
+
+  //   return monaco.editor.create(containerElement, {
+  //     autoIndent: true,
+  //     formatOnType: true,
+  //     formatOnPaste: true,
+  //     selectOnLineNumbers: true,
+  //     scrollBeyondLastLine: false,
+  //     folding: true,
+  //     minimap: {
+  //       enabled: false
+  //     },
+  //     ...options,
+  //     model: this.model
+  //   });
+  // };
+
   renderEditor() {
     return (
       <CodeEditor
         value={this.state.schemaCode}
         onChange={this.handleChange}
+        // editorFactory={this.editorFactory}
+        editorDidMount={this.editorDidMount}
         language="json"
       />
     );
@@ -257,12 +372,12 @@ export default class PlayGround extends React.Component {
         <div className="vbox">
           <div className="row-row">
             <div className="cell pos-rlt">
-              <div className="scroll-y h-full pos-abt w-full">
+              <div className="scroll-y h-full pos-abt w-full b-b">
                 {this.renderPreview()}
               </div>
             </div>
           </div>
-          <div className="row-row" style={{height: 200}}>
+          <div className="row-row b-t" style={{height: 200}}>
             <div className="cell">{this.renderEditor()}</div>
           </div>
         </div>
@@ -279,7 +394,7 @@ export default class PlayGround extends React.Component {
       >
         <div className="hbox">
           <div className="col pos-rlt">
-            <div className="scroll-y h-full pos-abt w-full">
+            <div className="scroll-y h-full pos-abt w-full b-b">
               {this.renderPreview()}
             </div>
           </div>

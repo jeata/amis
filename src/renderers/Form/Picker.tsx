@@ -1,5 +1,10 @@
 import React from 'react';
-import {OptionsControl, OptionsControlProps, Option} from './Options';
+import {
+  OptionsControl,
+  OptionsControlProps,
+  Option,
+  FormOptionsControl
+} from './Options';
 import cx from 'classnames';
 import Button from '../../components/Button';
 import {SchemaNode, Schema, Action} from '../../types';
@@ -18,6 +23,47 @@ import {filter} from '../../utils/tpl';
 import {Icon} from '../../components/icons';
 import {isEmpty} from '../../utils/helper';
 import {dataMapping} from '../../utils/tpl-builtin';
+import {SchemaCollection, SchemaTpl} from '../../Schema';
+import {CRUDSchema} from '../CRUD';
+
+/**
+ * Picker
+ * 文档：https://baidu.gitee.io/amis/docs/components/form/picker
+ */
+export interface PickerControlSchema extends FormOptionsControl {
+  type: 'picker';
+
+  /**
+   * 可用来生成选中的值的描述文字
+   */
+  labelTpl?: SchemaTpl;
+
+  /**
+   * 建议用 labelTpl
+   * 选中一个字段名用来作为值的描述文字
+   */
+  labelField?: string;
+
+  /**
+   * 选一个可以用来作为值的字段。
+   */
+  valueField?: string;
+
+  /**
+   * 弹窗选择框详情。
+   */
+  pickerSchema?: any; // Omit<CRUDSchema, 'type'>;
+
+  /**
+   * 弹窗模式，dialog 或者 drawer
+   */
+  modalMode?: 'dialog' | 'drawer';
+
+  /**
+   * 内嵌模式，也就是说不弹框了。
+   */
+  embed?: boolean;
+}
 
 export interface PickerProps extends OptionsControlProps {
   modalMode: 'dialog' | 'drawer';
@@ -46,7 +92,8 @@ export default class PickerControl extends React.PureComponent<
     'multiple',
     'embed',
     'resetValue',
-    'placeholder'
+    'placeholder',
+    'onQuery' // 防止 Form 的 onQuery 事件透传下去，不然会导致 table 先后触发 Form 和 Crud 的 onQuery
   ];
   static defaultProps: Partial<PickerProps> = {
     modalMode: 'dialog',
@@ -335,8 +382,10 @@ export default class PickerControl extends React.PureComponent<
               {labelTpl ? (
                 <Html html={filter(labelTpl, item)} />
               ) : (
-                getVariable(item, labelField || 'label') ||
-                getVariable(item, 'id')
+                `${
+                  getVariable(item, labelField || 'label') ||
+                  getVariable(item, 'id')
+                }`
               )}
             </span>
           </div>
@@ -346,7 +395,7 @@ export default class PickerControl extends React.PureComponent<
   }
 
   @autobind
-  renderBody() {
+  renderBody({popOverContainer}: any = {}) {
     const {
       render,
       selectedOptions,
@@ -363,7 +412,8 @@ export default class PickerControl extends React.PureComponent<
       options: options,
       multiple,
       onSelect: embed ? this.handleChange : undefined,
-      ref: this.crudRef
+      ref: this.crudRef,
+      popOverContainer
     }) as JSX.Element;
   }
 
@@ -383,12 +433,15 @@ export default class PickerControl extends React.PureComponent<
       embed,
       value,
       selectedOptions,
-      translate: __
+      translate: __,
+      popOverContainer
     } = this.props;
     return (
       <div className={cx(`PickerControl`, className)}>
         {embed ? (
-          <div className={cx('Picker')}>{this.renderBody()}</div>
+          <div className={cx('Picker')}>
+            {this.renderBody({popOverContainer})}
+          </div>
         ) : (
           <div
             className={cx(`Picker`, {

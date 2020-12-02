@@ -9,14 +9,17 @@ import {
   render,
   Renderer,
   getRendererByName,
+  registerRenderer,
+  unRegisterRenderer,
   resolveRenderer,
   filterSchema,
-  clearStoresCache
+  clearStoresCache,
+  updateEnv
 } from './factory';
 import {wrapFetcher, buildApi} from './utils/api';
 import {
   filter,
-  reigsterTplEnginer,
+  registerTplEnginer,
   evalExpression,
   evalJS,
   setCustomEvalJs,
@@ -33,6 +36,9 @@ import {
   makeTranslator,
   register as registerLocale
 } from './locale';
+import animation from './utils/Animation';
+
+export * from './Schema';
 
 // 注册渲染器
 import './renderers/Action';
@@ -82,6 +88,7 @@ import './renderers/Form/Matrix';
 import './renderers/Form/Range';
 import './renderers/Form/Array';
 import './renderers/Form/Combo';
+import './renderers/Form/ConditionBuilder';
 import './renderers/Form/Container';
 import './renderers/Form/SubForm';
 import './renderers/Form/RichText';
@@ -115,7 +122,7 @@ import './renderers/Page';
 import './renderers/Panel';
 import './renderers/Plain';
 import './renderers/Spinner';
-import './renderers/Table';
+import './renderers/Table/index';
 import './renderers/Tabs';
 import './renderers/Tpl';
 import './renderers/Mapping';
@@ -127,6 +134,7 @@ import './renderers/Switch';
 import './renderers/Wizard';
 import './renderers/Chart';
 import './renderers/Container';
+import './renderers/SearchBox';
 import './renderers/Service';
 import './renderers/Video';
 import './renderers/Audio';
@@ -140,7 +148,7 @@ import './renderers/Icon';
 import './renderers/Carousel';
 import Scoped, {ScopedContext} from './Scoped';
 
-import {FormItem} from './renderers/Form/Item';
+import {FormItem, registerFormItem} from './renderers/Form/Item';
 
 // 兼容旧版本用法
 import './compat';
@@ -162,7 +170,7 @@ import {
   validateObject
 } from './utils/validations';
 import {normalizeOptions} from './components/Select';
-import {OptionsControl} from './renderers/Form/Options';
+import {OptionsControl, registerOptionsControl} from './renderers/Form/Options';
 
 import {
   classnames,
@@ -178,6 +186,7 @@ export * from './components/index';
 export {
   render,
   clearStoresCache,
+  updateEnv,
   Renderer,
   RegisterStore,
   FormItem,
@@ -189,7 +198,7 @@ export {
   utils,
   resizeSensor,
   registerFilter,
-  reigsterTplEnginer,
+  registerTplEnginer,
   evalExpression,
   evalJS,
   setCustomEvalJs,
@@ -198,6 +207,10 @@ export {
   str2rules,
   normalizeOptions,
   getRendererByName,
+  registerRenderer,
+  unRegisterRenderer,
+  registerFormItem,
+  registerOptionsControl,
   resolveRenderer,
   filterSchema,
   filterDate,
@@ -221,5 +234,6 @@ export {
   getDefaultLocale,
   setDefaultLocale,
   registerLocale,
-  makeTranslator
+  makeTranslator,
+  animation
 };
