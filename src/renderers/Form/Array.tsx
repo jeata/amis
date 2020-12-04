@@ -13,7 +13,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * Array 数组输入框。 combo 的别名。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/array
+ * 文档：https://doc.jeata.com/amis/docs/components/form/array
  */
 export interface ArrayControlSchema
   extends Omit<ComboControlSchema, 'type' | 'controls' | 'conditions'> {

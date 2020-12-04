@@ -122,7 +122,7 @@ export type TableColumn = TableColumnWithType | TableColumnObject;
 
 /**
  * Table 表格渲染器。
- * 文档：https://baidu.gitee.io/amis/docs/components/table
+ * 文档：https://doc.jeata.com/amis/docs/components/table
  */
 export interface TableSchema extends BaseSchema {
   /**

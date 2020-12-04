@@ -24,7 +24,7 @@ import {findDOMNode} from 'react-dom';
 
 /**
  * Tree 下拉选择框。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/tree
+ * 文档：https://doc.jeata.com/amis/docs/components/form/tree
  */
 export interface TreeSelectControlSchema extends FormOptionsControl {
   type: 'tree-select';

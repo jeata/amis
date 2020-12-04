@@ -40,7 +40,7 @@ export interface DateBaseControlSchema extends FormBaseControl {
 
 /**
  * Date日期选择控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/date
+ * 文档：https://doc.jeata.com/amis/docs/components/form/date
  */
 export interface DateControlSchema extends DateBaseControlSchema {
   /**
@@ -78,7 +78,7 @@ export interface DateControlSchema extends DateBaseControlSchema {
 
 /**
  * Datetime日期时间选择控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/datetime
+ * 文档：https://doc.jeata.com/amis/docs/components/form/datetime
  */
 export interface DateTimeControlSchema extends DateBaseControlSchema {
   /**
@@ -123,7 +123,7 @@ export interface DateTimeControlSchema extends DateBaseControlSchema {
 
 /**
  * Time 时间选择控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/time
+ * 文档：https://doc.jeata.com/amis/docs/components/form/time
  */
 export interface TimeControlSchema extends DateBaseControlSchema {
   /**
@@ -158,7 +158,7 @@ export interface TimeControlSchema extends DateBaseControlSchema {
 
 /**
  * Month 月份选择控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/Month
+ * 文档：https://doc.jeata.com/amis/docs/components/form/Month
  */
 export interface MonthControlSchema extends DateBaseControlSchema {
   /**

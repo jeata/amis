@@ -5,7 +5,7 @@ import LocationPicker from '../../components/LocationPicker';
 
 /**
  * Location 选点组件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/location
+ * 文档：https://doc.jeata.com/amis/docs/components/form/location
  */
 export interface LocationControlSchema extends FormBaseControl {
   type: 'location';

@@ -25,7 +25,7 @@ import {
 
 /**
  * File 文件上传控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/file
+ * 文档：https://doc.jeata.com/amis/docs/components/form/file
  */
 export interface FileControlSchema extends FormBaseControl {
   /**

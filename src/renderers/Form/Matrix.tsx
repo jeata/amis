@@ -14,7 +14,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * Matrix 选择控件。适合做权限勾选。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/matrix
+ * 文档：https://doc.jeata.com/amis/docs/components/form/matrix
  */
 export interface MatrixControlSchema extends FormBaseControl {
   type: 'matrix';

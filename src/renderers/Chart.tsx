@@ -24,7 +24,7 @@ import {ActionSchema} from './Action';
 
 /**
  * Chart 图表渲染器。
- * 文档：https://baidu.gitee.io/amis/docs/components/carousel
+ * 文档：https://doc.jeata.com/amis/docs/components/carousel
  */
 export interface ChartSchema extends BaseSchema {
   /**
@@ -96,7 +96,7 @@ export interface ChartSchema extends BaseSchema {
    * 不可见的时候隐藏
    */
   unMountOnHidden?: boolean;
-  
+
   /**
    * 主题
    */

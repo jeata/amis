@@ -28,7 +28,7 @@ import {CRUDSchema} from '../CRUD';
 
 /**
  * Picker
- * 文档：https://baidu.gitee.io/amis/docs/components/form/picker
+ * 文档：https://doc.jeata.com/amis/docs/components/form/picker
  */
 export interface PickerControlSchema extends FormOptionsControl {
   type: 'picker';

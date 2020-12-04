@@ -14,7 +14,7 @@ import {autobind} from '../../utils/helper';
 
 /**
  * 复选框
- * 文档：https://baidu.gitee.io/amis/docs/components/form/checkboxes
+ * 文档：https://doc.jeata.com/amis/docs/components/form/checkboxes
  */
 export interface CheckboxesControlSchema extends FormOptionsControl {
   type: 'checkboxes';

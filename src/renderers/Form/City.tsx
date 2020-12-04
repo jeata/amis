@@ -8,7 +8,7 @@ import {localeable, LocaleProps} from '../../locale';
 
 /**
  * City 城市选择框。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/city
+ * 文档：https://doc.jeata.com/amis/docs/components/form/city
  */
 export interface CityControlSchema extends FormBaseControl {
   /**

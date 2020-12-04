@@ -21,7 +21,7 @@ import {ActionSchema} from './Action';
 
 /**
  * Drawer 抽出式弹框。
- * 文档：https://baidu.gitee.io/amis/docs/components/drawer
+ * 文档：https://doc.jeata.com/amis/docs/components/drawer
  */
 export interface DrawerSchema extends BaseSchema {
   type: 'drawer';

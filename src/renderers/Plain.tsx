@@ -6,13 +6,13 @@ import {BaseSchema, SchemaTpl} from '../Schema';
 
 /**
  * Plain 纯文本渲染器
- * 文档：https://baidu.gitee.io/amis/docs/components/plain
+ * 文档：https://doc.jeata.com/amis/docs/components/plain
  */
 export interface PlainSchema extends BaseSchema {
   /**
    * 指定为模板渲染器。
    *
-   * 文档：https://baidu.gitee.io/amis/docs/concepts/template
+   * 文档：https://doc.jeata.com/amis/docs/concepts/template
    */
   type: 'plain' | 'text';
 

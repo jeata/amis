@@ -10,7 +10,7 @@ import {
 
 /**
  * Collapse 折叠渲染器，格式说明。
- * 文档：https://baidu.gitee.io/amis/docs/components/collapse
+ * 文档：https://doc.jeata.com/amis/docs/components/collapse
  */
 export interface CollapseSchema extends BaseSchema {
   /**

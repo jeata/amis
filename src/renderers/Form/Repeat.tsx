@@ -11,7 +11,7 @@ import {FormItem, FormControlProps, FormBaseControl} from './Item';
 
 /**
  * Repeat
- * 文档：https://baidu.gitee.io/amis/docs/components/form/repeat
+ * 文档：https://doc.jeata.com/amis/docs/components/form/repeat
  */
 export interface RepeatControlSchema extends FormBaseControl {
   type: 'rating';

@@ -6,7 +6,7 @@ import {noop} from '../../utils/helper';
 
 /**
  * RichText
- * 文档：https://baidu.gitee.io/amis/docs/components/form/rich-text
+ * 文档：https://doc.jeata.com/amis/docs/components/form/rich-text
  */
 export interface RichTextControlSchema extends FormBaseControl {
   type: 'rich-text';

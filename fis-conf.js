@@ -570,7 +570,7 @@ if (fis.project.currentMedia() === 'publish') {
           /(\\?(?:'|"))((?:get|post|delete|put)\:)?\/api\/sample/gi,
           function (_, qutoa, method) {
             return (
-              qutoa + (method || '') + 'https://houtai.baidu.com/api/sample'
+              qutoa + (method || '') + 'https://mock.jeata.com/crud/sample'
             );
           }
         );
@@ -671,15 +671,16 @@ if (fis.project.currentMedia() === 'publish') {
           return _;
         });
 
-        const contents = indexHtml.getContent();
-        pages.forEach(function (path) {
-          const file = fis.file(
-            fis.project.getProjectPath(),
-            '/examples/' + path + '.html'
-          );
-          file.setContent(contents);
-          ret.pkg[file.getId()] = file;
-        });
+        // 使用Caddy当做文档服务器，不需要每个目录生成index.html
+        // const contents = indexHtml.getContent();
+        // pages.forEach(function (path) {
+        //   const file = fis.file(
+        //     fis.project.getProjectPath(),
+        //     '/examples/' + path + '.html'
+        //   );
+        //   file.setContent(contents);
+        //   ret.pkg[file.getId()] = file;
+        // });
       }
     ]
   });

@@ -41,7 +41,7 @@ export interface TabSchema extends Omit<BaseSchema, 'type'> {
    * 设置以后将跟url的hash对应
    */
   hash?: string;
-  
+
   /**
    * 跳转到其他页面的链接
    */
@@ -70,7 +70,7 @@ export interface TabSchema extends Omit<BaseSchema, 'type'> {
 
 /**
  * 选项卡控件。
- * 文档：https://baidu.gitee.io/amis/docs/components/tabs
+ * 文档：https://doc.jeata.com/amis/docs/components/tabs
  */
 export interface TabsSchema extends BaseSchema {
   type: 'tabs';

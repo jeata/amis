@@ -5,7 +5,7 @@ import {flattenTree, filterTree, mapTree} from '../../src/utils/helper';
 export const docs = [
   {
     // prefix: ({classnames: cx}) => <li className={cx('AsideNav-divider')} />,
-    label: '📌  开始',
+    label: '开始',
     children: [
       {
         label: '介绍',
@@ -16,32 +16,32 @@ export const docs = [
           })
       },
 
-      {
-        label: '快速开始',
-        path: '/docs/start/getting-started',
-        getComponent: (location, cb) =>
-          require(['../../docs/start/getting-started.md'], doc => {
-            cb(null, makeMarkdownRenderer(doc));
-          })
-      },
-
-      {
-        label: '自定义',
-        path: '/docs/start/custom',
-        getComponent: (location, cb) =>
-          require(['../../docs/start/custom.md'], doc => {
-            cb(null, makeMarkdownRenderer(doc));
-          })
-      },
-
-      {
-        label: '常见问题',
-        path: '/docs/start/faq',
-        getComponent: (location, cb) =>
-          require(['../../docs/start/faq.md'], doc => {
-            cb(null, makeMarkdownRenderer(doc));
-          })
-      }
+      // {
+      //   label: '快速开始',
+      //   path: '/docs/start/getting-started',
+      //   getComponent: (location, cb) =>
+      //     require(['../../docs/start/getting-started.md'], doc => {
+      //       cb(null, makeMarkdownRenderer(doc));
+      //     })
+      // },
+      //
+      // {
+      //   label: '自定义',
+      //   path: '/docs/start/custom',
+      //   getComponent: (location, cb) =>
+      //     require(['../../docs/start/custom.md'], doc => {
+      //       cb(null, makeMarkdownRenderer(doc));
+      //     })
+      // },
+      //
+      // {
+      //   label: '常见问题',
+      //   path: '/docs/start/faq',
+      //   getComponent: (location, cb) =>
+      //     require(['../../docs/start/faq.md'], doc => {
+      //       cb(null, makeMarkdownRenderer(doc));
+      //     })
+      // }
 
       // {
       //   label: '基本用法',
@@ -66,7 +66,7 @@ export const docs = [
   },
 
   {
-    label: '💡  概念',
+    label: '概念',
     children: [
       {
         label: '配置与组件',
@@ -136,7 +136,7 @@ export const docs = [
   },
 
   {
-    label: '🎼  类型',
+    label: '类型',
     children: [
       {
         label: 'SchemaNode',
@@ -166,7 +166,7 @@ export const docs = [
   },
 
   {
-    label: '⚙  组件',
+    label: '组件',
     children: [
       {
         label: '组件介绍',

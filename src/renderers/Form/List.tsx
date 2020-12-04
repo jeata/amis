@@ -12,7 +12,7 @@ import {SchemaCollection} from '../../Schema';
 
 /**
  * List 复选框
- * 文档：https://baidu.gitee.io/amis/docs/components/form/list
+ * 文档：https://doc.jeata.com/amis/docs/components/form/list
  */
 export interface ListControlSchema extends FormOptionsControl {
   type: 'list';

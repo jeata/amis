@@ -5,7 +5,7 @@ import {filter} from '../utils/tpl';
 
 /**
  * Link 链接展示控件。
- * 文档：https://baidu.gitee.io/amis/docs/components/link
+ * 文档：https://doc.jeata.com/amis/docs/components/link
  */
 export interface LinkSchema extends BaseSchema {
   /**

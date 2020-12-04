@@ -21,7 +21,7 @@ import {SchemaClassName} from '../../Schema';
 
 /**
  * InputGroup
- * 文档：https://baidu.gitee.io/amis/docs/components/form/input-group
+ * 文档：https://doc.jeata.com/amis/docs/components/form/input-group
  */
 export interface InputGroupControlSchema extends FormBaseControl {
   type: 'input-group';

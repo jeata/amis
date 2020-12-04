@@ -5,7 +5,7 @@ import {ActionSchema} from './Action';
 
 /**
  * Button Toolar 渲染器。
- * 文档：https://baidu.gitee.io/amis/docs/components/button-toolbar
+ * 文档：https://doc.jeata.com/amis/docs/components/button-toolbar
  */
 export interface ButtonToolbarSchema extends BaseSchema {
   /**

@@ -13,7 +13,7 @@ export interface TplSchema extends BaseSchema {
   /**
    * 指定为模板渲染器。
    *
-   * 文档：https://baidu.gitee.io/amis/docs/concepts/template
+   * 文档：https://doc.jeata.com/amis/docs/concepts/template
    */
   type: 'tpl' | 'html';
 

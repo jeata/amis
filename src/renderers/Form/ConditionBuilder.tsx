@@ -7,7 +7,7 @@ import ConditionBuilder from '../../components/condition-builder/index';
 
 /**
  * 条件组合控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/condition-builder
+ * 文档：https://doc.jeata.com/amis/docs/components/form/condition-builder
  */
 export interface ConditionBuilderControlSchema extends FormBaseControl {
   /**

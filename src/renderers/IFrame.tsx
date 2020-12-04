@@ -9,7 +9,7 @@ import {ActionSchema} from './Action';
 
 /**
  * IFrame 渲染器
- * 文档：https://baidu.gitee.io/amis/docs/components/iframe
+ * 文档：https://doc.jeata.com/amis/docs/components/iframe
  */
 export interface IFrameSchema extends BaseSchema {
   type: 'iframe';

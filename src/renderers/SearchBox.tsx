@@ -12,7 +12,7 @@ export interface SearchBoxSchema extends BaseSchema {
   /**
    * 指定为搜索框。
    *
-   * 文档：https://baidu.gitee.io/amis/docs/components/search-box
+   * 文档：https://doc.jeata.com/amis/docs/components/search-box
    */
   type: 'search-box';
 

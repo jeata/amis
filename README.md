@@ -8,7 +8,7 @@
 
 https://baidu.github.io/amis/docs/index
 
-国内推荐使用：<https://baidu.gitee.io/amis/docs/index>
+国内推荐使用：<https://doc.jeata.com/amis/docs/index>
 
 ## 相关工具及平台
 

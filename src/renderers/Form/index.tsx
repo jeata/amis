@@ -58,7 +58,7 @@ export interface FormSchemaHorizontal {
 /**
  * Form 表单渲染器。
  *
- * 说明：https://baidu.gitee.io/amis/docs/components/form/index
+ * 说明：https://doc.jeata.com/amis/docs/components/form/index
  */
 export interface FormSchema extends BaseSchema {
   /**
@@ -156,7 +156,7 @@ export interface FormSchema extends BaseSchema {
   /**
    * Form 用来保存数据的 api。
    *
-   * 详情：https://baidu.gitee.io/amis/docs/components/form/index#%E8%A1%A8%E5%8D%95%E6%8F%90%E4%BA%A4
+   * 详情：https://doc.jeata.com/amis/docs/components/form/index#%E8%A1%A8%E5%8D%95%E6%8F%90%E4%BA%A4
    */
   api?: SchemaApi;
 

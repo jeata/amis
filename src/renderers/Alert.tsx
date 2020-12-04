@@ -5,7 +5,7 @@ import {BaseSchema, SchemaCollection} from '../Schema';
 
 /**
  * Alert 提示渲染器。
- * 文档：https://baidu.gitee.io/amis/docs/components/alert
+ * 文档：https://doc.jeata.com/amis/docs/components/alert
  */
 export interface AlertSchema extends BaseSchema {
   /**

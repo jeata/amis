@@ -17,7 +17,7 @@ import {BaseSchema, SchemaCollection, SchemaName, SchemaTpl} from '../Schema';
 
 /**
  * Carousel 轮播图渲染器。
- * 文档：https://baidu.gitee.io/amis/docs/components/carousel
+ * 文档：https://doc.jeata.com/amis/docs/components/carousel
  */
 export interface CarouselSchema extends BaseSchema {
   /**
@@ -106,8 +106,8 @@ const defaultSchema = {
         <div style="background-image: url('<%= data.image %>'); background-size: contain; background-repeat: no-repeat; background-position: center center;" class="image <%= data.imageClassName %>"></div>
         <% if (data.hasOwnProperty('title')) { %>
             <div class="title <%= data.titleClassName %>"><%= data.title %></div>
-        <% } if (data.hasOwnProperty('description')) { %> 
-            <div class="description <%= data.descriptionClassName %>"><%= data.description %></div> 
+        <% } if (data.hasOwnProperty('description')) { %>
+            <div class="description <%= data.descriptionClassName %>"><%= data.description %></div>
         <% } %>
     <% } else if (data.hasOwnProperty('html')) { %>
         <%= data.html %>"
@@ -115,8 +115,8 @@ const defaultSchema = {
         <div style="background-image: url('<%= data.image %>')" class="image <%= data.imageClassName %>"></div>
         <% if (data.title) { %>
             <div class="title <%= data.titleClassName %>"><%= data.title %></div>
-        <% } if (data.description) { %> 
-            <div class="description <%= data.descriptionClassName %>"><%= data.description %></div> 
+        <% } if (data.description) { %>
+            <div class="description <%= data.descriptionClassName %>"><%= data.description %></div>
         <% } %>
     <% } else if (data.hasOwnProperty('html')) { %>
         <%= data.html %>

@@ -14,6 +14,7 @@
     "build": "sh build.sh",
     "prettier": "prettier --write '{src,examples,scss}/**/*.{tsx,ts,jsx,scss}'",
     "deploy-gh-page": "sh ./deploy-gh-pages.sh",
+    "start-doc": "docker run --rm -p 8080:80 -v $PWD/gh-pages:/usr/share/caddy/amis -v $PWD/examples/Caddyfile:/etc/caddy/Caddyfile caddy:2-alpine",
     "build-schemas": "ts-node -O '{\"target\":\"es6\"}' scripts/build-schemas.ts"
   },
   "repository": {

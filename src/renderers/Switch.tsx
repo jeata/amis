@@ -10,7 +10,7 @@ import {BaseSchema} from '../Schema';
 
 /**
  * 开关展示控件。
- * 文档：https://baidu.gitee.io/amis/docs/components/switch
+ * 文档：https://doc.jeata.com/amis/docs/components/switch
  */
 export interface SwitchSchema extends BaseSchema {
   /**

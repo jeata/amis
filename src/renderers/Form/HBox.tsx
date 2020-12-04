@@ -14,7 +14,7 @@ import {IIRendererStore} from '../../store/iRenderer';
 
 /**
  * HBox 水平布局控件。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/hbox
+ * 文档：https://doc.jeata.com/amis/docs/components/form/hbox
  */
 export interface HBoxControlSchema
   extends FormBaseControl,

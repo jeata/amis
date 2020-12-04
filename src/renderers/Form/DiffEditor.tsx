@@ -11,7 +11,7 @@ import {autobind} from '../../utils/helper';
 
 /**
  * Diff 编辑器
- * 文档：https://baidu.gitee.io/amis/docs/components/form/diff
+ * 文档：https://doc.jeata.com/amis/docs/components/form/diff
  */
 export interface DiffControlSchema extends FormBaseControl {
   /**

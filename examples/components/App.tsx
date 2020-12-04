@@ -120,13 +120,13 @@ class BackTop extends React.PureComponent {
 @withRouter
 export class App extends React.PureComponent {
   state = {
-    viewMode: localStorage.getItem('viewMode') || 'pc',
+    viewMode: 'pc', //localStorage.getItem('viewMode') || 'pc',
     offScreen: false,
     headerVisible: true,
     themeIndex: 0,
     themes: themes,
-    theme: themes[localStorage.getItem('themeIndex') || 0],
-    locale: localStorage.getItem('locale') || '',
+    theme: themes[0],//themes[localStorage.getItem('themeIndex') || 0],
+    locale: 'zh-cn', //localStorage.getItem('locale') || '',
     navigations: []
   };
 
@@ -219,76 +219,13 @@ export class App extends React.PureComponent {
             <Link to={`${ContextPath}/examples`} activeClassName="is-active">
               示例
             </Link>
-            <a
-              href="https://github.com/fex-team/amis-editor-demo"
-              target="_blank"
-            >
-              可视化编辑器
-            </a>
-            {/* <a href="https://suda.bce.baidu.com" target="_blank">
-              爱速搭
-            </a> */}
           </ul>
-
-          <div className="hidden-xs p-t pull-right m-l-sm">
-            <Select
-              clearable={false}
-              theme={this.state.theme.value}
-              value={this.state.locale || 'zh-cn'}
-              options={locales}
-              onChange={locale => {
-                this.setState({locale: locale.value});
-                localStorage.setItem('locale', locale.value);
-                window.location.reload();
-              }}
-            />
-          </div>
-
-          <div className="hidden-xs p-t pull-right m-l-sm">
-            <Select
-              clearable={false}
-              theme={this.state.theme.value}
-              value={this.state.theme}
-              options={this.state.themes}
-              onChange={theme => {
-                this.setState({theme});
-                localStorage.setItem(
-                  'themeIndex',
-                  this.state.themes.indexOf(theme)
-                );
-                document
-                  .querySelector('body')
-                  .classList[theme.value === 'dark' ? 'add' : 'remove']('dark');
-              }}
-            />
-          </div>
-
-          <div className="hidden-xs p-t pull-right">
-            <Select
-              clearable={false}
-              theme={this.state.theme.value}
-              value={this.state.viewMode || 'pc'}
-              options={viewModes}
-              onChange={viewMode => {
-                this.setState({viewMode: viewMode.value});
-                localStorage.setItem('viewMode', viewMode.value);
-                window.location.reload();
-              }}
-            />
-          </div>
         </div>
 
         <div className={`${theme.ns}Layout-searchBar hidden-xs hidden-sm`}>
           <DocSearch theme={theme} />
         </div>
 
-        <a
-          className="gh-icon"
-          href="https://github.com/baidu/amis"
-          target="_blank"
-        >
-          <i className="fa fa-github" />
-        </a>
       </>
     );
   }
@@ -453,7 +390,8 @@ export default function entry({pathPrefix}) {
   return (
     <Router history={browserHistory}>
       <Route component={App}>
-        <Redirect from={`${ContextPath}/`} to={`${ContextPath}/docs/index`} />
+        <Redirect from={`/`} to={`${ContextPath}/docs/index`} exact/>
+        {ContextPath != '' && <Redirect from={`${ContextPath}`} to={`${ContextPath}/docs/index`} exact />}
         <Redirect
           from={`${ContextPath}/docs`}
           to={`${ContextPath}/docs/index`}

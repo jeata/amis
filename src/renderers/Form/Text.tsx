@@ -26,7 +26,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * Text 文本输入框。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/text
+ * 文档：https://doc.jeata.com/amis/docs/components/form/text
  */
 export interface TextControlSchema extends FormOptionsControl {
   type: 'text' | 'email' | 'url' | 'password';

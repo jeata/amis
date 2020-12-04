@@ -310,7 +310,7 @@ export type SchemaRedirect = string;
  * 2. `<%= data.xxx %>`
  *
  *
- * 更多文档：https://baidu.gitee.io/amis/docs/concepts/template
+ * 更多文档：https://doc.jeata.com/amis/docs/concepts/template
  */
 export type SchemaTpl = string;
 

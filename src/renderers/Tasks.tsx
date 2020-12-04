@@ -13,7 +13,7 @@ import {createObject} from '../utils/helper';
 
 /**
  * Tasks 渲染器，格式说明
- * 文档：https://baidu.gitee.io/amis/docs/components/tasks
+ * 文档：https://doc.jeata.com/amis/docs/components/tasks
  */
 export interface TasksSchema extends BaseSchema {
   /** 指定为任务类型 */

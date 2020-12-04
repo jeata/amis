@@ -4,7 +4,7 @@ import {BaseSchema} from '../Schema';
 
 /**
  * Icon 图表渲染器
- * 文档：https://baidu.gitee.io/amis/docs/components/icon
+ * 文档：https://doc.jeata.com/amis/docs/components/icon
  */
 export interface IconSchema extends BaseSchema {
   type: 'icon';

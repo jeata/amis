@@ -7,7 +7,7 @@ import {FormOptionsControl} from './Options';
 
 /**
  * 数字输入框
- * 文档：https://baidu.gitee.io/amis/docs/components/form/number
+ * 文档：https://doc.jeata.com/amis/docs/components/form/number
  */
 export interface NumberControlSchema extends FormBaseControl {
   type: 'number';

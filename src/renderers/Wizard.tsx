@@ -76,7 +76,7 @@ export type WizardStepSchema = Omit<FormSchema, 'type'> & {
 
 /**
  * 表单向导
- * 文档：https://baidu.gitee.io/amis/docs/components/wizard
+ * 文档：https://doc.jeata.com/amis/docs/components/wizard
  */
 export interface WizardSchema extends BaseSchema {
   /**

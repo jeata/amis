@@ -10,7 +10,7 @@ import DateRangePicker, {
 
 /**
  * DateRange 日期范围控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/date-range
+ * 文档：https://doc.jeata.com/amis/docs/components/form/date-range
  */
 export interface DateRangeControlSchema extends FormBaseControl {
   /**

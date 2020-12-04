@@ -2,6 +2,8 @@
 @import '../scss/functions';
 @import '../scss/variables';
 
+$menu-width: 270px;
+
 body {
   background-color: #fff !important;
   &.dark {
@@ -144,16 +146,17 @@ a {
     &-searchBar {
       position: relative;
 
-      &::before {
-        top: 50%;
-        right: 0;
-        height: 32px;
-        content: ' ';
-        position: absolute;
-        transform: translateY(-50%);
-        border-left: 1px solid #e8ebee;
-        width: 1px;
-      }
+      // change by xubin
+      //&::before {
+      //  top: 50%;
+      //  right: 0;
+      //  height: 32px;
+      //  content: ' ';
+      //  position: absolute;
+      //  transform: translateY(-50%);
+      //  border-left: 1px solid #e8ebee;
+      //  width: 1px;
+      //}
     }
 
     &-brandBar {
@@ -728,6 +731,9 @@ a {
   .dark-Layout {
     &-brandBar {
       text-align: left;
+
+      // change by xubin
+      width: $menu-width !important;
     }
   }
 }
@@ -754,13 +760,30 @@ a {
       overflow: auto;
     }
 
+    &-nav {
+      width: $menu-width;
+    }
+
+    // change by xubin
     &-nav > div {
       position: fixed;
-      width: 200px;
+      width: $menu-width;
       top: 100px;
       bottom: 0;
       overflow-y: auto;
-      border-right: 1px solid #e8ebee;
+      // border-right: 1px solid #e8ebee;
+      background-color: #f7f7f7;
+      padding: 20px;
+    }
+
+    // change by xubin
+    &-navigation .a-AsideNav-item {
+
+      a {
+        font-weight: 400;
+        padding-right: 0;
+      }
+
     }
   }
 
@@ -806,7 +829,7 @@ a {
       width: 1px;
 
       > div {
-        margin-left: -199px;
+        margin-left: -$menu-width;
       }
     }
   }
@@ -818,7 +841,7 @@ a {
       &-brandBar {
         width: 1px;
         > div {
-          margin-left: -220px;
+          margin-left: -$menu-width;
         }
       }
 
