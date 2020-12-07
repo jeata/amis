@@ -15,7 +15,7 @@ order: 30
 ```schema:height="350" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "matrix",
@@ -50,7 +50,7 @@ order: 30
 ```schema:height="350" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "matrix",
@@ -86,7 +86,7 @@ order: 30
 ```schema:height="350" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "name": "matrix",
@@ -164,7 +164,7 @@ order: 30
 ```schema:height="350" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "matrix",
@@ -200,7 +200,7 @@ cell 模式，指全部选项中只能单选某个单元格
 ```schema:height="350" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "matrix",
@@ -237,7 +237,7 @@ row 模式，每行只能单选某个单元格
 ```schema:height="350" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "matrix",

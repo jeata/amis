@@ -189,7 +189,7 @@ export class App extends React.PureComponent {
     if (location.pathname === '/edit') {
       return (
         <div id="headerBar" className="box-shadow bg-dark">
-          <div className={`${theme.ns}Layout-brand`}>AMis 可视化编辑器</div>
+          <div className={`${theme.ns}Layout-brand`}>可视化编辑器</div>
         </div>
       );
     }

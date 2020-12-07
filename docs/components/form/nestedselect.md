@@ -13,7 +13,7 @@ order: 31
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "nested-select",
@@ -60,7 +60,7 @@ order: 31
 {
   "type": "form",
   "debug": true,
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "nested-select",
@@ -146,7 +146,7 @@ order: 31
 {
   "type": "form",
   "debug": true,
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "nested-select",

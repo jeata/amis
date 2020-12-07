@@ -22,7 +22,7 @@ order: 51
 
 ## 如何和 iframe 通信
 
-#### amis 向 iframe 通信
+#### 基塔云 向 iframe 通信
 
 在 iframe 页面中添加`message`事件监听器，在 iframe 初始化、更新或者接收到其他组件发送数据的时候，会通过 `postMessage` 发送当前数据域数据，iframe 页面的事件监听器中可以通过`e.data`进行获取：
 
@@ -36,7 +36,7 @@ window.addEventListener('message', e => {
 
 ```json
 {
-  "type": "amis:init", // 当前事件类型
+  "type": "jeata:init", // 当前事件类型
   "data": {
     //... 当前数据域数据
   }
@@ -44,16 +44,16 @@ window.addEventListener('message', e => {
 ```
 
 - **type**: 当前事件类型
-  - amis:init：初始化的时候触发
-  - amis:update：组件更新时触发
-  - amis:receive：组件通过 target 接收到其他组件发送来数据的时候
+  - jeata:init：初始化的时候触发
+  - jeata:update：组件更新时触发
+  - jeata:receive：组件通过 target 接收到其他组件发送来数据的时候
 - **data**：当前数据源数据
 
 > 如果是 webpack 开发环境，注意过滤掉`webpackOk`类型消息
 
-#### iframe 页面向 amis 通信
+#### iframe 页面向 基塔云 通信
 
-1. 首先在 amis 的 iframe 配置项中配置 events 对象，指明 iframe 需要触发的 amis 行为
+1. 首先在 基塔云 的 iframe 配置项中配置 events 对象，指明 iframe 需要触发的行为
 
 ```json
 {
@@ -64,14 +64,14 @@ window.addEventListener('message', e => {
       "actionType": "dialog",
       "dialog": {
         "title": "弹框",
-        "body": "iframe 传给 amis 的 id 是：${iframeId}"
+        "body": "iframe 传给 基塔云 的 id 是：${iframeId}"
       }
     }
   }
 }
 ```
 
-上面 `events` 对象中配置了`detail`事件，该行为会触发 amis 弹框行为，并在弹框中渲染`"iframe 传给 amis 的 id 是：${iframeId}"`这段模板。
+上面 `events` 对象中配置了`detail`事件，该行为会触发弹框行为，并在弹框中渲染`"iframe 传给 基塔云 的 id 是：${iframeId}"`这段模板。
 
 那么要如何触发该事件和传递数据呢？
 
@@ -80,7 +80,7 @@ window.addEventListener('message', e => {
 ```js
 window.parent.postMessage(
   {
-    type: 'amis:detail',
+    type: 'jeata:detail',
     data: {
       iframeId: '111'
     }
@@ -91,22 +91,22 @@ window.parent.postMessage(
 
 `message`格式：
 
-- `type`: 标识要触发的 amis 行为，请使用 `amis:xxx` 的格式，这里我们设置为配置好的`detail`事件
-- `data`: 传给 amis 的数据，amis 会将该数据与当前数据域进行合并进行使用
+- `type`: 标识要触发的行为，请使用 `jeata:xxx` 的格式，这里我们设置为配置好的`detail`事件
+- `data`: 传给 基塔云 的数据，会将该数据与当前数据域进行合并进行使用
 
-这样 amis 弹框中就会渲染内容:`iframe 传给 amis 的 id 是：111`
+这样弹框中就会渲染内容:`iframe 传给 基塔云 的 id 是：111`
 
 ## 设置高度自适应
 
-默认 amis 中只支持给 iframe 配置固定高度，我们可以通过上面说到的通信机制实现高度自适应。
+默认只支持给 iframe 配置固定高度，我们可以通过上面说到的通信机制实现高度自适应。
 
 1. 首先在 iframe 页面中获取到页面高度
-2. 通过`amis:resize`事件，将高度信息发送给 amis
+2. 通过`jeata:resize`事件，将高度信息发送给 基塔云
 
 ```js
 window.parent.postMessage(
   {
-    type: 'amis:resize',
+    type: 'jeata:resize',
     data: {
       height: 400
     }

@@ -29,7 +29,7 @@ order: 8
     "type": "crud",
     "draggable": true,
     "syncLocation": false,
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "keepItemSelectionOnPageChange": true,
     "filter": {
       "title": "筛选",
@@ -51,7 +51,7 @@ order: 8
         "type": "button",
         "label": "批量删除",
         "actionType": "ajax",
-        "api": "delete:https://houtai.baidu.com/api/sample/${ids|raw}",
+        "api": "delete:https://mock.jeata.com/crud/sample/${ids|raw}",
         "confirmText": "确定要批量删除?"
       },
       {
@@ -63,7 +63,7 @@ order: 8
           "name": "sample-bulk-edit",
           "body": {
             "type": "form",
-            "api": "https://houtai.baidu.com/api/sample/bulkUpdate2",
+            "api": "https://mock.jeata.com/crud/sample/bulkUpdate2",
             "controls": [
               {
                 "type": "hidden",
@@ -79,8 +79,8 @@ order: 8
         }
       }
     ],
-    "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
-    "quickSaveItemApi": "https://houtai.baidu.com/api/sample/$id",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
+    "quickSaveItemApi": "https://mock.jeata.com/crud/sample/$id",
     "filterTogglable": true,
     "headerToolbar": [
       "filter-toggler",
@@ -90,7 +90,7 @@ order: 8
         "label": "重置测试数据",
         "actionType": "ajax",
         "size": "sm",
-        "api": "https://houtai.baidu.com/api/sample/reset"
+        "api": "https://mock.jeata.com/crud/sample/reset"
       },
       {
         "type": "tpl",
@@ -160,7 +160,7 @@ order: 8
             "actionType": "ajax",
             "tooltip": "删除",
             "confirmText": "您确认要删除?",
-            "api": "delete:https://houtai.baidu.com/api/sample/$id"
+            "api": "delete:https://mock.jeata.com/crud/sample/$id"
           }
         ]
       }
@@ -183,7 +183,7 @@ order: 8
 
 全部实现这些需要大量的代码。
 
-但可以看到，用 JSON配置 只需要 **150** 行 JSON 配置（嘿，其中 40 多行只有一个括号），你不需要了解 `React/Vue`、`Webpack`，甚至不需要很了解 `JavaScript`，即便没学过 amis 也能猜到大部分配置的作用，只需要简单配置就能完成所有页面开发。
+但可以看到，用 JSON配置 只需要 **150** 行 JSON 配置（嘿，其中 40 多行只有一个括号），你不需要了解 `React/Vue`、`Webpack`，甚至不需要很了解 `JavaScript`，即便没学过 基塔云 也能猜到大部分配置的作用，只需要简单配置就能完成所有页面开发。
 
 **对于大部分常用页面，应该使用最简单的方法来实现**，甚至不需要学习各种框架和工具。
 
@@ -191,22 +191,21 @@ order: 8
 
 为了实现用最简单方式来生成大部分页面，解决方案是基于 [JSON](https://baike.baidu.com/item/JSON) 来配置，它的独特好处是：
 
-- **不需要懂前端**：在百度内部，大部分 amis 用户之前从来没写过前端页面，也不会 `JavaScript`，却能做出专业且复杂的后台界面，这是所有其他前端 UI 库都无法做到的；
-- **不受前端技术更新的影响**：百度内部最老的 amis 页面是 4 年多前创建的，至今还在使用，而当年的 `Angular/Vue/React` 版本现在都废弃了，当年流行的 `Gulp` 也被 `Webpack` 取代了，如果这些页面不是用 amis，现在的维护成本会很高；
+- **不需要懂前端**：大部分用户之前从来没写过前端页面，也不会 `JavaScript`，却能做出专业且复杂的后台界面，这是所有其他前端 UI 库都无法做到的；
+- **不受前端技术更新的影响**：当年的 `Angular/Vue/React` 版本现在都废弃了，当年流行的 `Gulp` 也被 `Webpack` 取代了，现在的维护成本会很高；
 - **享受 基塔云 的不断升级**：基塔云 一直在提升细节交互体验，比如表格首行冻结、下拉框大数据下不卡顿等，之前的 JSON 配置完全不需要修改；
 
 ## 其它亮点
 
-- **提供完整的界面解决方案**：其它 UI 框架必须使用 JavaScript 来组装业务逻辑，而 amis 只需 JSON 配置就能完成完整功能开发，包括数据获取、表单提交及验证等功能，做出来的页面不需要经过二次开发就能直接上线；
+- **提供完整的界面解决方案**：其它 UI 框架必须使用 JavaScript 来组装业务逻辑，而 基塔云 只需 JSON 配置就能完成完整功能开发，包括数据获取、表单提交及验证等功能，做出来的页面不需要经过二次开发就能直接上线；
 - **内置 100+ 种 UI 组件**：包括其它 UI 框架都不会提供的富文本编辑器、条件组合等，能满足各种页面组件展现的需求，而且对于特殊的展现形式还可以通过 [自定义组件](./start/custom.md) 来扩充；
 - **容器支持无限级嵌套**：可以通过组合来满足各种布局需求；
-- **经历了长时间的实战考验**：amis 在百度内部得到了广泛使用，**在 4 年多的时间里创建了 3 万+ 页面**，从内容审核到机器管理，从数据分析到模型训练，amis 满足了各种各样的页面需求，最复杂的页面有超过 1 万行 JSON 配置。
 
 ## 不适合做什么？
 
 使用 JSON 有优点但也有明显缺点，在以下场合并不适合：
 
-- **大量定制 UI**：JSON 配置使得基塔云更适合做有大量常见 UI 组件的页面，但对于面向普通客户（toC）的页面，往往追求个性化的视觉效果，这种情况下用 amis 就不合适，实际上绝大部分前端 UI 组件库也都不适合，只能定制开发。
+- **大量定制 UI**：JSON 配置使得基塔云更适合做有大量常见 UI 组件的页面，但对于面向普通客户（toC）的页面，往往追求个性化的视觉效果，这种情况下用 基塔云 就不合适，实际上绝大部分前端 UI 组件库也都不适合，只能定制开发。
 - **极为复杂或特殊的交互**：
   - 有些复杂的前端功能，比如 可视化编辑器，其中有大量定制的拖拽操作，这种需要依赖原生 DOM 实现的功能无法使用。
   - 但对于某些交互固定的领域，比如图连线，后续会有专门的组件来实现。

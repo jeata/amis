@@ -8,7 +8,7 @@ icon:
 order: 24
 ---
 
-表单是 amis 中核心组件之一，主要作用是提交或者展示表单数据。
+表单是核心组件之一，主要作用是提交或者展示表单数据。
 
 ## 基本用法
 
@@ -19,7 +19,7 @@ order: 24
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
       {
         "type": "text",
@@ -44,7 +44,7 @@ order: 24
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
       {
         "type": "text",
@@ -356,7 +356,7 @@ Form 默认会在底部渲染一个提交按钮，用于执行表单的提交行
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "initApi": "https://houtai.baidu.com/api/mock2/form/initData",
+    "initApi": "https://mock.jeata.com/form/initData",
     "title": "编辑用户信息",
     "controls": [
       {
@@ -383,7 +383,7 @@ Form 支持轮训初始化接口，步骤如下：
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "initApi": "https://houtai.baidu.com/api/mock2/page/initData",
+    "initApi": "https://mock.jeata.com/api/page/initData",
     "interval": 3000,
     "title": "表单",
     "controls": [
@@ -401,7 +401,7 @@ Form 支持轮训初始化接口，步骤如下：
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "initApi": "https://houtai.baidu.com/api/mock2/page/initData",
+    "initApi": "https://mock.jeata.com/api/page/initData",
     "interval": 3000,
     "title": "表单",
     "stopAutoRefreshWhen": "this.date % 5",
@@ -495,7 +495,7 @@ Form 支持轮训初始化接口，步骤如下：
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "initApi": "https://houtai.baidu.com/api/saveForm",
+    "initApi": "https://mock.jeata.com/api/form/saveForm",
     "title": "用户信息",
     "controls": [
       {
@@ -552,7 +552,7 @@ Form 支持轮训初始化接口，步骤如下：
     "type": "form",
     "initApi": {
       "method": "put",
-      "url": "https://houtai.baidu.com/api/mock2/page/initData",
+      "url": "https://mock.jeata.com/api/page/initData",
       "data": {
         "&": "$$",
         "_from": "browser"
@@ -587,8 +587,8 @@ Form 支持轮训初始化接口，步骤如下：
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "initApi": "https://houtai.baidu.com/api/mock2/page/initData",
-    "asyncApi": "https://houtai.baidu.com/api/mock2/page/initData",
+    "initApi": "https://mock.jeata.com/api/page/initData",
+    "asyncApi": "https://mock.jeata.com/api/page/initData",
     "title": "用户信息",
     "controls": [
       {
@@ -684,7 +684,7 @@ Form 支持轮训初始化接口，步骤如下：
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "resetAfterSubmit": true,
     "controls": [
       {
@@ -712,7 +712,7 @@ Form 支持轮训初始化接口，步骤如下：
 ```schema:height="330" scope="body"
 {
     "type": "form",
-    "initApi": "https://houtai.baidu.com/api/mock2/page/initData",
+    "initApi": "https://mock.jeata.com/api/page/initData",
     "redirect": "/user/list",
     "title": "用户信息",
     "controls": [
@@ -738,7 +738,7 @@ Form 支持轮训初始化接口，步骤如下：
 [
     {
       "type": "form",
-      "initApi": "https://houtai.baidu.com/api/mock2/page/initData",
+      "initApi": "https://mock.jeata.com/api/page/initData",
       "title": "用户信息",
       "reload": "my_service",
       "controls": [
@@ -757,7 +757,7 @@ Form 支持轮训初始化接口，步骤如下：
     {
       "type": "service",
       "name": "my_service",
-      "api": "https://houtai.baidu.com/api/mock2/page/initData",
+      "api": "https://mock.jeata.com/api/page/initData",
       "body": "service初识数据"
     }
   ]
@@ -787,7 +787,7 @@ Form 支持轮训初始化接口，步骤如下：
     {
       "type": "form",
       "name": "detailForm",
-      "initApi": "https://houtai.baidu.com/api/mock2/page/initData?keywords=${keywords}",
+      "initApi": "https://mock.jeata.com/api/page/initData?keywords=${keywords}",
       "controls": [
         {
           "label": "名称",

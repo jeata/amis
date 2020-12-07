@@ -34,7 +34,7 @@ API 类型用于配置请求接口的格式，涉及请求方式、请求地址�
 
 ## 接口返回格式（重要）
 
-所有配置在 amis 组件中的接口，都要符合下面的返回格式
+所有配置在组件中的接口，都要符合下面的返回格式
 
 ```json
 {
@@ -79,14 +79,13 @@ API 类型用于配置请求接口的格式，涉及请求方式、请求地址�
 
 ### 兼容格式
 
-> 1.0.19 及以上版本。
 
-为了支持多种后端，amis 支持直接返回数据的方式，无需返回 status 和将数据放在 data 字段中，比如下面的例子：
+为了支持多种后端，支持直接返回数据的方式，无需返回 status 和将数据放在 data 字段中，比如下面的例子：
 
 ```json
 {
-  "username": "amis",
-  "email": "amis@amis.com"
+  "username": "jeata",
+  "email": "jeata@examples.com"
 }
 ```
 
@@ -133,7 +132,7 @@ API 还支持配置对象类型
     "type": "form",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "url": "https://mock.jeata.com/api/form/saveForm",
         "data": {
             "myName": "${name}",
             "myEmail": "${email}"
@@ -175,7 +174,7 @@ API 还支持配置对象类型
     "title": "默认JSON格式",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "url": "https://mock.jeata.com/api/form/saveForm",
         "data":{
             "&": "$$" // 获取表单数据域中的所有值
         }
@@ -204,7 +203,7 @@ API 还支持配置对象类型
     "type": "form",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "url": "https://mock.jeata.com/api/form/saveForm",
         "dataType": "form"
     },
     "controls": [
@@ -231,7 +230,7 @@ API 还支持配置对象类型
     "type": "form",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "url": "https://mock.jeata.com/api/form/saveForm",
         "dataType": "form-data"
     },
     "controls": [
@@ -256,7 +255,7 @@ API 还支持配置对象类型
     "type": "form",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm"
+        "url": "https://mock.jeata.com/api/form/saveForm"
     },
     "controls": [
       {
@@ -285,7 +284,7 @@ API 还支持配置对象类型
     "type": "form",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "url": "https://mock.jeata.com/api/form/saveForm",
         "headers": {
             "my-header": "aaa"
         }
@@ -342,7 +341,7 @@ API 还支持配置对象类型
         "name": "b",
         "source": {
             "method": "get",
-            "url": "https://houtai.baidu.com/api/mock2/options/level2?a=${a}",
+            "url": "https://mock.jeata.com/options/level2?a=${a}",
             "sendOn": "this.a === 2"
         },
         "description": "只有<code>选项1</code>选择<code>B</code>的时候，才触发<code>选项2</code>的<code>source</code>接口重新拉取"
@@ -361,7 +360,7 @@ API 还支持配置对象类型
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -370,7 +369,7 @@ API 还支持配置对象类型
         {
             "type": "service",
             "label": "数据",
-            "api": "https://houtai.baidu.com/api/mock2/page/initData",
+            "api": "https://mock.jeata.com/api/page/initData",
             "body": {
                 "type": "tpl",
                 "tpl": "当前日期是：${date}"
@@ -387,7 +386,7 @@ API 还支持配置对象类型
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -398,7 +397,7 @@ API 还支持配置对象类型
             "label": "数据",
             "api": {
                 "method": "get",
-                "url": "https://houtai.baidu.com/api/mock2/page/initData",
+                "url": "https://mock.jeata.com/api/page/initData",
                 "cache": 2000
             },
             "body": {
@@ -414,7 +413,7 @@ API 还支持配置对象类型
 
 ### 配置请求适配器
 
-amis 的 API 配置，如果无法配置出你想要的请求结构，那么可以配置`requestAdaptor`发送适配器
+如果无法配置出你想要的请求结构，那么可以配置`requestAdaptor`发送适配器
 
 **发送适配器** 是指在接口请求前，对请求进行一些自定义处理，例如修改发送数据体、添加请求头、等等，基本用法是，获取暴露的`api`参数，并且对该参数进行一些修改，并`return`出去：
 
@@ -447,7 +446,7 @@ function (api) {
     "type": "form",
     "api": {
         "method": "post",
-        "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "url": "https://mock.jeata.com/api/form/saveForm",
         "requestAdaptor": "return {\n    ...api,\n    data: {\n        ...api.data,    // 获取暴露的 api 中的 data 变量\n        foo: 'bar'      // 新添加数据\n    }\n}"
     },
     "controls": [
@@ -489,7 +488,7 @@ const schema = {
   type: 'form',
   api: {
     method: 'post',
-    url: 'https://houtai.baidu.com/api/mock2/form/saveForm',
+    url: 'https://mock.jeata.com/api/form/saveForm',
     requestAdaptor: function (api) {
       return {
         ...api,
@@ -521,11 +520,11 @@ const schema = {
 
 ### 配置接收适配器
 
-同样的，如果后端返回的响应结构不符合 amis 的[接口格式要求](#%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%A0%BC%E5%BC%8F-%E9%87%8D%E8%A6%81-)，而后端不方便调整时，可以配置`adaptor`实现接收适配器
+同样的，如果后端返回的响应结构不符合[接口格式要求](#%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%A0%BC%E5%BC%8F-%E9%87%8D%E8%A6%81-)，而后端不方便调整时，可以配置`adaptor`实现接收适配器
 
 **接收适配器** 是指在接口请求后，对响应进行一些自定义处理，例如修改响应的数据结构、修改响应的数据等等。
 
-例如：接口正确返回的格式中，会返回`"code": 200`，而 amis 中，接口返回格式需要`"status": 0`，这时候就需要接收适配器进行调整结构。
+例如：接口正确返回的格式中，会返回`"code": 200`，而接口返回格式需要`"status": 0`，这时候就需要接收适配器进行调整结构。
 
 ##### 暴露的参数
 
@@ -553,7 +552,7 @@ function (payload, responsee) {
   "type": "form",
   "api": {
     "method": "post",
-    "url": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "url": "https://mock.jeata.com/api/form/saveForm",
     "adaptor": "return {\n    ...payload,\n    status: payload.code === 200 ? 0 : payload.code\n}"
   },
   "controls": [
@@ -593,7 +592,7 @@ const schema = {
   type: 'form',
   api: {
     method: 'post',
-    url: 'https://houtai.baidu.com/api/mock2/form/saveForm',
+    url: 'https://mock.jeata.com/api/form/saveForm',
     adaptor: function (payload, response) {
       return {
         ...payload,
@@ -646,6 +645,6 @@ const schema = {
 | sendOn         | 请求条件     | [表达式](../concepts/expression)                                                                     | -                                                                                                                                                                                             |
 | cache          | 接口缓存时间 | 整型数字                                                                                             | -                                                                                                                                                                                             |
 | requestAdaptor | 发送适配器   | 字符串                                                                                               | ，支持字符串串格式，或者直接就是函数如：                                                                                                                                                      |
-| adaptor        | 接收适配器   | 字符串                                                                                               | 如果接口返回不符合要求，可以通过配置一个适配器来处理成 amis 需要的。同样支持 Function 或者 字符串函数体格式                                                                                   |
+| adaptor        | 接收适配器   | 字符串                                                                                               | 如果接口返回不符合要求，可以通过配置一个适配器来处理成需要的。同样支持 Function 或者 字符串函数体格式                                                                                   |
 | replaceData    | 替换当前数据 | 布尔                                                                                                 | 返回的数据是否替换掉当前的数据，默认为 `false`，即：`追加`，设置成 `true` 就是完全替换。                                                                                                      |
 | responseType   | 返回类型     | 字符串                                                                                               | 如果是下载需要设置为 'blob'                                                                                                                                                                   |

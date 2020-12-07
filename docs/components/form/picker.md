@@ -15,7 +15,7 @@ order: 35
 ```schema:height="400" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "picker",
@@ -47,7 +47,7 @@ order: 35
 ```schema:height="300" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "picker",
@@ -56,15 +56,15 @@ order: 35
       "valueField": "id",
       "labelField": "engine",
       "label": "多选",
-      "source": "https://houtai.baidu.com/api/sample",
+      "source": "https://mock.jeata.com/crud/sample",
       "size": "lg",
       "value": "4,5",
       "multiple": true,
       "pickerSchema": {
         "mode": "table",
         "name": "thelist",
-        "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
-        "quickSaveItemApi": "https://houtai.baidu.com/api/sample/$id",
+        "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
+        "quickSaveItemApi": "https://mock.jeata.com/crud/sample/$id",
         "draggable": true,
         "headerToolbar": {
           "wrapWithPanel": false,
@@ -252,7 +252,7 @@ order: 35
                 "icon": "fa fa-times text-danger",
                 "actionType": "ajax",
                 "confirmText": "您确认要删除?",
-                "api": "delete:https://houtai.baidu.com/api/sample/$id"
+                "api": "delete:https://mock.jeata.com/crud/sample/$id"
               }
             ],
             "toggled": true
@@ -271,7 +271,7 @@ order: 35
 ```schema:height="900" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "picker",
@@ -281,15 +281,15 @@ order: 35
       "labelField": "engine",
       "label": "Picker",
       "embed": true,
-      "source": "https://houtai.baidu.com/api/sample",
+      "source": "https://mock.jeata.com/crud/sample",
       "size": "lg",
       "value": "4,5",
       "multiple": true,
       "pickerSchema": {
         "mode": "table",
         "name": "thelist",
-        "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
-        "quickSaveItemApi": "https://houtai.baidu.com/api/sample/$id",
+        "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
+        "quickSaveItemApi": "https://mock.jeata.com/crud/sample/$id",
         "draggable": true,
         "headerToolbar": {
           "wrapWithPanel": false,
@@ -477,7 +477,7 @@ order: 35
                 "icon": "fa fa-times text-danger",
                 "actionType": "ajax",
                 "confirmText": "您确认要删除?",
-                "api": "delete:https://houtai.baidu.com/api/sample/$id"
+                "api": "delete:https://mock.jeata.com/crud/sample/$id"
               }
             ],
             "toggled": true

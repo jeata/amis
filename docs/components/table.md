@@ -15,7 +15,7 @@ order: 67
 ```schema:height="700" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/sample?perPage=5",
+    "api": "https://mock.jeata.com/crud/sample?perPage=5",
     "body": [
         {
             "type": "table",
@@ -63,7 +63,6 @@ order: 67
 
 ```schema:height="600"
 {
-    "$schema": "https://houtai.baidu.com/v2/schemas/table.json#",
     "type": "table",
     "data": {
         "items": [
@@ -313,7 +312,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -335,7 +334,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -357,7 +356,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/sample?perPage=5",
+    "api": "https://mock.jeata.com/crud/sample?perPage=5",
     "body": [
         {
             "type": "table",
@@ -407,7 +406,7 @@ order: 67
 ```schema:height="530" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/sample?perPage=5",
+    "api": "https://mock.jeata.com/crud/sample?perPage=5",
     "className": "w-xxl",
     "body": [
         {
@@ -460,7 +459,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -480,7 +479,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -504,7 +503,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -529,7 +528,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -564,7 +563,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
   "type": "crud",
-  "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+  "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
   "affixHeader": false,
   "combineNum": 1,
   "columns": [
@@ -598,7 +597,7 @@ order: 67
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -811,7 +810,7 @@ order: 67
 ```schema:height="400" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/sample?perPage=5",
+    "api": "https://mock.jeata.com/crud/sample?perPage=5",
     "body": [
         {
             "type": "table",
@@ -993,7 +992,7 @@ order: 67
 ```schema:height="430" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/sample?perPage=5",
+    "api": "https://mock.jeata.com/crud/sample?perPage=5",
     "body": [
         {
             "type": "table",
@@ -1051,7 +1050,7 @@ order: 67
 ```schema:height="530" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/sample?perPage=10",
+    "api": "https://mock.jeata.com/crud/sample?perPage=10",
     "body": [
         {
             "type": "table",

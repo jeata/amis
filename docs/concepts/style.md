@@ -8,7 +8,7 @@ icon:
 order: 18
 ---
 
-amis 中有大量的功能类 class 可以使用，即可以用在 schema 中，也可以用在自定义组件开发中，掌握这些 class, 几乎可以不用写样式。
+有大量的功能类 class 可以使用，即可以用在 schema 中，也可以用在自定义组件开发中，掌握这些 class, 几乎可以不用写样式。
 
 ## 基本使用
 
@@ -71,7 +71,7 @@ amis 中有大量的功能类 class 可以使用，即可以用在 schema 中，
 
 ## 图标
 
-amis 集成了 [fontawesome](http://fontawesome.io/icons/)，所以关于图标部分，请前往 [fontawesome](http://fontawesome.io/icons/) 查看。
+集成了 [fontawesome](http://fontawesome.io/icons/)，所以关于图标部分，请前往 [fontawesome](http://fontawesome.io/icons/) 查看。
 
 ## 布局
 

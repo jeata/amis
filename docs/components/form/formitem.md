@@ -371,7 +371,7 @@ order: 1
 ```schema:height="300" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -390,7 +390,7 @@ order: 1
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "number",
@@ -419,7 +419,7 @@ order: 1
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -439,7 +439,7 @@ order: 1
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -462,7 +462,7 @@ order: 1
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -480,7 +480,7 @@ order: 1
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -497,12 +497,12 @@ order: 1
 
 ### 自定义校验信息
 
-amis 会有默认的报错信息，如果你想自定义校验信息，配置`validationErrors`属性
+有默认的报错信息，如果你想自定义校验信息，配置`validationErrors`属性
 
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -525,7 +525,7 @@ amis 会有默认的报错信息，如果你想自定义校验信息，配置`va
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "text",
@@ -581,7 +581,7 @@ amis 会有默认的报错信息，如果你想自定义校验信息，配置`va
 ```schema:height="300" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveFormFailed?waitSeconds=1",
+  "api": "https://mock.jeata.com/api/form/saveFormFailed?waitSeconds=1",
   "controls": [
     {
         "name": "test2",

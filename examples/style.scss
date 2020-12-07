@@ -200,17 +200,17 @@ a {
 
         > a {
           display: inline-block;
-          color: #333;
+          color: #ccc;
           padding: 0px 22px;
           font-weight: 500;
 
           &.is-active {
-            color: #108cee;
+            color: #fff;
             position: relative;
 
             &::before {
               content: '';
-              border-bottom: 2px solid #108cee;
+              border-bottom: 2px solid #fff;
               position: absolute;
               width: 100%;
               left: 0;
@@ -227,10 +227,20 @@ a {
       .Doc-search {
         margin-top: 15px;
         border: 0;
+        background-color: #515a71;
 
         > .icon-search {
           margin-right: 8px;
           top: 3px;
+          fill: #ccc;
+        }
+
+        > input::-webkit-input-placeholder {
+          color: #ccc;
+        }
+
+        > input::placeholder {
+          color: #ccc;
         }
       }
 
@@ -267,7 +277,7 @@ a {
       background-color: #fff;
     }
     &-header::before {
-      background: #fff;
+      background: #454d61;
     }
   }
 }

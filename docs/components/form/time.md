@@ -13,7 +13,7 @@ order: 58
 ```schema:height="400" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",
@@ -33,7 +33,7 @@ order: 58
 ```schema:height="400" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",
@@ -55,7 +55,7 @@ order: 58
 {
     "type": "form",
     "debug": true,
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",
@@ -74,7 +74,7 @@ order: 58
 {
     "type": "form",
     "debug": true,
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",
@@ -96,7 +96,7 @@ order: 58
 {
     "type": "form",
     "debug": true,
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",
@@ -122,7 +122,7 @@ order: 58
 {
     "type": "form",
     "debug": true,
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",
@@ -142,7 +142,7 @@ order: 58
 {
     "type": "form",
     "debug": true,
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "time",

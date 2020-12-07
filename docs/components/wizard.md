@@ -15,7 +15,7 @@ order: 73
 ```schema:height="400" scope="body"
 {
     "type": "wizard",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm?waitSeconds=2",
+    "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=2",
     "mode": "vertical",
     "steps": [
         {

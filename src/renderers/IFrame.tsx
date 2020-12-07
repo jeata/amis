@@ -20,7 +20,7 @@ export interface IFrameSchema extends BaseSchema {
   src: SchemaUrlPath;
 
   /**
-   * 事件相应，配置后当 iframe 通过 postMessage 发送事件时，可以触发 AMIS 内部的动作。
+   * 事件相应，配置后当 iframe 通过 postMessage 发送事件时，可以触发基塔云内部的动作。
    */
   events?: {
     [eventName: string]: ActionSchema;
@@ -79,7 +79,7 @@ export default class IFrame extends React.Component<IFrameProps, object> {
 
     const [prefix, type] = e.data.type.split(':');
 
-    if (prefix !== 'amis' || !type) {
+    if (prefix !== 'jeata' || !type) {
       return;
     }
 
@@ -137,7 +137,7 @@ export default class IFrame extends React.Component<IFrameProps, object> {
   postMessage(type: string, data: any) {
     (this.IFrameRef.current as HTMLIFrameElement).contentWindow?.postMessage(
       {
-        type: `amis:${type}`,
+        type: `jeata:${type}`,
         data
       },
       '*'

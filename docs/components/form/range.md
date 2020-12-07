@@ -12,7 +12,7 @@ order: 38
 ```schema:height="400" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "range",
@@ -29,7 +29,7 @@ order: 38
 {
     "type": "form",
     "debug": true,
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "range",

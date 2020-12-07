@@ -69,7 +69,7 @@ order: 69
 {
     "type": "tasks",
     "name": "tasks",
-    "checkApi": "https://houtai.baidu.com/api/mock2/task"
+    "checkApi": "https://mock.jeata.com/other/task"
 },
 
 "为了演示，目前获取的状态都是随机出现的。"]

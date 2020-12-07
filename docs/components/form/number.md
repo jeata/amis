@@ -13,7 +13,7 @@ order: 32
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "number",

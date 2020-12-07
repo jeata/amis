@@ -12,7 +12,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "默认",
@@ -56,7 +56,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "分组",
@@ -113,7 +113,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "表格形式",
@@ -172,7 +172,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "树型展示",
@@ -230,7 +230,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "级联选择",
@@ -288,7 +288,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "带搜索",
@@ -348,14 +348,14 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "延时加载",
       "type": "transfer",
       "name": "transfer7",
       "selectMode": "tree",
-      "deferApi": "https://houtai.baidu.com/api/mock2/form/deferOptions?label=${label}",
+      "deferApi": "https://mock.jeata.com/form/deferOptions?label=${label}",
       "options": [
         {
           "label": "法师",
@@ -398,7 +398,7 @@ icon:
 ```schema:height="550" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "label": "关联选择模式",
@@ -406,7 +406,7 @@ icon:
       "name": "b",
       "sortable": true,
       "searchable": true,
-      "deferApi": "https://houtai.baidu.com/api/mock/form/deferOptions?label=${label}",
+      "deferApi": "https://mock.jeata.com/form/deferOptions?label=${label}",
       "selectMode": "associated",
       "leftMode": "tree",
       "leftOptions": [

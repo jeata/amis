@@ -17,7 +17,7 @@ FieldSet 是用于分组展示表单项的一种容器型组件。
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "fieldSet",
@@ -87,7 +87,7 @@ FieldSet 是用于分组展示表单项的一种容器型组件。
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "fieldSet",
@@ -118,7 +118,7 @@ FieldSet 是用于分组展示表单项的一种容器型组件。
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "fieldSet",
@@ -152,7 +152,7 @@ fieldSet 的另一种标题展现样式，不同的是展开的时候收起文�
 ```schema:height="400" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "fieldSet",

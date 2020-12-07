@@ -8,7 +8,7 @@ icon:
 order: 63
 ---
 
-amis 中部分组件，作为展示组件，自身没有**使用接口初始化数据域的能力**，例如：[Table](./table)、[Cards](./cards)、[List](./list)等，他们需要使用某些配置项，例如`source`，通过[数据映射](../concepts/data-mapping)功能，在当前的 **数据链** 中获取数据，并进行数据展示。
+部分组件，作为展示组件，自身没有**使用接口初始化数据域的能力**，例如：[Table](./table)、[Cards](./cards)、[List](./list)等，他们需要使用某些配置项，例如`source`，通过[数据映射](../concepts/data-mapping)功能，在当前的 **数据链** 中获取数据，并进行数据展示。
 
 而`Service`组件就是专门为该类组件而生，它的功能是：：**配置初始化接口，进行数据域的初始化，然后在`Service`内容器中配置子组件，这些子组件通过数据链的方法，获取`Service`所拉取到的数据**
 
@@ -19,7 +19,7 @@ amis 中部分组件，作为展示组件，自身没有**使用接口初始化�
 ```schema:height="200" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/mock2/page/initData",
+    "api": "https://mock.jeata.com/api/page/initData",
     "body": {
         "type": "panel",
         "title": "$title",
@@ -50,7 +50,7 @@ amis 中部分组件，作为展示组件，自身没有**使用接口初始化�
 ```schema:height="400" scope="body"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/mock2/crud/table?perPage=5",
+    "api": "https://mock.jeata.com/crud/sample",
     "body": [
         {
             "type": "table",
@@ -188,7 +188,7 @@ amis 中部分组件，作为展示组件，自身没有**使用接口初始化�
 ```schema:height="200" scope="body"
 {
   "type": "service",
-  "schemaApi": "https://houtai.baidu.com/api/mock2/service/schema?type=tabs"
+  "schemaApi": "https://mock.jeata.com/service/schema?type=tabs"
 }
 ```
 
@@ -214,7 +214,7 @@ amis 中部分组件，作为展示组件，自身没有**使用接口初始化�
 }
 ```
 
-它将`data`返回的对象作为 amis 页面配置，进行了解析渲染，实现动态渲染页面的功能。
+它将`data`返回的对象作为页面配置，进行了解析渲染，实现动态渲染页面的功能。
 
 ## 接口联动
 
@@ -224,7 +224,7 @@ amis 中部分组件，作为展示组件，自身没有**使用接口初始化�
 {
     "title": "",
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock/saveForm?waitSeconds=1",
+    "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=1",
     "mode": "horizontal",
     "controls": [
         {
@@ -251,7 +251,7 @@ amis 中部分组件，作为展示组件，自身没有**使用接口初始化�
         },
         {
         "type": "service",
-        "api": "https://houtai.baidu.com/api/mock2/form/initData?tpl=${tpl}",
+        "api": "https://mock.jeata.com/form/initData?tpl=${tpl}",
         "controls": [
             {
             "label": "名称",

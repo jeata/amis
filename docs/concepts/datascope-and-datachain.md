@@ -49,7 +49,7 @@ order: 10
 ```schema:height="200"
 {
   "type": "page",
-  "initApi": "https://houtai.baidu.com/api/mock2/page/initData",
+  "initApi": "https://mock.jeata.com/api/page/initData",
   "body": "date is ${date}"
 }
 ```
@@ -60,13 +60,13 @@ order: 10
 
 1. 首先我们给 `Page` 组件配置了`initApi`属性，该属性会在组件初始化时，请求所该属性所配置的接口
 2. 接口请求成功后，`Page` 会把接口返回的`data`内数据存到当前的数据域中
-3. `Page` 在渲染 `body` 所配置的文本时，会解析文本内容，当解析到模板变量`${text}`时，amis 会把尝试在当前组件的数据域中获取`text`变量值，并替换掉`${text}`，最后渲染解析后的文本。
+3. `Page` 在渲染 `body` 所配置的文本时，会解析文本内容，当解析到模板变量`${text}`时，会把尝试在当前组件的数据域中获取`text`变量值，并替换掉`${text}`，最后渲染解析后的文本。
 
-> 下一节我们会介绍[模板](./template)，`body`属性自身支持模板语法，amis 中支持模板语法的组件还有很多
+> 下一节我们会介绍[模板](./template)，`body`属性自身支持模板语法，支持模板语法的组件还有很多
 
 ## 数据域
 
-前面我们提到了**数据域**这个概念，它是 amis 中最重要的概念之一。
+前面我们提到了**数据域**这个概念，它是最重要的概念之一。
 
 还是通过最简单的示例进行讲解：
 
@@ -114,13 +114,13 @@ order: 10
 }
 ```
 
-> amis 中大部分组件都具有数据域。
+> 大部分组件都具有数据域。
 >
-> 而前面我们知道 amis 的特性之一是基于组件树，因此自然数据域也会形成类似于树型结构，如何来处理这些数据域之间的联系呢，这就是我们马上要介绍到的 **[数据链](./datascope-and-datachain#%E6%95%B0%E6%8D%AE%E9%93%BE)**
+> 数据域类似于树型结构，如何来处理这些数据域之间的联系呢，这就是我们马上要介绍到的 **[数据链](./datascope-and-datachain#%E6%95%B0%E6%8D%AE%E9%93%BE)**
 
 ## 数据链
 
-相信通过上文，你已经基本掌握了 amis 中数据域的概念，接下来我们会介绍另一个重要概念：**数据链**。
+相信通过上文，你已经基本掌握了数据域的概念，接下来我们会介绍另一个重要概念：**数据链**。
 
 **数据链**的特性是，当前组件在遇到获取变量的场景（例如模板渲染、展示表单数据、渲染列表等等）时：
 
@@ -260,7 +260,7 @@ page
 {
   "data": {
     "text": "World!",
-    "name": "amis"
+    "name": "jeata"
   },
   "type": "page",
   "body": "Hello ${text}, my name is ${name}."
@@ -280,7 +280,7 @@ page
   "type": "page",
   "body": {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
       {
         "type": "text",
@@ -313,6 +313,6 @@ page
 }
 ```
 
-这时 amis 将会把`data`数据与当前`form`组件的数据域进行**merge**，`form`组件中的`static-tpl`组件会根据更新后的数据域，显示`id`为`1`。
+这时将会把`data`数据与当前`form`组件的数据域进行**merge**，`form`组件中的`static-tpl`组件会根据更新后的数据域，显示`id`为`1`。
 
 > 具有类似特征的组件还有`Formula`等

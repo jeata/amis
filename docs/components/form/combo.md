@@ -17,7 +17,7 @@ order: 12
 ```schema:height="300" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "combo",
@@ -49,7 +49,7 @@ order: 12
 {
   "type": "form",
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "combo",
@@ -103,7 +103,7 @@ order: 12
 {
   "type": "form",
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "combo",
@@ -157,7 +157,7 @@ order: 12
 {
   "type": "form",
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "combo",
@@ -215,7 +215,7 @@ order: 12
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "combo",
@@ -270,7 +270,7 @@ order: 12
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "combo",
@@ -353,7 +353,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "combo",
@@ -394,7 +394,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "combo",
@@ -576,7 +576,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "text",
@@ -607,7 +607,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "text",
@@ -643,7 +643,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "text",
@@ -680,7 +680,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "text",
@@ -716,7 +716,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
   "type": "form",
   "debug": true,
   "mode": "horizontal",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
         "type": "combo",

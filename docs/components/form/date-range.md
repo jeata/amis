@@ -13,7 +13,7 @@ order: 15
 ```schema:height="500" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "date-range",
@@ -29,7 +29,7 @@ order: 15
 ```schema:height="600" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "debug": true,
     "controls": [
         {

@@ -131,7 +131,7 @@ export interface FileControlSchema extends FormBaseControl {
   startChunkApi?: string;
 
   /**
-   * 默认为 'auto' amis 所在服务器，限制了文件上传大小不得超出10M，所以 amis 在用户选择大文件的时候，自动会改成分块上传模式。
+   * 默认为 'auto' 分块上传模式。
    */
   useChunk?: 'auto' | boolean;
 

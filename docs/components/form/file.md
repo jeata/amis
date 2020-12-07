@@ -15,14 +15,14 @@ order: 21
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "file",
             "name": "file",
             "label": "File",
             "accept": "*",
-            "reciever": "https://houtai.baidu.com/api/upload/file"
+            "reciever": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -49,14 +49,14 @@ order: 21
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "file",
             "name": "file",
             "label": "限制只能上传csv文件",
             "accept": ".csv",
-            "reciever": "https://houtai.baidu.com/api/upload/file"
+            "reciever": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -71,7 +71,7 @@ order: 21
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "debug": true,
     "controls": [
         {
@@ -85,7 +85,7 @@ order: 21
 }
 ```
 
-上例中，选择任意文件，然后观察数据域变化；点击提交，amis 自动会调整接口数据格式为`FormData`
+上例中，选择任意文件，然后观察数据域变化；点击提交，自动会调整接口数据格式为`FormData`
 
 ## 分块上传
 
@@ -98,14 +98,14 @@ order: 21
 ```schema:height="300" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "file",
       "name": "file",
       "label": "File",
       "accept": "*",
-      "reciever": "https://houtai.baidu.com/api/upload/file",
+      "reciever": "https://mock.jeata.com/api/upload/file",
       "autoFill": {
         "myUrl": "${url}"
       }
@@ -160,7 +160,7 @@ order: 21
 | stateTextMap     | object                 | `{ init: '', pending: '等待上传', uploading: '上传中', error: '上传出错', uploaded: '已上传', ready: '' }` | 上传状态文案                                                                                                                         |
 | fileField        | `string`               | `file`                                                                                                     | 如果你不想自己存储，则可以忽略此属性。                                                                                               |
 | downloadUrl      | `boolean`或`string`    | `""`                                                                                                       | 默认显示文件路径的时候会支持直接下载，可以支持加前缀如：`http://xx.dom/filename=` ，如果不希望这样，可以把当前配置项设置为 `false`。 |
-| useChunk         | `boolean`或`"auto"`    | `"auto"`                                                                                                   | amis 所在服务器，限制了文件上传大小不得超出 10M，所以 amis 在用户选择大文件的时候，自动会改成分块上传模式。                          |
+| useChunk         | `boolean`或`"auto"`    | `"auto"`                                                                                                   | 分块上传模式。                          |
 | chunkSize        | `number`               | `5 * 1024 * 1024`                                                                                          | 分块大小                                                                                                                             |
 | startChunkApi    | [API](../../types/api) |                                                                                                            | startChunkApi                                                                                                                        |
 | chunkApi         | [API](../../types/api) |                                                                                                            | chunkApi                                                                                                                             |

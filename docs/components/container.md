@@ -8,7 +8,7 @@ icon:
 order: 38
 ---
 
-Container 是一种容器组件，它可以渲染其他 amis 组件
+Container 是一种容器组件，它可以渲染其他组件
 
 ## 基本用法
 

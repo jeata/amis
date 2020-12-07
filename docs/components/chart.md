@@ -15,7 +15,7 @@ order: 34
 ```schema:height="350" scope="body"
 {
     "type": "chart",
-    "api": "https://houtai.baidu.com/api/mock2/chart/chart",
+    "api": "https://mock.jeata.com/chart/chart",
     "interval": 5000
 }
 ```
@@ -122,7 +122,7 @@ order: 34
                 },
                 {
                     "type": "chart",
-                    "api": "https://houtai.baidu.com/api/mock2/chart/chart1"
+                    "api": "https://mock.jeata.com/chart/chart1"
                 }
             ]
         }
@@ -132,7 +132,7 @@ order: 34
 
 ## 配置图表点击行为
 
-可以通过配置`"clickAction": {}`，来指定图表节点的点击行为，支持 amis 的 [行为](./action)。
+可以通过配置`"clickAction": {}`，来指定图表节点的点击行为，支持的 [行为](./action)。
 
 然后在配置的行为中可以通过 [数据链](../concepts/datascope-and-datachain) 获取到 [echarts 鼠标事件](https://echarts.apache.org/zh/api.html#events.%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6.click) 的值，例如下面例子中可以通过`${value|json}`获取到点击节点的`传入的数据值`
 
@@ -236,7 +236,7 @@ order: 34
                 },
                 {
                     "type": "chart",
-                    "api": "https://houtai.baidu.com/api/mock2/chart/chart1"
+                    "api": "https://mock.jeata.com/chart/chart1"
                 }
             ]
         }
@@ -251,7 +251,7 @@ order: 34
 ```schema:height="350" scope="body"
 {
     "type": "chart",
-    "api": "https://houtai.baidu.com/api/mock2/chart/chart1"
+    "api": "https://mock.jeata.com/chart/chart1"
 }
 ```
 
@@ -306,13 +306,13 @@ order: 34
                 "type": "chart",
                 "name": "chart1",
                 "initFetch": false,
-                "api": "https://houtai.baidu.com/api/mock2/chart/chart?name=$name&starttime=${starttime}&endtime=${endtime}"
+                "api": "https://mock.jeata.com/chart/chart?name=$name&starttime=${starttime}&endtime=${endtime}"
             },
             {
                 "type": "chart",
                 "name": "chart2",
                 "initFetch": false,
-                "api": "https://houtai.baidu.com/api/mock2/chart/chart2?name=$name"
+                "api": "https://mock.jeata.com/chart/chart2?name=$name"
             }
         ]
     }

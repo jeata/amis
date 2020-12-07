@@ -202,13 +202,13 @@ order: 2
             "label": "选项",
             "type": "select",
             "name": "select",
-            "source": "https://houtai.baidu.com/api/mock2/form/getOptions?waitSeconds=1"
+            "source": "https://mock.jeata.com/api/options/getOptions?waitSeconds=1"
         }
     ]
 }
 ```
 
-远程拉取接口时，返回的数据结构除了需要满足 [amis 接口要求的基本数据结构](../../types/api#%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%A0%BC%E5%BC%8F-%E9%87%8D%E8%A6%81-) 以外，必须用`"options"`作为选项组的`key`值，如下
+远程拉取接口时，返回的数据结构除了需要满足 [接口要求的基本数据结构](../../types/api#%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%A0%BC%E5%BC%8F-%E9%87%8D%E8%A6%81-) 以外，必须用`"options"`作为选项组的`key`值，如下
 
 ```json
 {
@@ -747,7 +747,7 @@ order: 2
             "name": "select",
             "type": "select",
             "label": "选项自动补全",
-            "autoComplete": "https://houtai.baidu.com/api/mock2/options/autoComplete?term=$term",
+            "autoComplete": "https://mock.jeata.com/options/autoComplete?term=$term",
             "placeholder": "请输入"
         }
     ]
@@ -1019,7 +1019,7 @@ order: 2
             "label": "选项",
             "type": "select",
             "name": "select",
-            "addApi": "https://houtai.baidu.com/api/mock2/form/saveForm",
+            "addApi": "https://mock.jeata.com/api/form/saveForm",
             "options": [
                 {
                     "label":"A",
@@ -1166,7 +1166,7 @@ order: 2
             "label": "选项",
             "type": "select",
             "name": "select",
-            "editApi": "https://houtai.baidu.com/api/mock2/form/saveForm",
+            "editApi": "https://mock.jeata.com/api/form/saveForm",
             "options": [
                 {
                     "label":"A",
@@ -1211,7 +1211,7 @@ order: 2
             "label": "选项",
             "type": "select",
             "name": "select",
-            "deleteApi": "https://houtai.baidu.com/api/mock2/form/saveForm",
+            "deleteApi": "https://mock.jeata.com/api/form/saveForm",
             "options": [
                 {
                     "label":"A",
@@ -1240,7 +1240,7 @@ order: 2
 ```schema:height="400" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "select",

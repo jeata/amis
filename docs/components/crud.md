@@ -17,7 +17,7 @@ CRUD，即增删改查组件，主要用来展现数据列表，并支持各类�
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "columns": [
         {
             "name": "id",
@@ -71,7 +71,7 @@ CRUD，即增删改查组件，主要用来展现数据列表，并支持各类�
 }
 ```
 
-如果无法知道数据总数，只能知道是否有下一页，请返回如下格式，amis 会简单生成一个简单版本的分页控件。
+如果无法知道数据总数，只能知道是否有下一页，请返回如下格式，会简单生成一个简单版本的分页控件。
 
 ```json
 {
@@ -276,7 +276,7 @@ Table 模式支持 [Table](./table) 中的所有功能。
 ```schema:height="700" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "syncLocation": false,
     "columns": [
         {
@@ -310,7 +310,7 @@ List 模式支持 [List](./list) 中的所有功能。
 ```schema:height="700" scope="body"
 {
 "type": "crud",
-"api": "raw:https://houtai.baidu.com/api/mock2/crud/permissions",
+"api": "raw:https://mock.jeata.com/api/crud/permissions",
 "mode": "list",
 "placeholder": "当前组内, 还没有配置任何权限.",
 "syncLocation": false,
@@ -356,7 +356,7 @@ List 模式支持 [List](./list) 中的所有功能。
       "icon": "fa fa-times",
       "confirmText": "您确定要移除该权限?",
       "actionType": "ajax",
-      "api": "delete:https://houtai.baidu.com/api/mock2/notFound"
+      "api": "delete:https://mock.jeata.com/api/notFound"
     }
   ]
 }
@@ -370,7 +370,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 ```schema:height="400" scope="body"
 {
   "type": "crud",
-  "api": "https://houtai.baidu.com/api/mock2/crud/users",
+  "api": "https://mock.jeata.com/crud/users",
   "syncLocation": false,
   "mode": "cards",
   "defaultParams": {
@@ -450,7 +450,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
         "label": "移除",
         "confirmText": "您确定要移除该用户?",
         "actionType": "ajax",
-        "api": "delete:https://houtai.baidu.com/api/mock2/notFound"
+        "api": "delete:https://mock.jeata.com/api/notFound"
       }
     ]
   }
@@ -466,7 +466,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 ```schema:height="800" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
      "filter": {
         "title": "条件搜索",
         "controls": [
@@ -517,7 +517,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "defaultParams": {
         "perPage": 50
     },
@@ -559,7 +559,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "interval": 3000,
     "columns": [
         {
@@ -603,7 +603,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "columns": [
         {
             "name": "id",
@@ -618,7 +618,7 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 }
 ```
 
-amis 只负责生成排序组件，并将排序参数传递给接口，而不会在前端对数据进行排序处理。参数格式如下：
+只负责生成排序组件，并将排序参数传递给接口，而不会在前端对数据进行排序处理。参数格式如下：
 
 ```json
 {
@@ -636,7 +636,7 @@ amis 只负责生成排序组件，并将排序参数传递给接口，而不会
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "columns": [
         {
             "name": "id",
@@ -651,7 +651,7 @@ amis 只负责生成排序组件，并将排序参数传递给接口，而不会
 }
 ```
 
-amis 只负责生成搜索组件，并将搜索参数传递给接口，而不会在前端对数据进行搜索处理。参数格式如下：
+只负责生成搜索组件，并将搜索参数传递给接口，而不会在前端对数据进行搜索处理。参数格式如下：
 
 ```json
 {
@@ -668,7 +668,7 @@ amis 只负责生成搜索组件，并将搜索参数传递给接口，而不会
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "columns": [
         {
             "name": "id",
@@ -691,7 +691,7 @@ amis 只负责生成搜索组件，并将搜索参数传递给接口，而不会
 }
 ```
 
-amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，而不会在前端对数据进行搜索处理。参数格式如下：
+只负责生成下拉选择器组件，并将搜索参数传递给接口，而不会在前端对数据进行搜索处理。参数格式如下：
 
 ```json
 {
@@ -710,8 +710,8 @@ amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
-    "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
     "columns": [
         {
             "name": "id",
@@ -733,8 +733,8 @@ amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
-    "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
     "columns": [
         {
             "name": "id",
@@ -765,8 +765,8 @@ amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，
 ```schema:height="750" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
-    "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
     "columns": [
         {
             "name": "id",
@@ -799,8 +799,8 @@ amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，
 ```schema:height="750" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
-    "quickSaveItemApi": "https://houtai.baidu.com/api/sample/$id",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveItemApi": "https://mock.jeata.com/crud/sample/$id",
     "columns": [
         {
             "name": "id",
@@ -832,7 +832,7 @@ amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，
 ```schema:height="750" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "columns": [
         {
             "name": "id",
@@ -853,7 +853,7 @@ amis 只负责生成下拉选择器组件，并将搜索参数传递给接口，
                     "X"
                 ],
                 "saveImmediately": {
-                    "api": "https://houtai.baidu.com/api/sample/$id"
+                    "api": "https://mock.jeata.com/crud/sample/$id"
                 }
             }
         }
@@ -868,7 +868,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "headerToolbar": [
         {
             "type": "tpl",
@@ -943,7 +943,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="700" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "headerToolbar": [],
     "footerToolbar": ["switch-per-page", "pagination"],
     "columns": [
@@ -966,7 +966,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
                     "X"
                 ],
                 "saveImmediately": {
-                    "api": "https://houtai.baidu.com/api/sample/$id"
+                    "api": "https://mock.jeata.com/crud/sample/$id"
                 }
             }
         }
@@ -1068,7 +1068,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 }
 ```
 
-这样 amis 会在配置分页组件的地方，渲染出一个简单的页面跳转控件。
+这样会在配置分页组件的地方，渲染出一个简单的页面跳转控件。
 
 ### 批量操作
 
@@ -1079,7 +1079,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "headerToolbar": [
         "bulkActions"
     ],
@@ -1087,7 +1087,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
         {
             "label": "批量删除",
             "actionType": "ajax",
-            "api": "delete:https://houtai.baidu.com/api/sample/${ids|raw}",
+            "api": "delete:https://mock.jeata.com/crud/sample/${ids|raw}",
             "confirmText": "确定要批量删除?"
         },
         {
@@ -1097,7 +1097,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
                 "title": "批量编辑",
                 "body": {
                     "type": "form",
-                    "api": "https://houtai.baidu.com/api/sample/bulkUpdate2",
+                    "api": "https://mock.jeata.com/crud/sample/bulkUpdate2",
                     "controls": [
                         {
                             "type": "hidden",
@@ -1159,7 +1159,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "headerToolbar": ["statistics"],
     "columns": [
         {
@@ -1197,7 +1197,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "headerToolbar": ["load-more"],
     "columns": [
         {
@@ -1251,7 +1251,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="800" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
      "filter": {
         "title": "条件搜索",
         "controls": [
@@ -1306,7 +1306,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="600" scope="body"
 {
   "type": "crud",
-  "api": "https://houtai.baidu.com/api/sample",
+  "api": "https://mock.jeata.com/crud/sample",
   "draggable": true,
   "columns": [
     {
@@ -1376,7 +1376,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "draggable": true,
     "columns": [
         {
@@ -1413,7 +1413,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 
 - `ids` 字符串如： `2,3,1,4,5,6` 用 id 来记录新的顺序。 前提是你的列表接口返回了 id 字段。另外如果你的 primaryField 不是 `id`，则需要配置如： `primaryField: "order_id"`。注意：无论你配置成什么 primayField，这个字段名始终是 ids。
 - `rows` `Array<Item>` 数组格式，新的顺序，数组里面包含所有原始信息。
-- `insertAfter` 或者 `insertBefore` 这是 amis 生成的 diff 信息，对象格式，key 为目标成员的 primaryField 值，即 id，value 为数组，数组中存放成员 primaryField 值。如：
+- `insertAfter` 或者 `insertBefore` 这是生成的 diff 信息，对象格式，key 为目标成员的 primaryField 值，即 id，value 为数组，数组中存放成员 primaryField 值。如：
 
   ```json
   {
@@ -1505,7 +1505,7 @@ CRUD 中不限制有多少个单条操作、添加一个操作对应的添加一
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "loadDataOnce": true,
     "columns": [
         {
@@ -1542,7 +1542,7 @@ CRUD 中不限制有多少个单条操作、添加一个操作对应的添加一
 ```schema:height="600" scope="body"
 {
     "type": "crud",
-    "api": "https://houtai.baidu.com/api/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "loadDataOnce": true,
     "source": "${rows | filter:engine:match:keywords}",
     "filter":{

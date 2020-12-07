@@ -13,11 +13,11 @@ order: 49
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "service",
-            "api": "https://houtai.baidu.com/api/mock2/page/initData",
+            "api": "https://mock.jeata.com/api/page/initData",
             "controls": [
                 {
                     "type": "text",
@@ -47,7 +47,7 @@ order: 49
 ```schema:height="200" scope="form-item"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/mock2/page/initData",
+    "api": "https://mock.jeata.com/api/page/initData",
     "body": {
         "type": "text",
         "text": "现在是：${date}"
@@ -60,7 +60,7 @@ order: 49
 ```schema:height="500" scope="form-item"
 {
     "type": "service",
-    "api": "https://houtai.baidu.com/api/mock2/page/initData",
+    "api": "https://mock.jeata.com/api/page/initData",
     "controls": [
       {
           "type": "text",
@@ -90,7 +90,7 @@ Service 中的`api`和`schemaApi`都支持**接口联动**。
 {
   "title": "",
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock/saveForm?waitSeconds=1",
+  "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=1",
   "mode": "horizontal",
   "controls": [
     {
@@ -117,7 +117,7 @@ Service 中的`api`和`schemaApi`都支持**接口联动**。
     },
     {
       "type": "service",
-      "api": "https://houtai.baidu.com/api/mock2/form/initData?tpl=${tpl}",
+      "api": "https://mock.jeata.com/form/initData?tpl=${tpl}",
       "controls": [
         {
           "label": "名称",
@@ -166,7 +166,7 @@ Service 中的`api`和`schemaApi`都支持**接口联动**。
 ```schema:height="400" scope="form-item"
 {
   "type": "service",
-  "schemaApi": "https://houtai.baidu.com/api/mock2/service/schema?type=controls"
+  "schemaApi": "https://mock.jeata.com/service/schema?type=controls"
 }
 ```
 

@@ -15,13 +15,13 @@ order: 27
 ```schema:height="300" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
             "name": "image",
             "label": "image",
-            "reciever": "https://houtai.baidu.com/api/upload/file"
+            "reciever": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -34,14 +34,14 @@ order: 27
 ```schema:height="350" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
             "name": "image",
             "label": "限制只能上传jpg图片",
             "accept": ".jpg",
-            "reciever": "https://houtai.baidu.com/api/upload/file"
+            "reciever": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -54,14 +54,14 @@ order: 27
 ```schema:height="350" scope="body"
 {
     "type": "form",
-    "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
             "name": "image",
             "label": "限制只能上传jpg图片",
             "accept": ".jpg",
-            "reciever": "https://houtai.baidu.com/api/upload/file",
+            "reciever": "https://mock.jeata.com/api/upload/file",
             "crop": true
         }
     ]
@@ -75,13 +75,13 @@ order: 27
 ```schema:height="300" scope="body"
 {
   "type": "form",
-  "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "image",
       "name": "image",
       "label": "image",
-      "reciever": "https://houtai.baidu.com/api/upload/file",
+      "reciever": "https://mock.jeata.com/api/upload/file",
       "autoFill": {
         "myUrl": "${url}"
       }

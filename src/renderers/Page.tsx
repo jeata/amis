@@ -32,7 +32,7 @@ import {
 import {SchemaRemark} from './Remark';
 
 /**
- * amis Page 渲染器。详情请见：https://doc.jeata.com/amis/docs/components/page
+ * Page 渲染器。详情请见：https://doc.jeata.com/amis/docs/components/page
  */
 export interface PageSchema extends BaseSchema {
   /**

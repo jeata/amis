@@ -15,7 +15,7 @@ order: 56
 ```schema:height="400" scope="body"
 {
   "type": "service",
-  "api": "https://houtai.baidu.com/api/sample?perPage=5",
+  "api": "https://mock.jeata.com/crud/sample?perPage=5",
   "body": [
     {
       "type": "panel",
