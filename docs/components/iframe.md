@@ -15,7 +15,7 @@ order: 51
 ```schema:height="650" scope="body"
 {
     "type": "iframe",
-    "src": "https://www.baidu.com",
+    "src": "https://www.jeata.com",
     "height": 600
 }
 ```

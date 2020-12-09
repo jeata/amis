@@ -201,7 +201,7 @@ Action 行为按钮，是触发页面行为的主要方法之一
     "type": "button",
     "actionType": "ajax",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "redirect": "https://www.baidu.com/"
+    "redirect": "https://www.jeata.com/"
 }
 ```
 
@@ -505,6 +505,6 @@ Action 行为按钮，是触发页面行为的主要方法之一
 | reload           | `string`                     | -           | 指定此次操作完后，需要刷新的目标组件名字（组件的`name`值，自己配置的），多个请用 `,` 号隔开。                                                                         |
 | tooltip          | `string`                     | -           | 鼠标停留时弹出该段文字，也可以配置对象类型：字段为`title`和`content`。可用 `${xxx}` 取值。                                                                            |
 | disabledTip      | `string`                     | -           | 被禁用后鼠标停留时弹出该段文字，也可以配置对象类型：字段为`title`和`content`。可用 `${xxx}` 取值。                                                                    |
-| tooltipPlacement | `string`                     | `top`       | 如果配置了`tooltip`或者`disabledTip`，指定提示信息位置，可配置`top`、`bottom`、`left`、`right`。                                                                      |
+| tooltipPlacement | `string`                     | `bottom`    | 如果配置了`tooltip`或者`disabledTip`，指定提示信息位置，可配置`top`、`bottom`、`left`、`right`。                                                                      |
 | close            | `boolean`                    | -           | 当`action`配置在`dialog`或`drawer`的`actions`中时，配置为`true`指定此次操作完后关闭当前`dialog`或`drawer`。                                                           |
 | required         | `Array<string>`              | -           | 配置字符串数组，指定在`form`中进行操作之前，需要指定的字段名的表单项通过验证                                                                                          |

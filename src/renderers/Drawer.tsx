@@ -448,6 +448,7 @@ export default class Drawer extends React.Component<DrawerProps, object> {
 
     document.body.addEventListener('mousemove', this.bindResize);
     document.body.addEventListener('mouseup', this.removeResize);
+    document.body.addEventListener('mouseout', this.removeResize);
   }
 
   bindResize(e: any) {
@@ -475,6 +476,7 @@ export default class Drawer extends React.Component<DrawerProps, object> {
   removeResize() {
     document.body.removeEventListener('mousemove', this.bindResize);
     document.body.removeEventListener('mouseup', this.removeResize);
+    document.body.removeEventListener('mouseout', this.removeResize);
   }
 
   openFeedback(dialog: any, ctx: any) {
@@ -539,7 +541,7 @@ export default class Drawer extends React.Component<DrawerProps, object> {
             : undefined
         }
       >
-        <div className={cx('Drawer-header')}>
+        {(title || header) && <div className={cx('Drawer-header')}>
           {title ? (
             <div className={cx('Drawer-title')}>
               {render('title', title, {
@@ -552,7 +554,7 @@ export default class Drawer extends React.Component<DrawerProps, object> {
                 data: store.formData
               })
             : null}
-        </div>
+        </div>}
 
         <div className={cx('Drawer-body', bodyClassName)}>
           {body ? this.renderBody(body, 'body') : null}

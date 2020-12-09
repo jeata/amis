@@ -127,8 +127,11 @@ export class App extends React.PureComponent {
     themes: themes,
     theme: themes[0],//themes[localStorage.getItem('themeIndex') || 0],
     locale: 'zh-cn', //localStorage.getItem('locale') || '',
+    inIFrame: false,
     navigations: []
   };
+
+  docSearch:any;
 
   constructor(props) {
     super(props);
@@ -148,6 +151,13 @@ export class App extends React.PureComponent {
       if (this.state.theme.value === 'dark') {
         document.querySelector('body').classList.add('dark');
       }
+    }
+
+    if(window != top.window) {
+      this.setState({
+        inIFrame: true,
+      });
+      document.querySelector('body').classList.add('iniframe');
     }
   }
 
@@ -182,6 +192,14 @@ export class App extends React.PureComponent {
     });
   }
 
+  onSearchRef(search:any) {
+    this.docSearch = search;
+  }
+
+  onSearchClick() {
+    this.docSearch.onOpen();
+  }
+
   renderHeader() {
     const location = this.props.location;
     const theme = this.state.theme;
@@ -197,16 +215,26 @@ export class App extends React.PureComponent {
     return (
       <>
         <div className={`${theme.ns}Layout-brandBar`}>
-          <div
-            onClick={() => this.setState({offScreen: !this.state.offScreen})}
-            className={`${theme.ns}Layout-offScreen-btn pull-left visible-xs`}
-          >
-            <i className="bui-icon iconfont icon-collapse"></i>
+
+          <div className={`${theme.ns}Layout-offScreen-group visible-xs`}>
+            <div
+              onClick={() => this.setState({offScreen: !this.state.offScreen})}
+              className={`${theme.ns}Layout-offScreen-btn`}
+            >
+              <i className="bui-icon iconfont icon-collapse"></i>
+            </div>
+            <div
+              onClick={this.onSearchClick.bind(this)}
+              className={`${theme.ns}Layout-offScreen-btn`}
+            >
+              <i className="bui-icon iconfont icon-search"></i>
+            </div>
           </div>
 
           <div className={`${theme.ns}Layout-brand`}>
             <Link to={`${ContextPath}/docs`}>
               <div className="logo"></div>
+              <span className="title">页面文档</span>
             </Link>
           </div>
         </div>
@@ -223,9 +251,17 @@ export class App extends React.PureComponent {
         </div>
 
         <div className={`${theme.ns}Layout-searchBar hidden-xs hidden-sm`}>
-          <DocSearch theme={theme} />
+          <DocSearch theme={theme} onRef={this.onSearchRef.bind(this)} />
         </div>
 
+        <div className={`${theme.ns}Layout-searchIcon visible-sm`}>
+          <div
+            onClick={this.onSearchClick.bind(this)}
+            className={`${theme.ns}Layout-offScreen-btn`}
+          >
+            <i className="bui-icon iconfont icon-search"></i>
+          </div>
+        </div>
       </>
     );
   }
@@ -317,6 +353,7 @@ export class App extends React.PureComponent {
             size="xs"
             className="Doc-navDrawer"
             overlay
+            closeOnEsc={true}
             closeOnOutside
             onHide={() => this.setState({offScreen: false})}
             show={this.state.offScreen}

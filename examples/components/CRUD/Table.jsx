@@ -130,8 +130,8 @@ export default {
       },
       {
         type: 'link',
-        href: 'https://www.baidu.com',
-        body: '百度一下',
+        href: 'https://www.jeata.com',
+        body: '基塔',
         htmlTarget: '_parent',
         className: 'v-middle'
       },

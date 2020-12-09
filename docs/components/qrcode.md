@@ -14,7 +14,7 @@ order: 61
 {
     "type": "qr-code",
     "codeSize": 128,
-    "value": "https://www.baidu.com"
+    "value": "https://www.jeata.com"
 }
 ```
 
@@ -29,7 +29,7 @@ order: 61
         "codeSize": 128,
         "backgroundColor": "#108cee",
         "foregroundColor": "#000",
-        "value": "https://www.baidu.com"
+        "value": "https://www.jeata.com"
     }
 ]
 ```
@@ -43,7 +43,7 @@ order: 61
         "codeSize": 128,
         "backgroundColor": "#fff",
         "foregroundColor": "#108cee",
-        "value": "https://www.baidu.com"
+        "value": "https://www.jeata.com"
     }
 ]
 ```
@@ -58,25 +58,25 @@ order: 61
       "type": "qr-code",
       "codeSize": 128,
       "level": "L",
-      "value": "https://www.baidu.com"
+      "value": "https://www.jeata.com"
     },
     {
       "type": "qr-code",
       "codeSize": 128,
       "level": "M",
-      "value": "https://www.baidu.com"
+      "value": "https://www.jeata.com"
     },
     {
       "type": "qr-code",
       "codeSize": 128,
       "level": "Q",
-      "value": "https://www.baidu.com"
+      "value": "https://www.jeata.com"
     },
     {
       "type": "qr-code",
       "codeSize": 128,
       "level": "H",
-      "value": "https://www.baidu.com"
+      "value": "https://www.jeata.com"
     }
   ]
 }
@@ -94,4 +94,4 @@ order: 61
 | backgroundColor | `string`                     | `"#fff"`                  | 二维码背景色                                                                                                                          |
 | foregroundColor | `string`                     | `"#000"`                  | 二维码前景色                                                                                                                          |
 | level           | `string`                     | `"L"`                     | 二维码复杂级别，有（'L' 'M' 'Q' 'H'）四种                                                                                             |
-| value           | [模板](../concepts/template) | `"https://www.baidu.com"` | 扫描二维码后显示的文本，如果要显示某个页面请输入完整 url（`"http://..."`或`"https://..."`开头），支持使用 [模板](./concepts/template) |
+| value           | [模板](../concepts/template) |                            | 扫描二维码后显示的文本，如果要显示某个页面请输入完整 url（`"http://..."`或`"https://..."`开头），支持使用 [模板](./concepts/template) |

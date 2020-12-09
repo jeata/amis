@@ -28,9 +28,9 @@ order: 30
     {
       "type": "button",
       "actionType": "url",
-      "url": "https://www.baidu.com",
+      "url": "https://www.jeata.com",
       "blank": true,
-      "label": "百度一下"
+      "label": "基塔官网"
     },
 
     {

@@ -311,8 +311,8 @@ Form 默认会在底部渲染一个提交按钮，用于执行表单的提交行
       },
       {
         "type": "button",
-        "label": "百度一下",
-        "url": "https://www.baidu.com/"
+        "label": "基塔官网",
+        "url": "https://www.jeata.com/"
       }
     ]
   }

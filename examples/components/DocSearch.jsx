@@ -41,6 +41,10 @@ export default class DocSearch extends React.Component {
       .catch(err => {
         this.setState({loadError: true});
       });
+
+    if(this.props.onRef) {
+      this.props.onRef(this);
+    }
   }
 
   onSearch() {
@@ -98,6 +102,8 @@ export default class DocSearch extends React.Component {
     this.setState({
       show: false
     });
+
+    this.props.onHide && this.props.onHide();
   }
 
   onEntered() {
@@ -129,10 +135,12 @@ export default class DocSearch extends React.Component {
           className="Doc-searchDrawer"
           overlay
           closeOnOutside
+          closeOnEsc={true}
           onHide={this.onClose}
           onEntered={this.onEntered}
           show={this.state.show}
-          position={'right'}
+          size={(document.body.offsetWidth && document.body.offsetWidth > 768)?'md': 'sm'}
+          position={(document.body.offsetWidth && document.body.offsetWidth > 768)?'right': 'left'}
         >
           <div className={`${this.props.theme.ns}TextControl-input search-bar`}>
             <Icon icon="search" className="icon" />
