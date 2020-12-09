@@ -947,8 +947,8 @@ $Button--default-onActive-border: darken(
 ) !default;
 $Button--default-onActive-color: $Button--default-color !default;
 
-$Button--link-color: $text-color !default;
-$Button--link-onHover-color: $text--loud-color !default;
+$Button--link-color: $link-color !default;
+$Button--link-onHover-color: $link-onHover-color !default;
 
 $DropDown-caret-marginLeft: $gap-sm;
 $DropDown-menu-bg: $white !default;

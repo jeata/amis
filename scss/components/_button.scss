@@ -316,6 +316,54 @@ fieldset:disabled a.#{$ns}Button {
     pointer-events: none;
     background-color: transparent;
   }
+
+  &:not(:disabled):not(.is-disabled):active, &:not(:disabled):not(.is-disabled).is-active {
+    box-shadow: none;
+  }
+  &:not(:disabled):not(.is-disabled):active:focus, &:not(:disabled):not(.is-disabled).is-active:focus {
+    box-shadow: none;
+  }
+
+  // 链接方式的下拉菜单
+  > .#{$ns}DropDown-caret {
+    margin-left: $gap-xs;
+  }
+}
+
+
+// 透明背景、边框按钮 by xubin
+.a-Button--transparent, .a-Button--none {
+  width: auto;
+  min-width: auto;
+  font-weight: 400;
+  color: $text-color;
+  text-decoration: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: auto;
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+
+  @include hover-focus {
+    color: $text--loud-color;
+    text-decoration: none;
+    box-shadow: none;
+  }
+
+  &:disabled,
+  &.is-disabled {
+    color: $text--muted-color;
+    pointer-events: none;
+    background-color: transparent;
+  }
+
+  &:not(:disabled):not(.is-disabled):active, &:not(:disabled):not(.is-disabled).is-active {
+    box-shadow: none;
+  }
+  &:not(:disabled):not(.is-disabled):active:focus, &:not(:disabled):not(.is-disabled).is-active:focus {
+    box-shadow: none;
+  }
 }
 
 .#{$ns}Button--block {
