@@ -1581,6 +1581,15 @@ a.label {
   @include label-variant($label--danger-bg);
 }
 
+.label-secondary {
+  @include label-variant($label--secondary-bg);
+}
+
+.label-light {
+  @include label-variant($label--light-bg);
+  color: $text-color;
+}
+
 @keyframes apearSensor {
   from {
     opacity: 0;

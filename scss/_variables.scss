@@ -145,6 +145,8 @@ $label--success-bg: $success !default;
 $label--info-bg: $info !default;
 $label--warning-bg: $warning !default;
 $label--danger-bg: $danger !default;
+$label--secondary-bg: $secondary !default;
+$label--light-bg: $light !default;
 
 $label-color: #fff !default;
 $label-link--hover-color: #fff !default;
@@ -1333,7 +1335,7 @@ $Wizard-badge-bg: $gray400 !default;
 $Wizard-badge-color: $white !default;
 $Wizard-badge-size: px2rem(20px) !default;
 $Wizard-badge-border: 0 !default;
-$Wizard-badge-onActive-backgroundColor: $info !default;
+$Wizard-badge-onActive-backgroundColor: $primary !default;
 $Wizard-badge-borderRadius: px2rem(10px) !default;
 $Wizard-badge-fontSize: $fontSizeSm !default;
 $Wizard-badge-marginRight: px2rem(4px) !default;
