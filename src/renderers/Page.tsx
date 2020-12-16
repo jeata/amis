@@ -250,7 +250,7 @@ export default class Page extends React.Component<PageProps> {
     throwErrors: boolean = false,
     delegate?: IScopedContext
   ) {
-    const {env, store, messages} = this.props;
+    const {env, store, messages, onAction} = this.props;
 
     if (
       action.actionType === 'url' ||
@@ -303,6 +303,9 @@ export default class Page extends React.Component<PageProps> {
       (action.content || action.copy)
     ) {
       env.copy && env.copy(filter(action.content || action.copy, ctx, '| raw'));
+    } else {
+      // 继承上级 onAction . change by xubin
+      onAction && onAction(e, action, ctx, throwErrors, delegate || this.context);
     }
   }
 
