@@ -90,7 +90,9 @@ $breakpoints: (
   sm: 576px,
   md: 768px,
   lg: 992px,
-  xl: 1200px
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px
 ) !default;
 
 // 段落间距
@@ -589,11 +591,11 @@ $Remark-width: 1rem !default;
 $Remark-icon-fontSize: $fontSizeBase !default;
 $Remark-iconColor: #fff !default;
 $Remark-onHover-iconColor: #fff !default;
-$Remark-bg: #4d4e4e !default;
-$Remark-onHover-bg: $primary !default;
+$Remark-bg: #99a6ad !default;
+$Remark-onHover-bg: #666666 !default;
 $Remark-borderWidth: px2rem(1px) !default;
 $Remark-borderColor: $borderColor !default;
-$Remark-onHover-borderColor: $primary !default;
+$Remark-onHover-borderColor: $borderColor !default;
 $Remark-marginLeft: $gap-sm !default;
 
 // ResultBox

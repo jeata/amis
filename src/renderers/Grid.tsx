@@ -4,7 +4,7 @@ import {Schema} from '../types';
 import pick from 'lodash/pick';
 import {BaseSchema, SchemaClassName, SchemaObject} from '../Schema';
 
-export const ColProps = ['xl', 'lg', 'md', 'sm', 'xs'];
+export const ColProps = ['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs'];
 
 export type GridColumnObject = {
   /**
@@ -108,6 +108,18 @@ export type GridColumnObject = {
   xlOffset?: number;
   xlPull?: number;
   xlPush?: number;
+
+  xxl?: number;
+  xxlHidden?: boolean;
+  xxlOffset?: number;
+  xxlPull?: number;
+  xxlPush?: number;
+
+  xxxl?: number;
+  xxxlHidden?: boolean;
+  xxxlOffset?: number;
+  xxxlPull?: number;
+  xxxlPush?: number;
 
   mode?: string;
   horizontal?: any;

@@ -161,3 +161,12 @@
 @include media-breakpoint-up(xl) {
   @include make-grid(xl);
 }
+
+@include media-breakpoint-up(xxl) {
+  @include make-grid(xxl);
+}
+
+
+@include media-breakpoint-up(xxxl) {
+  @include make-grid(xxxl);
+}

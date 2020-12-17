@@ -62,6 +62,7 @@
 @include text-wariant($dark, dark);
 @include text-wariant($white, white);
 @include text-wariant($black, black);
+@include text-wariant($secondary, secondary);
 
 .text-muted {
   color: $text--muted-color;
