@@ -1,5 +1,18 @@
 :80
 
 root * /usr/share/caddy
+
+@hashfile {
+    path_regexp \.(css|js|png|eot|svg|woff|woff2|ttf)$
+}
+
+@otherfile {
+   not path_regexp \.(css|js|png|eot|svg|woff|woff2|ttf)$
+}
+
+# 带hash的文件 缓存30天
+header @hashfile Cache-Control max-age=2592000
+header @otherfile Cache-Control max-age=3600
+
 try_files {path} /amis/index.html
 file_server

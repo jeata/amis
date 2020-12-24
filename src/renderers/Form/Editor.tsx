@@ -191,7 +191,8 @@ export default class EditorControl extends React.Component<EditorProps, any> {
       options,
       language,
       editorTheme,
-      size
+      size,
+      editorSchemaUrl
     } = this.props;
 
     let finnalValue = value;
@@ -223,6 +224,7 @@ export default class EditorControl extends React.Component<EditorProps, any> {
           language={language}
           editorTheme={editorTheme}
           editorDidMount={this.handleEditorMounted}
+          editorSchemaUrl={editorSchemaUrl}
           options={{
             ...options,
             readOnly: disabled

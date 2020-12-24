@@ -83,7 +83,7 @@ export interface EditorProps {
   editorWillMount?: (monaco: any) => void;
   editorWillUnmount?: (editor: any, monaco: any) => void;
   editorFactory?: (conatainer: HTMLElement, monaco: any, options: any) => any;
-  schemaUrl?: string;
+  editorSchemaUrl?: string;
 }
 
 export class Editor extends React.Component<EditorProps, any> {
@@ -187,7 +187,7 @@ export class Editor extends React.Component<EditorProps, any> {
   initMonaco(monaco: any) {
     let value =
       this.props.value !== null ? this.props.value : this.props.defaultValue;
-    const { language, editorTheme, options, editorFactory, schemaUrl } = this.props;
+    const { language, editorTheme, options, editorFactory, editorSchemaUrl } = this.props;
     const containerElement = this.container;
     if (!containerElement) {
       return;
@@ -218,14 +218,25 @@ export class Editor extends React.Component<EditorProps, any> {
       theme: editorTheme
     });
 
-    // json 默认开启验证。
-    monaco.languages.json?.jsonDefaults.setDiagnosticsOptions({
+    let jsonOptions = {
       enableSchemaRequest: true,
       validate: true,
       allowComments: true,
-      schemas: schemaUrl ? [{ uri: schemaUrl, fileMatch: ["*"] }] : [],
+      schemas: [],
       ...monaco.languages.json?.jsonDefaults.diagnosticsOptions
-    });
+    }
+
+    // 自定义schema地址
+    if(editorSchemaUrl) {
+      jsonOptions.schemas = [{ uri: editorSchemaUrl, fileMatch: ["*"] }];
+      jsonOptions.enableSchemaRequest = true;
+    } else {
+      jsonOptions.schemas = []
+      jsonOptions.enableSchemaRequest = false;
+    }
+
+    // json 默认开启验证。
+    monaco.languages.json?.jsonDefaults.setDiagnosticsOptions(jsonOptions);
 
     // After initializing monaco editor
     this.editorDidMount(this.editor, monaco);

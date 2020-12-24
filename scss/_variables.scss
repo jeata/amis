@@ -977,7 +977,7 @@ $Checkbox-size: px2rem(20px) !default;
 $Checkbox-inner-size: $Checkbox-size / 2 !default;
 $Checkbox--full-inner-size: px2rem(12px) !default;
 $Checkbox-color: $Form-input-borderColor !default;
-$Checkbox-onHover-color: $info !default;
+$Checkbox-onHover-color: $primary !default;
 
 $Checkbox--sm-size: px2rem(16px) !default;
 $Checkbox--sm-inner-size: $Checkbox--sm-size/2 !default;
@@ -999,7 +999,7 @@ $Switch-height: px2rem(22px) !default;
 $Switch-bgColor: $gray600 !default;
 $Switch-borderColor: darken($Switch-bgColor, 10%) !default;
 $Switch-valueColor: $white !default;
-$Switch-onActive-bgColor: $info !default;
+$Switch-onActive-bgColor: $primary !default;
 $Switch-onDisabled-bgColor: #ccc !default;
 $Switch-onDisabled-color: #fff !default;
 $Switch-onDisabled-circle-BackgroundColor: $white !default;
@@ -1050,10 +1050,10 @@ $DatePicker-header-select-borderColor: #fff !default;
 
 $Calendar-fontSize: $fontSizeBase !default;
 
-$Calendar-input-color: $info !default;
+$Calendar-input-color: $primary !default;
 $Calendar-input-fontSize: $fontSizeBase !default;
 $Calendar-input-borderColor: $borderColor !default;
-$Calendar-input-onFocused-borderColor: $info !default;
+$Calendar-input-onFocused-borderColor: $primary !default;
 $Calendar-input-borderRadius: $borderRadius !default;
 $Calendar-input-height: px2rem(30px) !default;
 $Calendar-input-lineHeight: $lineHeightBase;
@@ -1071,7 +1071,7 @@ $Calendar-btn-paddingY: (
     $Calendar-btn-height - $Calendar-btn-lineHeight * $Calendar-btn-fontSize
   )/2 !default;
 
-$Calendar-btn-bg: $info !default;
+$Calendar-btn-bg: $primary !default;
 $Calendar-btn-border: $Calendar-btn-bg !default;
 $Calendar-btn-borderRadius: $Button-borderRadius !default;
 $Calendar-btn-color: $white !default;
@@ -1103,14 +1103,14 @@ $Calendar-color: $text-color !default;
 $Calendar-wLabel-color: #999 !default;
 $Calendar-cell-bg: $white !default;
 $Calendar-cell-onHover-bg: darken($Calendar-cell-bg, 7%) !default;
-$Calendar-cell-onActive-bg: $info !default;
-$Calendar-cell-onBetween-bg: rgba($info, 0.1) !default;
+$Calendar-cell-onActive-bg: $primary !default;
+$Calendar-cell-onBetween-bg: rgba($primary, 0.1) !default;
 $Calendar-cell-onDisabled-bg: $light !default;
 
 $Calendar-shortcuts-bg: transparent;
 $Calendar-shortcuts-height: px2rem(30px);
 
-$Calendar-shortcut-color: $info !default;
+$Calendar-shortcut-color: $primary !default;
 $Calendar-shortcut-decoration: none !default;
 $Calendar-shortcut-onHover-color: darken(
   $Calendar-shortcut-color,
@@ -1192,7 +1192,7 @@ $Combo--vertical-item-paddingX: px2rem(10px) !default;
 $Combo--vertical-item-paddingY: px2rem(10px) !default;
 
 $Combo--vertical-itemToolbar-height: px2rem(25px) !default;
-$Combo--vertical-itemToolbar-bg: $info !default;
+$Combo--vertical-itemToolbar-bg: $primary !default;
 $Combo--vertical-itemToolbar-color: darken($white, 5%) !default;
 $Combo--vertical-itemToolbar-onHover-color: $white !default;
 $Combo--vertical-itemToolbar-borderWidth: $borderWidth !default;
@@ -1234,7 +1234,7 @@ $SubForm--addBtn-paddingY: (
 
 // InputRange
 $InputRange-fontFamily: $fontFamilyBase !default;
-$InputRange-primaryColor: $info !default;
+$InputRange-primaryColor: $primary !default;
 $InputRange-neutralColor: #aaaaaa !default;
 $InputRange-neutralLightColor: #eeeeee !default;
 $InputRange-onDisabled-color: #cccccc !default;
@@ -1329,7 +1329,7 @@ $Wizard-steps-padding: 0 !default;
 $Wizard-steps-liAfterContent: '' !default;
 $Wizard-steps-liVender: '' !default;
 $Wizard-steps-liAfterBorder: px2rem(20px) solid transparent !default;
-$Wizard-steps-li-onActive-color: $info !default;
+$Wizard-steps-li-onActive-color: $primary !default;
 $Wizard-steps-li-onActive-bg: #fff !default;
 $Wizard-steps-li-onActive-arrow-bg: #fff !default;
 $Wizard-stepsContent-padding: px2rem(15px) !default;

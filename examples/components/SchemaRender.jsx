@@ -111,7 +111,7 @@ export default function (schema) {
           host += '/amis';
         }
 
-        const schemaUrl = `${host}/schema.json`;
+        const schemaUrl = `https://schema.jeata.com/v2/schema.json`;
 
         monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
           schemas: [
