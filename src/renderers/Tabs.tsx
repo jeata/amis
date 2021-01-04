@@ -66,6 +66,11 @@ export interface TabSchema extends Omit<BaseSchema, 'type'> {
    * 卡片隐藏就销毁卡片节点。
    */
   unmountOnExit?: boolean;
+
+  /**
+   * 默认激活的tab
+   */
+  activeKey?: any;
 }
 
 /**
@@ -105,7 +110,7 @@ export interface TabsSchema extends BaseSchema {
   /**
    * 可以在右侧配置点其他功能按钮。
    */
-  toolbar?: ActionSchema;
+  toolbar?: ActionSchema | Array<ActionSchema>;
 }
 
 export interface TabsProps extends RendererProps, TabsSchema {

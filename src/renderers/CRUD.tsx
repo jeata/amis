@@ -278,6 +278,12 @@ export interface CRUDCommonSchema extends BaseSchema {
      * 是否为手风琴模式
      */
     accordion?: boolean;
+
+    /**
+     * 用于标识选中状态，配置当前行数据中的某一唯一标识字段，例如id，否则可能会出现无法选中的问题
+     * @default id
+     */
+    primaryField?:string;
   };
 }
 

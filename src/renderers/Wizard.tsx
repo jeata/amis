@@ -41,6 +41,16 @@ export type WizardStepSchema = Omit<FormSchema, 'type'> & {
   initApi?: SchemaApi;
 
   /**
+   * 是否默认就拉取？
+   */
+  initFetch?: boolean;
+
+  /**
+   * 是否默认就拉取表达式
+   */
+  initFetchOn?: SchemaExpression;
+
+  /**
    * 是否可直接跳转到该步骤，一般编辑模式需要可直接跳转查看。
    */
   jumpable?: boolean;
@@ -213,6 +223,7 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
     const {
       initApi,
       initFetch,
+      initFetchOn,
       initAsyncApi,
       initFinishedField,
       store,
@@ -220,7 +231,7 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
       onInit
     } = this.props;
 
-    if (isEffectiveApi(initApi, store.data, initFetch)) {
+    if (isEffectiveApi(initApi, store.data, initFetch, initFetchOn)) {
       store
         .fetchInitData(initApi, store.data, {
           successMessage: fetchSuccess,
@@ -292,18 +303,33 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
     const props = this.props;
     const {store, fetchSuccess, fetchFailed} = props;
 
+    // if (
+    //   isApiOutdated(
+    //     prevProps.initApi,
+    //     props.initApi,
+    //     prevProps.data,
+    //     props.data
+    //   )
+    // ) {
+    //   store.fetchData(props.initApi, store.data, {
+    //     successMessage: fetchSuccess,
+    //     errorMessage: fetchFailed
+    //   });
+    // }
+
     if (
-      isApiOutdated(
-        prevProps.initApi,
-        props.initApi,
-        prevProps.data,
-        props.data
-      )
+      // 前一次不构成条件，这次更新构成了条件，则需要重新拉取
+      (props.initFetchOn && props.initFetch && !prevProps.initFetch) ||
+      // 构成了条件，同时 url 里面有变量，且上次和这次还不一样，则需要重新拉取。
+      (props.initFetch !== false &&
+        isApiOutdated(prevProps.initApi, props.initApi, prevProps.data, props.data))
     ) {
-      store.fetchData(props.initApi, store.data, {
-        successMessage: fetchSuccess,
-        errorMessage: fetchFailed
-      });
+      isEffectiveApi(props.initApi, store.data) &&
+      store
+        .fetchData(props.initApi as Api, store.data, {
+          successMessage: fetchSuccess,
+          errorMessage: fetchFailed
+        });
     }
   }
 

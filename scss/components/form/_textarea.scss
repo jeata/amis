@@ -29,4 +29,9 @@
     background: $gray200;
     color: $text--muted-color;
   }
+
+  &::placeholder {
+    color: $Form-input-placeholderColor;
+    user-select: none;
+  }
 }
