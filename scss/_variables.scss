@@ -441,7 +441,7 @@ $Nav-item-onActive-color: $white !default;
 $Nav-item-onDisabled-color: $text--muted-color !default;
 $Nav-item-bg: transparent !default;
 $Nav-item-onHover-bg: rgba(0, 0, 0, 0.05) !default;
-$Nav-item-onActive-bg: $info !default;
+$Nav-item-onActive-bg: $primary !default;
 $Nav-item-onActive-borderLeft: 4px solid transparent !default;
 $Nav-subItem-onActiveBeforeBg: #e5eaeb !default;
 $Nav-subItem-fontSize: $fontSizeBase !default;
@@ -507,7 +507,7 @@ $Table-heading-bg: $white !default;
 $Table--unsaved-heading-bg: #e8f0fe !default;
 $Table--unsaved-heading-color: #4285f4 !default;
 
-$Table-expandBtn-color: $info !default;
+$Table-expandBtn-color: $primary !default;
 
 $TableCell-sortBtn-width: px2rem(8px) !default;
 $TableCell-sortBtn--default-opacity: 0 !default;
@@ -616,9 +616,9 @@ $ListMenu-item-height: px2rem(34px) !default;
 $ListMenu-divider-color: lighten($borderColor, 2.5%) !default;
 $ListMenu-item-bg: $white !default;
 $ListMenu-item-color: $text-color !default;
-$ListMenu-item--onHover-color: $info !default;
+$ListMenu-item--onHover-color: $primary !default;
 $ListMenu-item--onHover-bg: rgba(0, 126, 255, 0.08) !default;
-$ListMenu-item--onActive-color: $info !default;
+$ListMenu-item--onActive-color: $primary !default;
 $ListMenu-item--onActive-bg: transparent !default;
 $ListMenu-item--onDisabled-color: $text--muted-color !default;
 $ListMenu-item--onDisabled-bg: transparent !default;
@@ -656,7 +656,7 @@ $Form-control-widthLg: px2rem(320px) !default;
 
 $Form-input-bg: $white !default;
 $Form-input-color: $text-color !default;
-$Form-input-onActive-color: $info !default;
+$Form-input-onActive-color: $primary !default;
 $Form-input-borderRadius: $borderRadius !default;
 $Form-input-borderColor: $borderColor !default;
 $Form-input-borderWidth: px2rem(1px) !default;
@@ -721,7 +721,7 @@ $Form-select-onFocused-color: $Form-select-color !default;
 $Form-select-onFocused-borderColor: $Form-input-onFocused-borderColor !default;
 $Form-select-onError-borderColor: $Form-input-onError-borderColor !default;
 $Form-selectOption-height: $Form-input-height !default;
-$Form-selectValue-color: $info !default;
+$Form-selectValue-color: $primary !default;
 $Form-selectValue-bg: saturate(
   lighten($Form-selectValue-color, 40%),
   2.5%
@@ -739,9 +739,9 @@ $Form-select-input-fontSize: $fontSizeSm !default;
 $Form-select-menu-height: $Form-input-height !default;
 $Form-select-menu-bg: $white !default;
 $Form-select-menu-color: $Form-select-color !default;
-$Form-select-menu-onHover-color: $info !default;
+$Form-select-menu-onHover-color: $primary !default;
 $Form-select-menu-onHover-bg: rgba(0, 126, 255, 0.08) !default;
-$Form-select-menu-onActive-color: $info !default;
+$Form-select-menu-onActive-color: $primary !default;
 $Form-select-menu-onActive-bg: transparent !default;
 $Form-select-menu-onDisabled-color: $text--muted-color !default;
 $Form-select-menu-onDisabled-bg: transparent !default;
@@ -1290,7 +1290,7 @@ $ImageControl-addBtn-onDisabled-border: $Form-input-onDisabled-borderColor !defa
 $ImageControl-addBtn-onDisabled-color: $text--muted-color !default;
 
 // Tag
-$TagControl-sugTip-color: $info !default;
+$TagControl-sugTip-color: $primary !default;
 
 $TagControl-sugBtn-bg: $Button--default-bg !default;
 $TagControl-sugBtn-border: $Button--default-border !default;
