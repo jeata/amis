@@ -421,6 +421,112 @@ export interface BaseSchema {
    * 是否显示表达式
    */
   visibleOn?: SchemaExpression;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$api?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$initApi?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$initAsyncApi?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$asyncApi?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$saveOrderApi?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$quickSaveApi?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$quickSaveItemApi?: string;
+
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$schemaApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$source?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$deleteApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$startChunkApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$chunkApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$finishChunkApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$reciever?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$downloadUrl?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$videoReciever?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$addApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$updateApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$searchApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$editApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$checkApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$submitApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$reSubmitApi?: string;
+  /**
+   * 系统内置，用于跟踪API权限，请勿手工修改。
+   */
+  $$API$?: string;
+
+
 }
 
 export {PageSchema};

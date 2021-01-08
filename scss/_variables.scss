@@ -166,10 +166,12 @@ $Layout-aside-onAcitve-bg: saturate(
   darken($Layout-aside-bg, 5%),
   2.5%
 ) !default;
-$Layout-aside-subList-bg: saturate(
-  darken($Layout-aside-bg, 10%),
-  2.5%
-) !default;
+// 子菜单改为跟主菜单相同颜色，防止只有两个子菜单时视觉混乱
+//$Layout-aside-subList-bg: saturate(
+//  darken($Layout-aside-bg, 10%),
+//  2.5%
+//) !default;
+$Layout-aside-subList-bg: $Layout-aside-bg !default;
 $Layout-aside-onHover-bg: saturate(darken($Layout-aside-bg, 3%), 2.5%) !default;
 $Layout-aside-color: desaturate(lighten($Layout-aside-bg, 40%), 10%) !default;
 

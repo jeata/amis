@@ -21,11 +21,19 @@ export type NavItemSchema = {
   label?: string;
 
   /**
-   * 图标类名，参考 fontawesome 4。
+   * 图标类名，参考“图标库”。
    */
   icon?: SchemaIcon;
 
+  /**
+   * 链接url
+   */
   to?: SchemaUrlPath;
+
+  /**
+   * 在新窗口打开
+   */
+  blank?: boolean;
 
   children?: Array<NavItemSchema>;
 } & Omit<BaseSchema, 'type'>;
@@ -65,6 +73,7 @@ export interface Link {
   activeOn?: string;
   unfolded?: boolean;
   children?: Links;
+  blank?: boolean;
   [propName: string]: any;
 }
 export interface Links extends Array<Link> {}
