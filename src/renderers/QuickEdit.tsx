@@ -19,6 +19,7 @@ import Overlay from '../components/Overlay';
 import PopOver from '../components/PopOver';
 import {Icon} from '../components/icons';
 import {FormControlSchema} from './Form/Item';
+import { SchemaApi } from "../Schema";
 
 export type SchemaQuickEditObject =
   /**
@@ -48,7 +49,7 @@ export type SchemaQuickEditObject =
       /**
        * 是否立即保存
        */
-      saveImmediately?: boolean;
+      saveImmediately?: boolean | SchemaApi;
 
       /**
        * 接口保存失败后，是否重置组件编辑状态

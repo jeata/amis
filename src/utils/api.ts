@@ -51,8 +51,12 @@ export function buildApi(
   const {autoAppend, ignoreData, ...rest} = options;
 
   api.config = {
-    ...rest
+    // 增加state透传对象 by xubin
+    // @ts-ignore
+    state: api.state,
+    ...rest,
   };
+
   api.method = (api.method || (options as any).method || 'get').toLowerCase();
 
   if (!data) {

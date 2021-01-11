@@ -153,7 +153,7 @@ export class App extends React.PureComponent {
       }
     }
 
-    if(window != top.window) {
+    if(window != top.window || location.search.indexOf('_inIframe=1') != -1) {
       this.setState({
         inIFrame: true,
       });
@@ -182,6 +182,8 @@ export class App extends React.PureComponent {
         () => window.scrollTo(0, 0)
       );
 
+      sessionStorage.setItem('jeata/doc/amis/pathname', props.location.pathname);
+
       _hmt && _hmt.push(['_trackPageview', props.location.pathname]);
     }
   }
@@ -200,9 +202,24 @@ export class App extends React.PureComponent {
     this.docSearch.onOpen();
   }
 
+  onExternalLinkClick() {
+    window.open(location.pathname);
+    window.parent.postMessage(
+      {
+        type: 'jeata:doc_close',
+        data: {
+          source: location.href,
+        }
+      },
+      '*'
+    );
+  }
+
+
   renderHeader() {
     const location = this.props.location;
     const theme = this.state.theme;
+    const inIframe = this.state.inIFrame;
 
     if (location.pathname === '/edit') {
       return (
@@ -220,15 +237,27 @@ export class App extends React.PureComponent {
             <div
               onClick={() => this.setState({offScreen: !this.state.offScreen})}
               className={`${theme.ns}Layout-offScreen-btn`}
+              data-tooltip="打开菜单"
+              data-position="bottom"
             >
               <i className="bui-icon iconfont icon-collapse"></i>
             </div>
             <div
               onClick={this.onSearchClick.bind(this)}
               className={`${theme.ns}Layout-offScreen-btn`}
+              data-tooltip="搜索"
+              data-position="bottom"
             >
               <i className="bui-icon iconfont icon-search"></i>
             </div>
+            {inIframe && <div
+              onClick={this.onExternalLinkClick.bind(this)}
+              className={`${theme.ns}Layout-offScreen-btn`}
+              data-tooltip="在新窗口中打开文档"
+              data-position="bottom"
+            >
+              <i className="fa fa-external-link" aria-hidden="true"></i>
+            </div> }
           </div>
 
           <div className={`${theme.ns}Layout-brand`}>

@@ -3,9 +3,12 @@
 @import '../scss/variables';
 
 $menu-width: 270px;
+$nav-header-height: 64px;
+$nav-header-iframe-height: 50px;
 
 body {
   background-color: #fff !important;
+
   &.dark {
     background-color: #333538 !important;
 
@@ -99,13 +102,13 @@ a {
 // }
 
 .amis-schema-editor.fix-settings
-  .amis-schema-editor-settings-inner
-  .amis-schema-editor-config-tab
-  > .tab-content,
+.amis-schema-editor-settings-inner
+.amis-schema-editor-config-tab
+> .tab-content,
 .amis-schema-editor.fix-settings
-  .amis-schema-editor-settings-inner
-  .amis-schema-editor-code-tab
-  > .tab-content {
+.amis-schema-editor-settings-inner
+.amis-schema-editor-code-tab
+> .tab-content {
   bottom: 50px;
 }
 
@@ -116,12 +119,12 @@ a {
     padding-top: 100px;
 
     &-header {
-      height: 64px !important;
+      height: $nav-header-height !important;
       box-shadow: none !important;
 
       &::before {
         position: fixed;
-        height: 64px;
+        height: $nav-header-height;
         content: '';
         z-index: -1;
         left: 0;
@@ -173,8 +176,8 @@ a {
       .a-Layout-brand,
       .cxd-Layout-brand,
       .dark-Layout-brand {
-        height: 64px;
-        line-height: 64px;
+        height: $nav-header-height;
+        line-height: $nav-header-height;
         font-size: 24px;
         font-weight: 400;
         padding: 0;
@@ -195,18 +198,19 @@ a {
       .cxd-Layout-brand > a {
         color: #fff;
       }
+
       .dark-Layout-brand > a {
         color: #fff;
       }
     }
 
     &-headerBar {
-      height: 64px;
+      height: $nav-header-height;
       padding-right: 20px;
 
       &-links {
-        height: 64px;
-        line-height: 64px;
+        height: $nav-header-height;
+        line-height: $nav-header-height;
         font-size: 14px;
         padding-left: 35px;
 
@@ -262,14 +266,14 @@ a {
     }
 
     &-offScreen-group {
-      line-height: 64px;
+      line-height: $nav-header-height;
       position: absolute;
       left: 0;
     }
 
     &-offScreen-btn {
       display: inline-block;
-      line-height: 64px;
+      line-height: $nav-header-height;
       padding: 0 10px;
       cursor: pointer;
     }
@@ -279,6 +283,7 @@ a {
     &-header::before {
       background-color: #191c22;
     }
+
     .Doc-search .dark-TextControl-input {
       background-color: #191c22;
     }
@@ -293,6 +298,7 @@ a {
     &::before {
       background-color: #fff;
     }
+
     &-header::before {
       background: #454d61;
     }
@@ -457,6 +463,7 @@ a {
       a {
         color: #666;
         cursor: pointer;
+
         &:hover {
           color: #333;
         }
@@ -467,6 +474,7 @@ a {
           content: ' ';
           border-left: 2px solid #108cee;
         }
+
         > a {
           color: #108cee;
         }
@@ -499,6 +507,7 @@ a {
           font-size: px2rem(16px);
           transform: rotateX(180deg);
         }
+
         &:hover {
           font-weight: 700;
           color: #108cee;
@@ -655,6 +664,7 @@ a {
   .dark-AsideNav-item {
     > a {
       color: #ccc;
+
       &:hover {
         color: #fff;
       }
@@ -662,6 +672,7 @@ a {
 
     &.is-top > a {
       color: #eee;
+
       &:hover {
         color: #fff;
       }
@@ -677,6 +688,7 @@ a {
 .dark-Layout .Doc {
   .Doc-headingList-item a {
     color: #fff;
+
     &:hover {
       color: #999;
     }
@@ -691,6 +703,7 @@ a {
     .Doc-navLinks-title {
       color: #fff;
     }
+
     &-fixme {
       color: #fff;
     }
@@ -698,6 +711,7 @@ a {
 
   .Backtop {
     color: #666;
+
     &:hover {
       color: #108cee;
     }
@@ -723,7 +737,7 @@ a {
   border: 1px solid #e8ebee;
   border-radius: 50%;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
-    0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   color: #666;
   font-size: 16px;
@@ -867,6 +881,7 @@ a {
     .dark-Layout {
       &-brandBar {
         width: 1px;
+
         > div {
           margin-left: -$menu-width;
         }
@@ -969,6 +984,7 @@ a {
 // 让 echarts 编辑器的 tabs 更紧凑
 .echarts-editor > .a-Tabs-links {
   width: 4rem;
+
   > .a-Tabs-link > a {
     padding: 0.5rem 0.5rem;
   }
@@ -991,6 +1007,7 @@ a {
   .Doc-content {
     .Doc-title {
       padding-left: 20px;
+
       .Doc-headingPopBtn {
         right: 20px;
       }
@@ -1001,19 +1018,159 @@ a {
     }
   }
 
+  .MDPreview-shcema-preview-popover {
+    padding: 0 20px !important;
+  }
+
 }
 
 .a-Drawer--sm.Doc-searchDrawer .a-Drawer-content {
   width: 18.75rem;
 }
 
-.iniframe .app-wrapper .a-Layout-brandBar .a-Layout-brand {
-  .title {
-    display: inline-block;
+.iniframe {
+  .app-wrapper .a-Layout {
+
+    &-header {
+      height: $nav-header-iframe-height !important;
+
+      &::before {
+        height: $nav-header-iframe-height;
+      }
+
+      //.a-Layout-brandBar .a-Layout-brand {
+      //  .title {
+      //    display: inline-block;
+      //  }
+      //
+      //  .logo {
+      //    display: none;
+      //    height: 34px;
+      //    margin-top: 8px;
+      //
+      //  }
+      //}
+
+      //.a-Layout-searchBar {
+      //  margin-top: 10px;
+      //}
+    }
+
+    &-brandBar {
+      background-color: transparent;
+
+      .a-Layout-brand,
+      .cxd-Layout-brand,
+      .dark-Layout-brand {
+        height: $nav-header-iframe-height;
+        line-height: $nav-header-iframe-height;
+        font-size: 18px;
+
+        .title {
+          display: inline-block;
+        }
+
+        .logo {
+          display: none;
+          height: 34px;
+          margin-top: 8px;
+
+        }
+      }
+    }
+
+    &-headerBar {
+      height: $nav-header-iframe-height;
+
+      &-links {
+        height: $nav-header-iframe-height;
+        line-height: $nav-header-iframe-height;
+      }
+    }
+
+    &-searchBar {
+      .Doc-search {
+        margin-top: 10px;
+      }
+    }
+
+    &-offScreen-group {
+      line-height: $nav-header-iframe-height;
+
+    }
+
+    &-offScreen-btn {
+      display: inline-block;
+      line-height: $nav-header-iframe-height;
+    }
+
+    &-body .Doc-content {
+
+
+      .Doc-title {
+
+        h1 {
+          font-size: 22px;
+        }
+
+        .Doc-headingPopBtn {
+          top: 2px;
+        }
+      }
+
+      .markdown-body {
+        font-size: 14px;
+
+        > *:first-child {
+          margin-top: 22px !important;
+        }
+
+        > h1,
+        > h2 {
+          font-size: 22px;
+          padding-top: 25px;
+          margin: 35px 0 25px;
+        }
+
+        > p,
+        > blockquote,
+        > ul,
+        > ol,
+        > dl,
+        > table,
+        > pre {
+          margin-bottom: 20px;
+        }
+      }
+
+      blockquote {
+        font-size: 14px;
+      }
+
+      .MDPreview-schema-preview {
+        border-color: #efefef;
+      }
+    }
   }
 
-  .logo {
-    display: none;
+  .Doc-searchDrawer .search-bar {
+    padding: 14px 10px;
+  }
+
+  .Doc-searchDrawer .search-result h4 {
+    font-size: 14px;
+  }
+
+  .Doc-searchDrawer .search-result h4, .Doc-searchDrawer .search-result p {
+    padding: 14px 10px;
+  }
+
+  .Doc-navDrawer .a-Drawer-content, .Doc-navDrawer .cxd-Drawer-content, .Doc-navDrawer .dark-Drawer-content {
+    padding: 14px 0 14px 14px
+  }
+
+  .Doc-navigation .a-AsideNav-item a, .Doc-navigation .cxd-AsideNav-item a, .Doc-navigation .dark-AsideNav-item a {
+    font-weight: 400;
   }
 }
 
