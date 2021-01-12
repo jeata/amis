@@ -102,6 +102,7 @@ export interface EditorControlSchema extends Omit<FormBaseControl, 'size'> {
 
 export interface EditorProps extends FormControlProps {
   options?: object;
+  height?: number | string;
 }
 
 export default class EditorControl extends React.Component<EditorProps, any> {
@@ -169,14 +170,43 @@ export default class EditorControl extends React.Component<EditorProps, any> {
       return;
     }
 
-    const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
-    const lineCount = editor.getModel()?.getLineCount() || 1;
-    const height = editor.getTopForLineNumber(lineCount + 1) + lineHeight;
+    // 这个逻辑似乎错误，导致滚动条可能无法滚动 修改方案 by xubin
+    // const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
+    // const lineCount = editor.getModel()?.getLineCount() || 1;
+    // const height = editor.getTopForLineNumber(lineCount + 1) + lineHeight;
 
-    if (this.prevHeight !== height) {
-      this.prevHeight = height;
-      this.divRef.current.style.height = `${height}px`;
-      editor.layout();
+    // if (this.prevHeight !== height) {
+    //   this.prevHeight = height;
+    //   this.divRef.current.style.height = `${height}px`;
+    //   editor.layout();
+    // }
+
+    // 组件位置
+    const bleedtHeight = 60;
+    const rect = this.divRef.current.getBoundingClientRect();
+    const propsHeight = this.props.height;
+    let newHeight: number;
+
+    // 指定了
+    if(propsHeight && typeof propsHeight == "number") {
+      newHeight = propsHeight;
+    } else if(propsHeight && typeof propsHeight == "string" && (propsHeight == 'auto' || propsHeight == '100%')) {
+      // 设置了自动处理
+      const clientHeight = document.documentElement.clientHeight;
+      const scrollTop = document.documentElement.scrollTop;
+      // 计算高度 可视高度-组件top位置-出血位
+      newHeight = clientHeight - (scrollTop + rect.top) - bleedtHeight;
+    } else {
+      return;
+    }
+
+    if (this.prevHeight !== newHeight) {
+      this.prevHeight = newHeight;
+      this.divRef.current.style.height = `${newHeight}px`;
+      this.divRef.current.style.minHeight = `none`;
+      this.divRef.current.style.maxHeight = `none`;
+
+      editor.layout({width:rect.width, height: newHeight});
     }
   }
 
@@ -192,7 +222,8 @@ export default class EditorControl extends React.Component<EditorProps, any> {
       language,
       editorTheme,
       size,
-      editorSchemaUrl
+      editorSchemaUrl,
+      height,
     } = this.props;
 
     let finnalValue = value;
