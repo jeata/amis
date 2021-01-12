@@ -103,6 +103,7 @@ export interface EditorControlSchema extends Omit<FormBaseControl, 'size'> {
 export interface EditorProps extends FormControlProps {
   options?: object;
   height?: number | string;
+  bleedHeight?:number;
 }
 
 export default class EditorControl extends React.Component<EditorProps, any> {
@@ -182,7 +183,6 @@ export default class EditorControl extends React.Component<EditorProps, any> {
     // }
 
     // 组件位置
-    const bleedtHeight = 60;
     const rect = this.divRef.current.getBoundingClientRect();
     const propsHeight = this.props.height;
     let newHeight: number;
@@ -190,12 +190,13 @@ export default class EditorControl extends React.Component<EditorProps, any> {
     // 指定了
     if(propsHeight && typeof propsHeight == "number") {
       newHeight = propsHeight;
-    } else if(propsHeight && typeof propsHeight == "string" && (propsHeight == 'auto' || propsHeight == '100%')) {
+    } else if(propsHeight && typeof propsHeight == "string" && (propsHeight == 'auto' || propsHeight == '100%' || propsHeight == 'full-height')) {
       // 设置了自动处理
+      const bleedHeight = this.props.bleedHeight?this.props.bleedHeight:0; // 出血位
       const clientHeight = document.documentElement.clientHeight;
-      const scrollTop = document.documentElement.scrollTop;
+      const scrollTop = propsHeight != 'full-height'?document.documentElement.scrollTop:0;
       // 计算高度 可视高度-组件top位置-出血位
-      newHeight = clientHeight - (scrollTop + rect.top) - bleedtHeight;
+      newHeight = clientHeight - (scrollTop + rect.top) - bleedHeight;
     } else {
       return;
     }
