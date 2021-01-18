@@ -386,6 +386,8 @@ export class Action extends React.Component<ActionProps> {
           [activeClassName || 'is-active']: isActive,
           'is-disabled': disabled
         })}
+        data-tooltip={filterContents(tooltip, data)}
+        data-position="bottom"
         onClick={this.handleAction}
       >
         {label}

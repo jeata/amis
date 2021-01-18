@@ -55,7 +55,7 @@ import {
   LocaleProps
 } from './locale';
 import {SchemaCollection, SchemaObject, SchemaTpl} from './Schema';
-import {result} from 'lodash';
+// import {result} from 'lodash';
 
 export interface TestFunc {
   (
