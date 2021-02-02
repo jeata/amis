@@ -31,7 +31,7 @@ export class NotFound extends React.Component<NotFoundProps, any> {
         {children}
 
         {links ? (
-          <div className="list-group bg-info auto m-b-sm m-b-lg">{links}</div>
+          <div className="list-group auto m-b-sm m-b-lg">{links}</div>
         ) : null}
 
         {footerText ? (

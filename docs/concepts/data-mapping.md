@@ -1415,6 +1415,16 @@ ${xxx | filter[:keys][:directive][:arg1]}
   比如: `${xxx|filter:readonly:isTrue}` 将 xxx 数组中 readonly 为 true 的成员提取出来。
   再来个栗子：`${xxx|filter:a,b:match:keywords}` 将 xxx 数组中成员变量 a 或者 b 的值与环境中 keywords 的值相匹配的提取出来。如果不需要取变量，也可以写固定值如：`${xxx|filter:a,b:match:'123'}`
 
+### toNumber
+
+将字符串转换成数字，不能转换时返回0。
+
+##### 基本用法
+
+```
+${xxx | toNumber}
+```
+
 ## 串联使用过滤器
 
 使用单一的过滤器可能无法满足你的所有需求，幸运的是支持串联使用过滤器，而前一个过滤器的值会作为下一个过滤器的入参，进行下一步处理。语法如下:

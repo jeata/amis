@@ -7,7 +7,7 @@
   overflow: hidden;
   border-radius: px2rem(30px);
   background-color: $Switch-onActive-bgColor;
-  margin: 0;
+  margin: 0 $Switch-gap 0 0; // 给右侧的option留出距离
   vertical-align: middle;
   text-align: left;
 
@@ -115,4 +115,8 @@
   &.is-inline {
     display: inline-block;
   }
+}
+
+.#{$ns}SwitchField {
+  vertical-align: middle;
 }

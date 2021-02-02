@@ -525,13 +525,13 @@ export const examples = [
         path: '/examples/iframe',
         component: makeSchemaRenderer(IFrameSchema)
       },
-
-      {
-        label: 'SDK',
-        icon: 'fa fa-rocket',
-        path: '/examples/sdk',
-        component: SdkTest
-      }
+      //
+      // {
+      //   label: 'SDK',
+      //   icon: 'fa fa-rocket',
+      //   path: '/examples/sdk',
+      //   component: SdkTest
+      // }
 
       // {
       //   label: 'Test',
