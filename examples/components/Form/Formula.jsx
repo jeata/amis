@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '公式示例',
   body: [
     '<p>通过公式，可以动态的设置目标值。</p>',

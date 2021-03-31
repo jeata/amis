@@ -58,7 +58,7 @@ test('Renderer:service', async () => {
                 type: 'service',
                 className: 'm-t',
                 initFetchSchemaOn: 'data.tpl',
-                schemaApi: 'https://houtai.baidu.com/api/mock2/service/form?tpl=$tpl'
+                schemaApi: 'https://mock.jeata.com/service/form?tpl=$tpl'
             }
         ],
         submitText: null,

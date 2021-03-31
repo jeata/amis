@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '开启单条底部展示功能',
   body: {
     type: 'crud',

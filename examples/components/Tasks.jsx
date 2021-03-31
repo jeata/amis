@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '异步任务',
   body: [
     '<p class="text-danger"></p>',

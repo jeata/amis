@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: 'HBox & Grid',
   type: 'page',
   body: [

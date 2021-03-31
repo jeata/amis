@@ -562,7 +562,7 @@ if (fis.project.currentMedia() === 'publish') {
           /(\\?(?:'|"))((?:get|post|delete|put)\:)?\/api\/mock2?/gi,
           function (_, qutoa, method) {
             return (
-              qutoa + (method || '') + 'https://houtai.baidu.com/api/mock2'
+              qutoa + (method || '') + 'https://mock.jeata.com'
             );
           }
         )

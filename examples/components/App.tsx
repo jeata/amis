@@ -261,20 +261,22 @@ export class App extends React.PureComponent {
           </div>
 
           <div className={`${theme.ns}Layout-brand`}>
-            <Link to={`${ContextPath}/docs`}>
+            <a href="https://www.jeata.com/">
               <div className="logo"></div>
               <span className="title">页面文档</span>
-            </Link>
+            </a>
           </div>
         </div>
 
         <div className={`${theme.ns}Layout-headerBar`}>
           <ul className={`${theme.ns}Layout-headerBar-links pull-left`}>
+            <a href="/">文档首页</a>
+            <a href="/docs/cloud">使用文档</a>
             <Link to={`${ContextPath}/docs`} activeClassName="is-active">
-              文档
+              页面文档
             </Link>
             <Link to={`${ContextPath}/examples`} activeClassName="is-active">
-              示例
+              页面示例
             </Link>
           </ul>
         </div>

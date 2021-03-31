@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '带边栏联动',
   aside: {
     type: 'form',

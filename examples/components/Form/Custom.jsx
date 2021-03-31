@@ -38,7 +38,7 @@ class CustomRenderer extends React.Component {
 }
 
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '自定义组件示例',
   body: [
     {

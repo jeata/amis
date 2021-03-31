@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '表单验证示例',
   toolbar: "<a target='_blank' href='/docs/renderers/Form/FormItem'>文档</a>",
   body: [

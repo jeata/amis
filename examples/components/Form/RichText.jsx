@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '富文本编辑器',
   body: [
     {

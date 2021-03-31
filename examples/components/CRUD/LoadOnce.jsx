@@ -1,5 +1,5 @@
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '一次性加载，前端分页，前端排序',
   body: {
     type: 'crud',

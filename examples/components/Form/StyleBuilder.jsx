@@ -226,7 +226,7 @@ valueControls = valueControls.concat([
 ]);
 
 export default {
-  $schema: 'https://houtai.baidu.com/v2/schemas/page.json#',
+
   title: '样式编辑',
   data: {
     style: [
