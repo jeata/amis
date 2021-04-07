@@ -9,6 +9,7 @@ import {
   render,
   Renderer,
   getRendererByName,
+  getRenderers,
   registerRenderer,
   unRegisterRenderer,
   resolveRenderer,
@@ -36,6 +37,9 @@ import {
   makeTranslator,
   register as registerLocale
 } from './locale';
+
+import './locale/zh-CN';
+
 import animation from './utils/Animation';
 
 export * from './Schema';
@@ -43,9 +47,12 @@ export * from './Schema';
 // 注册渲染器
 import './renderers/Action';
 import './renderers/Alert';
+import './renderers/App';
+import './renderers/Avatar';
 import './renderers/Remark';
 import './renderers/ButtonGroup';
 import './renderers/ButtonToolbar';
+import './renderers/Breadcrumb';
 import './renderers/DropDownButton';
 import './renderers/Collapse';
 import './renderers/Color';
@@ -53,10 +60,12 @@ import './renderers/CRUD';
 import './renderers/Pagination';
 import './renderers/Cards';
 import './renderers/Card';
+import './renderers/Custom';
 import './renderers/Date';
 import './renderers/Dialog';
 import './renderers/Divider';
 import './renderers/Each';
+import './renderers/Flex';
 import './renderers/Form/index';
 import './renderers/Form/Control';
 import './renderers/Form/Hidden';
@@ -67,6 +76,7 @@ import './renderers/Form/Textarea';
 import './renderers/Form/Checkboxes';
 import './renderers/Form/Checkbox';
 import './renderers/Form/City';
+import './renderers/Form/ChartRadios';
 import './renderers/Form/Rating';
 import './renderers/Form/Switch';
 import './renderers/Form/Button';
@@ -84,7 +94,9 @@ import './renderers/Form/Tree';
 import './renderers/Form/TreeSelect';
 import './renderers/Form/Image';
 import './renderers/Form/File';
+import './renderers/Form/UUID';
 import './renderers/Form/Matrix';
+import './renderers/Form/MonthRange';
 import './renderers/Form/Range';
 import './renderers/Form/Array';
 import './renderers/Form/Combo';
@@ -112,15 +124,19 @@ import './renderers/Form/TabsTransfer';
 import './renderers/Form/Group';
 import './renderers/Form/InputGroup';
 import './renderers/Grid';
+import './renderers/Grid2D';
 import './renderers/HBox';
 import './renderers/VBox';
 import './renderers/Image';
 import './renderers/Images';
 import './renderers/List';
+import './renderers/Log';
 import './renderers/Operation';
 import './renderers/Page';
+import './renderers/PaginationWrapper';
 import './renderers/Panel';
 import './renderers/Plain';
+import './renderers/Property';
 import './renderers/Spinner';
 import './renderers/Table/index';
 import './renderers/Tabs';
@@ -136,6 +152,7 @@ import './renderers/Chart';
 import './renderers/Container';
 import './renderers/SearchBox';
 import './renderers/Service';
+import './renderers/SparkLine';
 import './renderers/Video';
 import './renderers/Audio';
 import './renderers/Nav';
@@ -146,6 +163,8 @@ import './renderers/IFrame';
 import './renderers/QRCode';
 import './renderers/Icon';
 import './renderers/Carousel';
+import './renderers/AnchorNav';
+import './renderers/Form/AnchorNav';
 import Scoped, {ScopedContext} from './Scoped';
 
 import {FormItem, registerFormItem} from './renderers/Form/Item';
@@ -156,6 +175,7 @@ import './compat';
 import './themes/default';
 import './themes/cxd';
 import './themes/dark';
+import './themes/antd';
 import {
   registerFilter,
   filterDate,
@@ -209,6 +229,7 @@ export {
   getRendererByName,
   registerRenderer,
   unRegisterRenderer,
+  getRenderers,
   registerFormItem,
   registerOptionsControl,
   resolveRenderer,

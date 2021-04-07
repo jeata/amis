@@ -35,6 +35,11 @@ export interface ServiceSchema extends BaseSchema {
   api?: SchemaApi;
 
   /**
+   * WebScocket 地址，用于实时获取数据
+   */
+  ws?: string;
+
+  /**
    * 内容区域
    */
   body?: SchemaCollection;
@@ -92,17 +97,22 @@ export interface ServiceSchema extends BaseSchema {
   name?: SchemaName;
 }
 
-export interface ServiceProps extends RendererProps, ServiceSchema {
+export interface ServiceProps
+  extends RendererProps,
+    Omit<ServiceSchema, 'type' | 'className'> {
   store: IServiceStore;
   messages: SchemaMessage;
 }
 export default class Service extends React.Component<ServiceProps> {
-  timer: NodeJS.Timeout;
+  timer: ReturnType<typeof setTimeout>;
   mounted: boolean;
+
+  // 主要是用于关闭 socket
+  socket: any;
 
   static defaultProps: Partial<ServiceProps> = {
     messages: {
-      fetchFailed: '初始化失败'
+      fetchFailed: 'fetchFailed'
     }
   };
 
@@ -151,11 +161,21 @@ export default class Service extends React.Component<ServiceProps> {
           errorMessage: fetchFailed
         })
         .then(this.afterSchemaFetch);
+
+    if (props.ws && prevProps.ws !== props.ws) {
+      if (this.socket) {
+        this.socket.close();
+      }
+      this.socket = store.fetchWSData(props.ws, this.afterDataFetch);
+    }
   }
 
   componentWillUnmount() {
     this.mounted = false;
     clearTimeout(this.timer);
+    if (this.socket && this.socket.close) {
+      this.socket.close();
+    }
   }
 
   @autobind
@@ -164,6 +184,7 @@ export default class Service extends React.Component<ServiceProps> {
       schemaApi,
       initFetchSchema,
       api,
+      ws,
       initFetch,
       initFetchOn,
       store,
@@ -187,6 +208,10 @@ export default class Service extends React.Component<ServiceProps> {
         })
         .then(this.afterDataFetch);
     }
+
+    if (ws) {
+      this.socket = store.fetchWSData(ws, this.afterDataFetch);
+    }
   }
 
   afterDataFetch(data: any) {
@@ -207,7 +232,7 @@ export default class Service extends React.Component<ServiceProps> {
       (!stopAutoRefreshWhen || !evalExpression(stopAutoRefreshWhen, data)) &&
       (this.timer = setTimeout(
         silentPolling ? this.silentReload : this.reload,
-        Math.max(interval, 3000)
+        Math.max(interval, 1000)
       ));
     return value;
   }

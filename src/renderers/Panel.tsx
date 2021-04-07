@@ -53,6 +53,11 @@ export interface PanelSchema extends BaseSchema {
   footerClassName?: SchemaClassName;
 
   /**
+   * footer 和 actions 外层 div 类名。
+   */
+  footerWrapClassName?: SchemaClassName;
+
+  /**
    * 头部内容, 和 title 二选一。
    */
   header?: SchemaCollection;
@@ -73,13 +78,19 @@ export interface PanelSchema extends BaseSchema {
   affixFooter?: boolean | 'always';
 }
 
-export interface PanelProps extends RendererProps, PanelSchema {}
+export interface PanelProps
+  extends RendererProps,
+    Omit<
+      PanelSchema,
+      'type' | 'className' | 'panelClassName' | 'bodyClassName'
+    > {}
 
 export default class Panel extends React.Component<PanelProps> {
   static propsList: Array<string> = [
     'header',
     'headerClassName',
     'footerClassName',
+    'footerWrapClassName',
     'actionsClassName',
     'bodyClassName'
   ];
@@ -95,7 +106,7 @@ export default class Panel extends React.Component<PanelProps> {
   unSensor: Function;
   affixDom: React.RefObject<HTMLDivElement> = React.createRef();
   footerDom: React.RefObject<HTMLDivElement> = React.createRef();
-  timer: NodeJS.Timeout;
+  timer: ReturnType<typeof setTimeout>;
 
   componentDidMount() {
     const dom = findDOMNode(this) as HTMLElement;
@@ -128,10 +139,12 @@ export default class Panel extends React.Component<PanelProps> {
 
     const affixDom = this.affixDom.current;
     const footerDom = this.footerDom.current;
+    const offsetBottom =
+      this.props.affixOffsetBottom ?? this.props.env.affixOffsetBottom ?? 0;
     let affixed = false;
 
     if (footerDom.offsetWidth) {
-      affixDom.style.cssText = `width: ${footerDom.offsetWidth}px`;
+      affixDom.style.cssText = `bottom: ${offsetBottom}px;width: ${footerDom.offsetWidth}px`;
     } else {
       this.timer = setTimeout(this.affixDetect, 250);
       return;
@@ -143,7 +156,8 @@ export default class Panel extends React.Component<PanelProps> {
     } else {
       const clip = footerDom.getBoundingClientRect();
       const clientHeight = window.innerHeight;
-      affixed = clip.top + clip.height / 2 > clientHeight;
+      // affixed = clip.top + clip.height / 2 > clientHeight;
+      affixed = clip.bottom > clientHeight - offsetBottom;
     }
 
     affixed ? affixDom.classList.add('in') : affixDom.classList.remove('in');
@@ -210,6 +224,7 @@ export default class Panel extends React.Component<PanelProps> {
       headerClassName,
       actionsClassName,
       footerClassName,
+      footerWrapClassName,
       children,
       title,
       footer,
@@ -244,7 +259,12 @@ export default class Panel extends React.Component<PanelProps> {
       );
 
     let footerDom = footerDoms.length ? (
-      <div ref={this.footerDom}>{footerDoms}</div>
+      <div
+        className={cx('Panel-footerWrap', footerWrapClassName)}
+        ref={this.footerDom}
+      >
+        {footerDoms}
+      </div>
     ) : null;
 
     return (
@@ -268,7 +288,13 @@ export default class Panel extends React.Component<PanelProps> {
         {footerDom}
 
         {affixFooter && footerDoms.length ? (
-          <div ref={this.affixDom} className={cx('Panel-fixedBottom')}>
+          <div
+            ref={this.affixDom}
+            className={cx(
+              'Panel-fixedBottom Panel-footerWrap',
+              footerWrapClassName
+            )}
+          >
             {footerDoms}
           </div>
         ) : null}

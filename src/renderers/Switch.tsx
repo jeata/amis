@@ -41,19 +41,31 @@ export interface SwitchSchema extends BaseSchema {
   readOnly?: boolean;
 
   /**
+   * 开启时显示的文本
+   */
+  onText?: string;
+
+  /**
+   * 关闭时显示的文本
+   */
+  offText?: string;
+
+  /**
    * 是否立即保存。关乎到是否立即调用保存接口。
    */
   saveImmediately?: boolean;
 }
 
-export interface SwitchProps extends RendererProps, SwitchSchema {}
+export interface SwitchProps
+  extends RendererProps,
+    Omit<SwitchSchema, 'className'> {}
 
 export class SwitchField extends React.Component<SwitchProps, object> {
   static defaultProps: Partial<SwitchProps> = {
     placeholder: '-',
     trueValue: true,
     falseValue: false,
-    readOnly: true,
+    readOnly: false,
     saveImmediately: false
   };
 
@@ -92,6 +104,8 @@ export class SwitchField extends React.Component<SwitchProps, object> {
       placeholder,
       trueValue,
       falseValue,
+      onText,
+      offText,
       onQuickChange,
       option,
       disabled,
@@ -115,6 +129,8 @@ export class SwitchField extends React.Component<SwitchProps, object> {
         <Switch
           inline
           classPrefix={ns}
+          onText={onText}
+          offText={offText}
           checked={value == trueValue}
           onChange={this.handleChange}
           disabled={disabled || !onQuickChange}

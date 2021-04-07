@@ -1,13 +1,5 @@
-import {
-  types,
-  getParent,
-  flow,
-  getEnv,
-  getRoot,
-  isAlive
-} from 'mobx-state-tree';
+import {types, flow, getEnv, isAlive, Instance} from 'mobx-state-tree';
 import {iRendererStore} from './iRenderer';
-import {IRendererStore} from './index';
 import {Api, ApiObject, Payload, fetchOptions} from '../types';
 import {extendObject, isEmpty, isObject} from '../utils/helper';
 import {ServerError} from '../utils/errors';
@@ -89,7 +81,7 @@ export const ServiceStore = iRendererStore
         fetchCancel = null;
 
         if (!json.ok) {
-          updateMessage(json.msg || (options && options.errorMessage), true);
+          updateMessage(json.msg ?? (options && options.errorMessage), true);
           getEnv(self).notify(
             'error',
             json.msg,
@@ -117,7 +109,7 @@ export const ServiceStore = iRendererStore
             }
           }
 
-          updateMessage(json.msg || (options && options.successMessage));
+          updateMessage(json.msg ?? (options && options.successMessage));
 
           // 配置了获取成功提示后提示，默认是空不会提示。
           options &&
@@ -140,10 +132,36 @@ export const ServiceStore = iRendererStore
 
         markFetching(false);
         e.stack && console.error(e.stack);
-        env.notify('error', e.message || e);
+        let message = e.message || e;
+        if (e && e.message === 'Network Error') {
+          message = self.__('networkError');
+        }
+        env.notify('error', message);
         return;
       }
     });
+
+    const fetchWSData = (ws: string, afterDataFetch: (data: any) => any) => {
+      const env = getEnv(self);
+
+      env.wsFetcher(
+        ws,
+        (data: any) => {
+          self.updateData(data, undefined, false);
+          setHasRemoteData();
+          // 因为 WebSocket 只会获取纯数据，所以没有 msg 之类的
+          afterDataFetch({ok: true, data: data});
+        },
+        (error: any) => {
+          updateMessage(error, true);
+          env.notify('error', error);
+        }
+      );
+    };
+
+    const setHasRemoteData = () => {
+      self.hasRemoteData = true;
+    };
 
     const fetchData: (
       api: Api,
@@ -166,9 +184,7 @@ export const ServiceStore = iRendererStore
         }
 
         (options && options.silent) || markFetching(true);
-        const json: Payload = yield ((getEnv(
-          self
-        ) as IRendererStore) as IRendererStore).fetcher(api, data, {
+        const json: Payload = yield getEnv(self).fetcher(api, data, {
           ...options,
           cancelExecutor: (executor: Function) => (fetchCancel = executor)
         });
@@ -188,7 +204,7 @@ export const ServiceStore = iRendererStore
         }
 
         if (!json.ok) {
-          updateMessage(json.msg || (options && options.errorMessage), true);
+          updateMessage(json.msg ?? (options && options.errorMessage), true);
           getEnv(self).notify(
             'error',
             self.msg,
@@ -208,7 +224,7 @@ export const ServiceStore = iRendererStore
             }
           }
 
-          updateMessage(json.msg || (options && options.successMessage));
+          updateMessage(json.msg ?? (options && options.successMessage));
 
           // 配置了获取成功提示后提示，默认是空不会提示。
           options &&
@@ -231,7 +247,11 @@ export const ServiceStore = iRendererStore
 
         markFetching(false);
         e.stack && console.error(e.stack);
-        env.notify('error', e.message || e);
+        let message = e.message || e;
+        if (e && e.message === 'Network Error') {
+          message = self.__('networkError');
+        }
+        env.notify('error', message);
         return;
       }
     });
@@ -270,10 +290,18 @@ export const ServiceStore = iRendererStore
         }
 
         if (!json.ok) {
+          if (options && options.onFailed) {
+            const ret = options.onFailed(json);
+
+            if (ret && ret.then) {
+              yield ret;
+            }
+          }
+
           updateMessage(
-            json.msg ||
-              (options && options.errorMessage) ||
-              self.__('保存失败'),
+            json.msg ??
+              (options && options.errorMessage) ??
+              self.__('saveFailed'),
             true
           );
           throw new ServerError(self.msg, json);
@@ -286,8 +314,18 @@ export const ServiceStore = iRendererStore
             }
           }
 
-          updateMessage(json.msg || (options && options.successMessage));
-          self.msg && getEnv(self).notify('success', self.msg);
+          updateMessage(json.msg ?? (options && options.successMessage));
+          self.msg &&
+            getEnv(self).notify(
+              'success',
+              self.msg,
+              json.msgTimeout !== undefined
+                ? {
+                    closeButton: true,
+                    timeout: json.msgTimeout
+                  }
+                : undefined
+            );
         }
 
         markSaving(false);
@@ -367,9 +405,9 @@ export const ServiceStore = iRendererStore
 
         if (!json.ok) {
           updateMessage(
-            json.msg ||
-              (options && options.errorMessage) ||
-              self.__('获取失败，请重试'),
+            json.msg ??
+              (options && options.errorMessage) ??
+              self.__('fetchFailed'),
             true
           );
           getEnv(self).notify(
@@ -393,7 +431,7 @@ export const ServiceStore = iRendererStore
                 !!(api as ApiObject).replaceData
               );
           }
-          updateMessage(json.msg || (options && options.successMessage));
+          updateMessage(json.msg ?? (options && options.successMessage));
 
           // 配置了获取成功提示后提示，默认是空不会提示。
           options &&
@@ -416,7 +454,11 @@ export const ServiceStore = iRendererStore
         }
 
         e.stack && console.error(e.stack);
-        env.notify('error', e.message || e);
+        let message = e.message || e;
+        if (e && e.message === 'Network Error') {
+          message = self.__('networkError');
+        }
+        env.notify('error', message);
       }
     });
 
@@ -459,13 +501,15 @@ export const ServiceStore = iRendererStore
       markBusying,
       fetchInitData,
       fetchData,
+      fetchWSData,
       reInitData,
       updateMessage,
       clearMessage,
+      setHasRemoteData,
       saveRemote,
       fetchSchema,
       checkRemote
     };
   });
 
-export type IServiceStore = typeof ServiceStore.Type;
+export type IServiceStore = Instance<typeof ServiceStore>;

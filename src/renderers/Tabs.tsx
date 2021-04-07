@@ -1,23 +1,30 @@
-import React from "react";
-import { Renderer, RendererProps } from "../factory";
-import { Action, Schema, SchemaNode } from "../types";
-import find from "lodash/find";
-import { isVisible, autobind, isDisabled } from "../utils/helper";
-import { filter } from "../utils/tpl";
-import findIndex from "lodash/findIndex";
-import { Tabs as CTabs, Tab } from "../components/Tabs";
-import isEqual from "lodash/isEqual";
-import { ClassNamesFn } from "../theme";
+import React from 'react';
+import {Renderer, RendererProps} from '../factory';
+import {Action, Schema, SchemaNode} from '../types';
+import find from 'lodash/find';
+import {
+  isVisible,
+  autobind,
+  isDisabled,
+  isObject,
+  createObject
+} from '../utils/helper';
+import findIndex from 'lodash/findIndex';
+import {Tabs as CTabs, Tab} from '../components/Tabs';
+import {ClassNamesFn} from '../theme';
 import {
   BaseSchema,
   SchemaClassName,
   SchemaCollection,
   SchemaIcon
-} from "../Schema";
-import { ActionSchema } from "./Action";
+} from '../Schema';
+import {ActionSchema} from './Action';
+import {filter} from '../utils/tpl';
+import {resolveVariable} from '../utils/tpl-builtin';
+import isEqual from "lodash/isEqual";
 import qs from "qs";
 
-export interface TabSchema extends Omit<BaseSchema, "type"> {
+export interface TabSchema extends Omit<BaseSchema, 'type'> {
   /**
    * Tab 标题
    */
@@ -54,6 +61,8 @@ export interface TabSchema extends Omit<BaseSchema, "type"> {
    */
   icon?: SchemaIcon;
 
+  iconPosition?: 'left' | 'right';
+
   /**
    * 设置以后内容每次都会重新渲染
    */
@@ -80,9 +89,17 @@ export interface TabSchema extends Omit<BaseSchema, "type"> {
  * 文档：https://doc.jeata.com/amis/docs/components/tabs
  */
 export interface TabsSchema extends BaseSchema {
-  type: "tabs";
+  type: 'tabs';
 
+  /**
+   * 选项卡成员。当配置了 source 时，选项卡成员，将会根据目标数据进行重复。
+   */
   tabs: Array<TabSchema>;
+
+  /**
+   * 关联已有数据，选项卡直接根据目标数据重复。
+   */
+  source?: string;
 
   /**
    * 类名
@@ -92,7 +109,7 @@ export interface TabsSchema extends BaseSchema {
   /**
    * 展示形式
    */
-  tabsMode?: "" | "line" | "card" | "radio" | "vertical";
+  tabsMode?: '' | 'line' | 'card' | 'radio' | 'vertical' | 'tiled';
 
   /**
    * 内容类名
@@ -115,7 +132,9 @@ export interface TabsSchema extends BaseSchema {
   toolbar?: ActionSchema | Array<ActionSchema>;
 }
 
-export interface TabsProps extends RendererProps, TabsSchema {
+export interface TabsProps
+  extends RendererProps,
+    Omit<TabsSchema, 'className' | 'contentClassName'> {
   activeKey?: string | number;
   location?: any;
   tabRender?: (tab: TabSchema, props: TabsProps, index: number) => JSX.Element;
@@ -128,13 +147,14 @@ export interface TabsState {
 
 export default class Tabs extends React.Component<TabsProps, TabsState> {
   static defaultProps: Partial<TabsProps> = {
-    className: "",
-    mode: "",
+    className: '',
+    mode: '',
     mountOnEnter: true,
     unmountOnExit: false
   };
 
   renderTab?: (tab: TabSchema, props: TabsProps, index: number) => JSX.Element;
+  activeKey: any;
 
   constructor(props: TabsProps) {
     super(props);
@@ -164,69 +184,66 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
 
     this.state = {
       prevKey: undefined,
-      activeKey: activeKey
+      activeKey: (this.activeKey = activeKey)
     };
   }
 
   componentDidMount() {
-    this.autoJumpToNeighbour();
+    this.autoJumpToNeighbour(this.activeKey);
   }
 
-  componentWillReceiveProps(nextProps: TabsProps) {
+  componentDidUpdate(preProps: TabsProps, prevState: any) {
     const props = this.props;
 
-    if (nextProps.location && nextProps.location.hash !== props.location.hash) {
-      const hash = nextProps.location.hash.substring(1);
+    if (props.location && props.location.hash !== preProps.location.hash) {
+      const hash = props.location.hash.substring(1);
       if (!hash) {
         return;
       }
 
       const tab: TabSchema = find(
-        nextProps.tabs,
+        props.tabs,
         tab => tab.hash === hash
       ) as TabSchema;
       if (tab && tab.hash && tab.hash !== this.state.activeKey) {
         this.setState({
-          activeKey: tab.hash,
+          activeKey: (this.activeKey = tab.hash),
           prevKey: this.state.activeKey
         });
       }
-    } else if (props.tabs !== nextProps.tabs) {
+    } else if (preProps.tabs !== props.tabs) {
       let activeKey: any = this.state.activeKey;
-      const location = nextProps.location;
+      const location = props.location;
       let tab: TabSchema | null = null;
 
-      if (location && Array.isArray(nextProps.tabs)) {
+      if (location && Array.isArray(props.tabs)) {
         const hash = location.hash.substring(1);
-        tab = find(nextProps.tabs, tab => tab.hash === hash) as TabSchema;
+        tab = find(props.tabs, tab => tab.hash === hash) as TabSchema;
       }
 
       if (tab) {
         activeKey = tab.hash;
       } else if (
-        !nextProps.tabs ||
-        !nextProps.tabs.some((item, index) =>
+        !props.tabs ||
+        !props.tabs.some((item, index) =>
           item.hash ? item.hash === activeKey : index === activeKey
         )
       ) {
-        activeKey =
-          (nextProps.tabs && nextProps.tabs[0] && nextProps.tabs[0].hash) || 0;
+        activeKey = (props.tabs && props.tabs[0] && props.tabs[0].hash) || 0;
       }
 
       this.setState({
         prevKey: undefined,
-        activeKey: activeKey
+        activeKey: (this.activeKey = activeKey)
       });
     }
-  }
 
-  componentDidUpdate() {
-    this.autoJumpToNeighbour();
+    this.autoJumpToNeighbour(this.activeKey);
   }
 
   @autobind
-  autoJumpToNeighbour() {
-    const { tabs, data } = this.props;
+  autoJumpToNeighbour(key: any) {
+    const {tabs, data} = this.props;
 
     if (!Array.isArray(tabs)) {
       return;
@@ -234,9 +251,7 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
 
     // 当前 tab 可能不可见，所以需要自动切到一个可见的 tab, 向前找，找一圈
     const tabIndex = findIndex(tabs, (tab: TabSchema, index) =>
-      tab.hash
-        ? tab.hash === this.state.activeKey
-        : index === this.state.activeKey
+      tab.hash ? tab.hash === key : index === key
     );
 
     if (tabs[tabIndex] && !isVisible(tabs[tabIndex], this.props.data)) {
@@ -249,7 +264,7 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
         if (isVisible(tabs[index], data)) {
           let activeKey = tabs[index].hash || index;
           this.setState({
-            activeKey
+            activeKey: (this.activeKey = activeKey)
           });
           break;
         }
@@ -262,14 +277,14 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
     const { env, tabs, data } = this.props;
 
     // 是 hash，需要更新到地址栏
-    if (typeof key === "string" && env) {
+    if (typeof key === 'string' && env) {
       env.updateLocation(`#${key}`);
-    } else if (typeof this.state.activeKey === "string" && env) {
+    } else if (typeof this.state.activeKey === 'string' && env) {
       env.updateLocation(`#`);
     }
 
     this.setState({
-      activeKey: key,
+      activeKey: (this.activeKey = key),
       prevKey: this.state.activeKey
     });
 
@@ -284,13 +299,13 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
 
   @autobind
   switchTo(index: number) {
-    const { tabs } = this.props;
+    const {tabs} = this.props;
 
     Array.isArray(tabs) &&
-    tabs[index] &&
-    this.setState({
-      activeKey: tabs[index].hash || index
-    });
+      tabs[index] &&
+      this.setState({
+        activeKey: (this.activeKey = tabs[index].hash || index)
+      });
   }
 
   @autobind
@@ -307,11 +322,11 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
   }
 
   renderToolbar() {
-    const { toolbar, render, classnames: cx, toolbarClassName } = this.props;
+    const {toolbar, render, classnames: cx, toolbarClassName} = this.props;
 
     return toolbar ? (
       <div className={cx(`Tabs-toolbar`, toolbarClassName)}>
-        {render("toolbar", toolbar)}
+        {render('toolbar', toolbar)}
       </div>
     ) : null;
   }
@@ -321,7 +336,6 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
       classnames: cx,
       classPrefix: ns,
       contentClassName,
-      tabs,
       tabRender,
       className,
       render,
@@ -329,14 +343,85 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
       mode: dMode,
       tabsMode,
       mountOnEnter,
-      unmountOnExit
+      unmountOnExit,
+      source
     } = this.props;
 
-    if (!Array.isArray(tabs)) {
+    const mode = tabsMode || dMode;
+    const arr = resolveVariable(source, data);
+
+    let tabs = this.props.tabs;
+    if (!tabs) {
       return null;
     }
 
-    const mode = tabsMode || dMode;
+    tabs = Array.isArray(tabs) ? tabs : [tabs];
+    let children: Array<JSX.Element | null> = [];
+
+    if (Array.isArray(arr)) {
+      arr.forEach((value, index) => {
+        const ctx = createObject(
+          data,
+          isObject(value) ? {index, ...value} : {item: value, index}
+        );
+
+        children.push(
+          ...tabs.map((tab, tabIndex) =>
+            isVisible(tab, ctx) ? (
+              <Tab
+                {...(tab as any)}
+                title={filter(tab.title, ctx)}
+                disabled={isDisabled(tab, ctx)}
+                key={`${index * 1000 + tabIndex}`}
+                eventKey={index * 1000 + tabIndex}
+                mountOnEnter={mountOnEnter}
+                unmountOnExit={
+                  typeof tab.reload === 'boolean'
+                    ? tab.reload
+                    : typeof tab.unmountOnExit === 'boolean'
+                    ? tab.unmountOnExit
+                    : unmountOnExit
+                }
+              >
+                {render(
+                  `item/${index}/${tabIndex}`,
+                  tab.tab || tab.body || '',
+                  {
+                    data: ctx
+                  }
+                )}
+              </Tab>
+            ) : null
+          )
+        );
+      });
+    } else {
+      children = tabs.map((tab, index) =>
+        isVisible(tab, data) ? (
+          <Tab
+            {...(tab as any)}
+            title={filter(tab.title, data)}
+            disabled={isDisabled(tab, data)}
+            key={index}
+            eventKey={tab.hash || index}
+            mountOnEnter={mountOnEnter}
+            unmountOnExit={
+              typeof tab.reload === 'boolean'
+                ? tab.reload
+                : typeof tab.unmountOnExit === 'boolean'
+                ? tab.unmountOnExit
+                : unmountOnExit
+            }
+          >
+            {this.renderTab
+              ? this.renderTab(tab, this.props, index)
+              : tabRender
+              ? tabRender(tab, this.props, index)
+              : render(`tab/${index}`, tab.tab || tab.body || '')}
+          </Tab>
+        ) : null
+      );
+    }
 
     return (
       <CTabs
@@ -349,30 +434,7 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
         activeKey={this.state.activeKey}
         toolbar={this.renderToolbar()}
       >
-        {tabs.map((tab, index) =>
-          isVisible(tab, data) ? (
-            <Tab
-              {...(tab as any)}
-              disabled={isDisabled(tab, data)}
-              key={index}
-              eventKey={tab.hash || index}
-              mountOnEnter={mountOnEnter}
-              unmountOnExit={
-                typeof tab.reload === "boolean"
-                  ? tab.reload
-                  : typeof tab.unmountOnExit === "boolean"
-                  ? tab.unmountOnExit
-                  : unmountOnExit
-              }
-            >
-              {this.renderTab
-                ? this.renderTab(tab, this.props, index)
-                : tabRender
-                  ? tabRender(tab, this.props, index)
-                  : render(`tab/${index}`, tab.tab || tab.body || "")}
-            </Tab>
-          ) : null
-        )}
+        {children}
       </CTabs>
     );
   }
@@ -384,7 +446,6 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
 
 @Renderer({
   test: /(^|\/)tabs$/,
-  name: "tabs"
+  name: 'tabs'
 })
-export class TabsRenderer extends Tabs {
-}
+export class TabsRenderer extends Tabs {}

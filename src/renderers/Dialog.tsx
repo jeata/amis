@@ -84,7 +84,9 @@ export interface DialogSchema extends BaseSchema {
 
 export type DialogSchemaBase = Omit<DialogSchema, 'type'>;
 
-export interface DialogProps extends RendererProps, DialogSchema {
+export interface DialogProps
+  extends RendererProps,
+    Omit<DialogSchema, 'className'> {
   onClose: () => void;
   onConfirm: (
     values: Array<object>,
@@ -192,14 +194,14 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
     ret.push({
       type: 'button',
       actionType: 'cancel',
-      label: __('取消')
+      label: __('cancle')
     });
 
     if (confirm) {
       ret.push({
         type: 'button',
         actionType: 'confirm',
-        label: __('确认'),
+        label: __('confirm'),
         primary: true
       });
     }
@@ -477,7 +479,7 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
           <div className={cx('Modal-header', headerClassName)}>
             {showCloseButton !== false && !store.loading ? (
               <a
-                data-tooltip={__('关闭')}
+                data-tooltip={__('Dialog.close')}
                 data-position="left"
                 onClick={this.handleSelfClose}
                 className={cx('Modal-close')}
@@ -493,7 +495,7 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
           <div className={cx('Modal-header', headerClassName)}>
             {showCloseButton !== false && !store.loading ? (
               <a
-                data-tooltip={__('关闭')}
+                data-tooltip={__('Dialog.close')}
                 onClick={this.handleSelfClose}
                 className={cx('Modal-close')}
               >
@@ -506,7 +508,7 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
           </div>
         ) : showCloseButton !== false && !store.loading ? (
           <a
-            data-tooltip={__('关闭')}
+            data-tooltip={__('Dialog.close')}
             onClick={this.handleSelfClose}
             className={cx('Modal-close')}
           >
@@ -749,6 +751,10 @@ export class DialogRenderer extends Dialog {
     } else if (action.actionType === 'reload') {
       store.setCurrentAction(action);
       action.target && scoped.reload(action.target, data);
+      if (action.close) {
+        this.handleSelfClose();
+        this.closeTarget(action.close);
+      }
     } else if (this.tryChildrenToHandle(action, data)) {
       // do nothing
     } else if (action.actionType === 'ajax') {
@@ -776,7 +782,10 @@ export class DialogRenderer extends Dialog {
     } else if (onAction) {
       let ret = onAction(
         e,
-        action,
+        {
+          ...action,
+          close: false
+        },
         data,
         throwErrors,
         delegate || this.context

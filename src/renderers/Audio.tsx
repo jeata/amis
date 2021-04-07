@@ -48,7 +48,9 @@ export interface AudioSchema extends BaseSchema {
   controls?: Array<'rates' | 'play' | 'time' | 'process' | 'volume'>;
 }
 
-export interface AudioProps extends RendererProps, AudioSchema {}
+export interface AudioProps
+  extends RendererProps,
+    Omit<AudioSchema, 'className'> {}
 
 export interface AudioState {
   src?: string;
@@ -67,8 +69,8 @@ export interface AudioState {
 
 export class Audio extends React.Component<AudioProps, AudioState> {
   audio: any;
-  progressTimeout: NodeJS.Timeout;
-  durationTimeout: NodeJS.Timeout;
+  progressTimeout: ReturnType<typeof setTimeout>;
+  durationTimeout: ReturnType<typeof setTimeout>;
 
   static defaultProps: Pick<
     AudioProps,

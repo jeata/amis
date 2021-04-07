@@ -62,11 +62,21 @@ export interface CollapseSchema extends BaseSchema {
    * 控件大小
    */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'base';
+
+  /**
+   * 点开时才加载内容
+   */
+  mountOnEnter?: boolean;
+
+  /**
+   * 卡片隐藏就销毁内容。
+   */
+  unmountOnExit?: boolean;
 }
 
 export interface CollapseProps
   extends RendererProps,
-    Omit<CollapseSchema, 'type'> {
+    Omit<CollapseSchema, 'type' | 'className'> {
   wrapperComponent?: any;
   headingComponent?: any;
 
@@ -87,7 +97,10 @@ export default class Collapse extends React.Component<
     'headingComponent',
     'bodyClassName',
     'collapsed',
-    'headingClassName'
+    'headingClassName',
+    'title',
+    'mountOnEnter',
+    'unmountOnExit'
   ];
 
   static defaultProps: Partial<CollapseProps> = {
@@ -145,7 +158,9 @@ export default class Collapse extends React.Component<
       bodyClassName,
       render,
       collapsable,
-      translate: __
+      translate: __,
+      mountOnEnter,
+      unmountOnExit
     } = this.props;
     // 默认给个 title，不然没法点
     const finalTitle = this.state.collapsed ? title : collapseTitle || title;
@@ -167,6 +182,8 @@ export default class Collapse extends React.Component<
         classnames={cx}
         classPrefix={ns}
         key="body"
+        mountOnEnter={mountOnEnter}
+        unmountOnExit={unmountOnExit}
       >
         <div className={cx(`Collapse-body`, bodyClassName)}>
           {children

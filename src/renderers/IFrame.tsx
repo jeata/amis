@@ -30,7 +30,9 @@ export interface IFrameSchema extends BaseSchema {
   height?: number | string;
 }
 
-export interface IFrameProps extends RendererProps, IFrameSchema {}
+export interface IFrameProps
+  extends RendererProps,
+    Omit<IFrameSchema, 'type' | 'className'> {}
 
 export default class IFrame extends React.Component<IFrameProps, object> {
   IFrameRef: React.RefObject<HTMLIFrameElement> = React.createRef();
@@ -135,7 +137,7 @@ export default class IFrame extends React.Component<IFrameProps, object> {
 
   @autobind
   postMessage(type: string, data: any) {
-    (this.IFrameRef.current as HTMLIFrameElement).contentWindow?.postMessage(
+    (this.IFrameRef.current as HTMLIFrameElement)?.contentWindow?.postMessage(
       {
         type: `jeata:${type}`,
         data
@@ -157,6 +159,17 @@ export default class IFrame extends React.Component<IFrameProps, object> {
       ...tempStyle,
       ...style
     };
+
+    const finalSrc = src ? buildApi(src, data).url : undefined;
+
+    if (
+      typeof finalSrc === 'string' &&
+      finalSrc &&
+      !/^(\.\/|\.\.\/|\/|https?\:\/\/|\/\/)/.test(finalSrc)
+    ) {
+      return <p>请填写合法的 iframe 地址</p>;
+    }
+
     return (
       <iframe
         className={className}
@@ -164,7 +177,7 @@ export default class IFrame extends React.Component<IFrameProps, object> {
         style={style}
         ref={this.IFrameRef}
         onLoad={this.onLoad}
-        src={src ? buildApi(src, data).url : undefined}
+        src={finalSrc}
       />
     );
   }

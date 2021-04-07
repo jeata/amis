@@ -4,10 +4,10 @@
  * @author fex
  */
 
-import React from "react";
-import cx from "classnames";
-import { ClassNamesFn, themeable } from "../theme";
-import { __uri } from "../utils/helper";
+import React from 'react';
+import cx from 'classnames';
+import {ClassNamesFn, themeable} from '../theme';
+import {__uri} from '../utils/helper';
 
 // 用于发布 sdk 版本的时候替换，因为不确定 sdk 版本怎么部署，而 worker 地址路径不可知。
 // 所以会被 fis3 替换成取相对的代码。
@@ -16,17 +16,17 @@ function filterUrl(url: string) {
 }
 
 (window as any).MonacoEnvironment = {
-  getWorkerUrl: function(moduleId: string, label: string) {
-    let url = "/pkg/editor.worker.js";
+  getWorkerUrl: function (moduleId: string, label: string) {
+    let url = '/pkg/editor.worker.js';
 
-    if (label === "json") {
-      url = "/pkg/json.worker.js";
-    } else if (label === "css") {
-      url = "/pkg/css.worker.js";
-    } else if (label === "html") {
-      url = "/pkg/html.worker.js";
-    } else if (label === "typescript" || label === "javascript") {
-      url = "/pkg/ts.worker.js";
+    if (label === 'json') {
+      url = '/pkg/json.worker.js';
+    } else if (label === 'css') {
+      url = '/pkg/css.worker.js';
+    } else if (label === 'html') {
+      url = '/pkg/html.worker.js';
+    } else if (label === 'typescript' || label === 'javascript') {
+      url = '/pkg/ts.worker.js';
     }
 
     url = filterUrl(url);
@@ -56,6 +56,9 @@ export function monacoFactory(
     folding: true,
     minimap: {
       enabled: false
+    },
+    scrollbar: {
+      alwaysConsumeMouseWheel: false
     },
     ...options
   });
@@ -88,10 +91,10 @@ export interface EditorProps {
 
 export class Editor extends React.Component<EditorProps, any> {
   static defaultProps = {
-    language: "javascript",
-    editorTheme: "vs",
-    width: "100%",
-    height: "100%",
+    language: 'javascript',
+    editorTheme: 'vs',
+    width: '100%',
+    height: '100%',
     options: {}
   };
 
@@ -99,8 +102,7 @@ export class Editor extends React.Component<EditorProps, any> {
   container: any;
   currentValue: any;
   preventTriggerChangeEvent: boolean;
-  disposes: Array<{ dispose: () => void }> = [];
-
+  disposes: Array<{dispose: () => void}> = [];
   constructor(props: EditorProps) {
     super(props);
 
@@ -112,11 +114,10 @@ export class Editor extends React.Component<EditorProps, any> {
     if (this.props.value !== this.currentValue && this.editor) {
       let value = String(this.props.value);
 
-      if (this.props.language === "json") {
+      if (this.props.language === 'json') {
         try {
           value = JSON.stringify(JSON.parse(value), null, 2);
-        } catch (e) {
-        }
+        } catch (e) {}
       }
 
       this.preventTriggerChangeEvent = true;
@@ -154,7 +155,7 @@ export class Editor extends React.Component<EditorProps, any> {
       const editorWillUnmount = this.props.editorWillUnmount;
       editorWillUnmount && editorWillUnmount(this.editor, monaco);
     }
-    this.disposes.forEach(({ dispose }) => dispose());
+    this.disposes.forEach(({dispose}) => dispose());
     this.disposes = [];
     this.editor?.dispose();
   }
@@ -165,7 +166,7 @@ export class Editor extends React.Component<EditorProps, any> {
       this.loadMonaco();
     } else {
       try {
-        this.disposes.forEach(({ dispose }) => dispose());
+        this.disposes.forEach(({dispose}) => dispose());
         this.disposes = [];
         if (this.editor) {
           this.editor.getModel().dispose();
@@ -179,9 +180,7 @@ export class Editor extends React.Component<EditorProps, any> {
   }
 
   loadMonaco() {
-    (require as any)(["monaco-editor"], (monaco: any) => {
-      this.initMonaco(monaco);
-    });
+    import('monaco-editor').then(monaco => this.initMonaco(monaco));
   }
 
   initMonaco(monaco: any) {
@@ -196,7 +195,7 @@ export class Editor extends React.Component<EditorProps, any> {
     // Before initializing monaco editor
     this.editorWillMount(monaco);
 
-    if (this.props.language === "json") {
+    if (this.props.language === 'json') {
       try {
         value = JSON.stringify(
           typeof value === "string" ? JSON.parse(value) : value,
@@ -243,36 +242,35 @@ export class Editor extends React.Component<EditorProps, any> {
   }
 
   editorWillMount(monaco: any) {
-    const { editorWillMount } = this.props;
+    const {editorWillMount} = this.props;
     editorWillMount && editorWillMount(monaco);
   }
-
   editorDidMount(editor: any, monaco: any) {
-    const { editorDidMount, onChange, onFocus, onBlur } = this.props;
+    const {editorDidMount, onChange, onFocus, onBlur} = this.props;
     editorDidMount && editorDidMount(editor, monaco);
     editor.onDidChangeModelContent &&
-    this.disposes.push(
-      editor.onDidChangeModelContent((event: any) => {
-        const value = editor.getValue();
-        // Always refer to the latest value
-        this.currentValue = value;
+      this.disposes.push(
+        editor.onDidChangeModelContent((event: any) => {
+          const value = editor.getValue();
+          // Always refer to the latest value
+          this.currentValue = value;
 
-        // Only invoking when user input changed
-        if (!this.preventTriggerChangeEvent && onChange) {
-          onChange(value, event);
-        }
-      })
-    );
+          // Only invoking when user input changed
+          if (!this.preventTriggerChangeEvent && onChange) {
+            onChange(value, event);
+          }
+        })
+      );
     onFocus &&
-    editor.onDidFocusEditorWidget &&
-    this.disposes.push(editor.onDidFocusEditorWidget(onFocus));
+      editor.onDidFocusEditorWidget &&
+      this.disposes.push(editor.onDidFocusEditorWidget(onFocus));
     onBlur &&
-    editor.onDidBlurEditorWidget &&
-    this.disposes.push(editor.onDidBlurEditorWidget(onBlur));
+      editor.onDidBlurEditorWidget &&
+      this.disposes.push(editor.onDidBlurEditorWidget(onBlur));
   }
 
   render() {
-    const { className, classPrefix: ns, width, height } = this.props;
+    const {className, classPrefix: ns, width, height} = this.props;
     let style = this.props.style || {};
     style.width = width;
     style.height = height;

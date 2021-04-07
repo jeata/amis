@@ -15,7 +15,9 @@ exports[`Renderer:switch 1`] = `
         <span
           class="a-TplField"
         >
-          The form
+          <span>
+            The form
+          </span>
         </span>
       </h3>
     </div>
@@ -28,25 +30,38 @@ exports[`Renderer:switch 1`] = `
       >
         <div
           class="a-Form-item a-Form-item--normal block"
+          data-role="form-item"
         >
           <label
             class="a-Form-label"
           >
             <span>
-              开关
+              <span
+                class="a-TplField"
+              >
+                <span>
+                  开关
+                </span>
+              </span>
             </span>
           </label>
           <div
             class="a-SwitchControl a-Form-control"
           >
             <label
-              class="a-Switch"
+              class="a-Switch is-checked"
             >
               <input
                 checked=""
+                theme="default"
                 type="checkbox"
               />
-              <i />
+              <span
+                class="text"
+              />
+              <span
+                class="slider"
+              />
             </label>
             <span
               class="a-Switch-option"
@@ -55,6 +70,10 @@ exports[`Renderer:switch 1`] = `
             </span>
           </div>
         </div>
+        <input
+          style="display: none;"
+          type="submit"
+        />
       </form>
     </div>
     <div

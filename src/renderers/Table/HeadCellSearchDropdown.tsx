@@ -45,7 +45,7 @@ export class HeadCellSearchDropDown extends React.Component<
   buildSchema() {
     const {searchable, sortable, name, label, translate: __} = this.props;
 
-    let schema;
+    let schema: any;
 
     if (searchable === true) {
       schema = {
@@ -63,7 +63,10 @@ export class HeadCellSearchDropDown extends React.Component<
       if (searchable.controls || searchable.tabs || searchable.fieldSet) {
         schema = {
           title: '',
-          ...searchable
+          ...searchable,
+          controls: Array.isArray(searchable.controls)
+            ? searchable.controls.concat()
+            : undefined
         };
       } else {
         schema = {
@@ -91,14 +94,14 @@ export class HeadCellSearchDropDown extends React.Component<
         {
           type: 'button-group',
           name: 'orderDir',
-          label: __('排序'),
+          label: __('sort'),
           options: [
             {
-              label: __('正序'),
+              label: __('asc'),
               value: 'asc'
             },
             {
-              label: __('降序'),
+              label: __('desc'),
               value: 'desc'
             }
           ]
@@ -123,18 +126,18 @@ export class HeadCellSearchDropDown extends React.Component<
         actions: [
           {
             type: 'button',
-            label: __('重置'),
-            actionType: 'reset'
+            label: __('reset'),
+            actionType: 'clear-and-submit'
           },
 
           {
             type: 'button',
-            label: __('取消'),
+            label: __('cancle'),
             actionType: 'cancel'
           },
 
           {
-            label: __('搜索'),
+            label: __('search'),
             type: 'submit',
             primary: true
           }

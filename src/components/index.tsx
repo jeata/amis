@@ -30,6 +30,7 @@ import Range from './Range';
 import Rating from './Rating';
 // import RichText from './RichText';
 import Select from './Select';
+import SparkLine from './SparkLine';
 import Spinner from './Spinner';
 import Switch from './Switch';
 import Textarea from './Textarea';
@@ -53,6 +54,7 @@ import ListGroup from './ListGroup';
 import NumberInput from './NumberInput';
 import ArrayInput from './ArrayInput';
 import SearchBox from './SearchBox';
+import AnchorNav from './AnchorNav';
 
 export {
   NotFound,
@@ -87,6 +89,7 @@ export {
   Rating,
   // RichText,
   Select,
+  SparkLine,
   Spinner,
   Switch,
   Textarea,
@@ -109,5 +112,6 @@ export {
   TreeRadios,
   ListGroup,
   NumberInput,
-  ArrayInput
+  ArrayInput,
+  AnchorNav
 };

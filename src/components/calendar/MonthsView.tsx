@@ -47,8 +47,8 @@ export class CustomMonthsView extends MonthsView {
 
     return (
       <div className="rdtMonths">
-        <table>
-          {showYearHead && (
+        {showYearHead && (
+          <table>
             <thead>
               <tr>
                 <th
@@ -62,11 +62,11 @@ export class CustomMonthsView extends MonthsView {
                     className="rdtSwitch"
                     onClick={this.props.showView('years')}
                   >
-                    {this.props.viewDate.format(__('YYYY年'))}
+                    {this.props.viewDate.format(__('dateformat.year'))}
                   </th>
                 ) : (
                   <th className="rdtSwitch">
-                    {this.props.viewDate.format(__('YYYY年'))}
+                    {this.props.viewDate.format(__('dateformat.year'))}
                   </th>
                 )}
 
@@ -78,8 +78,9 @@ export class CustomMonthsView extends MonthsView {
                 </th>
               </tr>
             </thead>
-          )}
-        </table>
+          </table>
+        )}
+
         <table>
           <tbody>{this.renderMonths()}</tbody>
         </table>

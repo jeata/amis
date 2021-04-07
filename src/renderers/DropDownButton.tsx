@@ -5,13 +5,10 @@ import Overlay from '../components/Overlay';
 import PopOver from '../components/PopOver';
 import TooltipWrapper from '../components/TooltipWrapper';
 import type {TooltipObject, Trigger} from '../components/TooltipWrapper';
-import {isVisible, noop} from '../utils/helper';
+import {isDisabled, isVisible, noop} from '../utils/helper';
 import {filter} from '../utils/tpl';
 import {Icon} from '../components/icons';
-import {
-  BaseSchema,
-  SchemaClassName
-} from '../Schema';
+import {BaseSchema, SchemaClassName} from '../Schema';
 import {ActionSchema} from './Action';
 import {DividerSchema} from './Divider';
 
@@ -83,7 +80,7 @@ export interface DropdownButtonSchema extends BaseSchema {
 
 export interface DropDownButtonProps
   extends RendererProps,
-    Omit<DropdownButtonSchema, 'type'> {
+    Omit<DropdownButtonSchema, 'type' | 'className'> {
   disabledTip?: string | TooltipObject;
   /**
    * 按钮提示文字，hover focus 时显示
@@ -111,9 +108,7 @@ export default class DropDownButton extends React.Component<
 
   static defaultProps: Pick<
     DropDownButtonProps,
-    | 'placement'
-    | 'tooltipTrigger'
-    | 'tooltipRootClose'
+    'placement' | 'tooltipTrigger' | 'tooltipRootClose'
   > = {
     placement: 'top',
     tooltipTrigger: ['hover', 'focus'],
@@ -196,7 +191,10 @@ export default class DropDownButton extends React.Component<
                 }
 
                 return (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    className={isDisabled(button, data) ? 'is-disabled' : ''}
+                  >
                     {render(`button/${index}`, {
                       type: 'button',
                       ...(button as any),
@@ -218,7 +216,7 @@ export default class DropDownButton extends React.Component<
             onHide={this.close}
             classPrefix={ns}
             className={cx('DropDown-popover')}
-            style={{minWidth: this.target?.offsetWidth}}
+            style={{minWidth: this.target?.getBoundingClientRect().width}}
           >
             {body}
           </PopOver>

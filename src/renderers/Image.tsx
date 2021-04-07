@@ -57,9 +57,36 @@ export interface ImageSchema extends BaseSchema {
    */
   showDimensions?: boolean;
 
+  /**
+   * 图片无法显示时的替换文本
+   */
   alt?: string;
 
+  /**
+   * 高度
+   */
+  height?: number;
+
+  /**
+   * 宽度
+   */
+  width?: number;
+
+  /**
+   * 图片 css 类名
+   */
   imageClassName?: SchemaClassName;
+
+  /**
+   * 外层 css 类名
+   */
+  className?: SchemaClassName;
+
+  /**
+   * 图片缩率图外层 css 类名
+   */
+  thumbClassName?: SchemaClassName;
+
   caption?: SchemaTpl;
 
   /**
@@ -76,7 +103,7 @@ export interface ImageSchema extends BaseSchema {
 export interface ImageThumbProps
   extends LocaleProps,
     ThemeProps,
-    Omit<ImageSchema, 'type'> {
+    Omit<ImageSchema, 'type' | 'className'> {
   onEnlarge?: (info: ImageThumbProps) => void;
   index?: number;
   onLoad?: React.EventHandler<any>;
@@ -94,8 +121,11 @@ export class ImageThumb extends React.Component<ImageThumbProps> {
       classnames: cx,
       className,
       imageClassName,
+      thumbClassName,
       thumbMode,
       thumbRatio,
+      height,
+      width,
       src,
       alt,
       title,
@@ -110,9 +140,11 @@ export class ImageThumb extends React.Component<ImageThumbProps> {
         <div
           className={cx(
             'Image-thumb',
+            thumbClassName,
             thumbMode ? `Image-thumb--${thumbMode}` : '',
             thumbRatio ? `Image-thumb--${thumbRatio.replace(/:/g, '-')}` : ''
           )}
+          style={{height: height, width: width}}
         >
           <img
             onLoad={onLoad}
@@ -124,7 +156,7 @@ export class ImageThumb extends React.Component<ImageThumbProps> {
           {enlargeAble ? (
             <div key="overlay" className={cx('Image-overlay')}>
               <a
-                data-tooltip={__('查看大图')}
+                data-tooltip={__('Image.zoomIn')}
                 data-position="bottom"
                 target="_blank"
                 onClick={this.handleEnlarge}
@@ -136,9 +168,15 @@ export class ImageThumb extends React.Component<ImageThumbProps> {
         </div>
         {title || caption ? (
           <div key="caption" className={cx('Image-info')}>
-            {title ? <div className={cx('Image-title')}>{title}</div> : null}
+            {title ? (
+              <div className={cx('Image-title')} title={title}>
+                {title}
+              </div>
+            ) : null}
             {caption ? (
-              <div className={cx('Image-caption')}>{caption}</div>
+              <div className={cx('Image-caption')} title={caption}>
+                {caption}
+              </div>
             ) : null}
           </div>
         ) : null}
@@ -221,6 +259,9 @@ export class ImageField extends React.Component<ImageFieldProps, object> {
       title,
       data,
       imageClassName,
+      thumbClassName,
+      height,
+      width,
       classnames: cx,
       src,
       thumbMode,
@@ -239,6 +280,9 @@ export class ImageField extends React.Component<ImageFieldProps, object> {
         {value ? (
           <ThemedImageThumb
             imageClassName={imageClassName}
+            thumbClassName={thumbClassName}
+            height={height}
+            width={width}
             src={value}
             title={filter(title, data)}
             caption={filter(imageCaption, data)}

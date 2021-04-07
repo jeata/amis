@@ -1,4 +1,5 @@
 import React from 'react';
+import {match} from 'path-to-regexp';
 import makeSchemaRenderer from './SchemaRender';
 
 import SimplePageSchema from './Page/Simple';
@@ -28,6 +29,7 @@ import FormulaFormSchema from './Form/Formula';
 import CustomFormSchema from './Form/Custom';
 import FormLayoutTestSchema from './Form/layoutTest';
 import Definitions from './Form/Definitions';
+import AnchorNav from './Form/AnchorNav';
 
 import TableCrudSchema from './CRUD/Table';
 import ItemActionsSchema from './CRUD/ItemActions';
@@ -39,6 +41,7 @@ import FixedCrudSchema from './CRUD/Fix';
 import AsideCrudSchema from './CRUD/Aside';
 import FieldsCrudSchema from './CRUD/Fields';
 import JumpNextCrudSchema from './CRUD/JumpNext';
+import PopOverCrudSchema from './CRUD/PopOver';
 import KeyboardsCrudSchema from './CRUD/Keyboards';
 import FootableCrudSchema from './CRUD/Footable';
 import NestedCrudSchema from './CRUD/Nested';
@@ -73,10 +76,13 @@ import IFrameSchema from './IFrame';
 
 import NormalTabSchema from './Tabs/Normal';
 import FormTabSchema from './Tabs/Form';
+import DynamicTabSchema from './Tabs/Dynamic';
 import Tab1Schema from './Tabs/Tab1';
 import Tab2Schema from './Tabs/Tab2';
 import Tab3Schema from './Tabs/Tab3';
 import TestComponent from './Test';
+import JSSDK from './JSSDK/index';
+import {normalizeLink} from '../../src/utils/normalizeLink';
 
 export const examples = [
   {
@@ -246,6 +252,12 @@ export const examples = [
             label: '样式编辑',
             path: '/examples/form/style-builder',
             component: makeSchemaRenderer(StyleBuilderSchema)
+          },
+
+          {
+            label: '锚点导航',
+            path: '/examples/form/anchor-nav',
+            component: makeSchemaRenderer(AnchorNav)
           }
 
           // {
@@ -342,6 +354,11 @@ export const examples = [
             component: makeSchemaRenderer(JumpNextCrudSchema)
           },
           {
+            label: '列展示详情',
+            path: '/examples/crud/popover',
+            component: makeSchemaRenderer(PopOverCrudSchema)
+          },
+          {
             label: '一次性加载',
             path: '/examples/crud/load-once',
             component: makeSchemaRenderer(LoadOnceTableCrudSchema)
@@ -390,6 +407,12 @@ export const examples = [
             label: '表单中选项卡分组',
             path: '/examples/tabs/form',
             component: makeSchemaRenderer(FormTabSchema)
+          },
+
+          {
+            label: '动态选项卡',
+            path: '/examples/tabs/dynamic',
+            component: makeSchemaRenderer(DynamicTabSchema)
           },
           {
             label: '选项卡页面1',

@@ -6,7 +6,8 @@ import {
   getEnv,
   getRoot,
   IAnyModelType,
-  isAlive
+  isAlive,
+  Instance
 } from 'mobx-state-tree';
 import {iRendererStore} from './iRenderer';
 import {resolveVariable} from '../utils/tpl-builtin';
@@ -23,9 +24,12 @@ import {
   eachTree,
   difference,
   immutableExtends,
-  extendObject
+  extendObject,
+  hasVisibleExpression
 } from '../utils/helper';
 import {evalExpression} from '../utils/tpl';
+import {IFormStore} from './form';
+import {getStoreById} from './manager';
 
 export const Column = types
   .model('Column', {
@@ -37,6 +41,7 @@ export const Column = types
     toggled: false,
     toggable: true,
     expandable: false,
+    checkdisable: false,
     isPrimary: false,
     searchable: types.maybe(types.frozen()),
     sortable: false,
@@ -65,7 +70,7 @@ export const Column = types
     }
   }));
 
-export type IColumn = typeof Column.Type;
+export type IColumn = Instance<typeof Column>;
 export type SColumn = SnapshotIn<typeof Column>;
 
 export const Row = types
@@ -79,6 +84,7 @@ export const Row = types
     index: types.number,
     newIndex: types.number,
     expandable: false,
+    checkdisable: false,
     isHover: false,
     children: types.optional(
       types.array(types.late((): IAnyModelType => Row)),
@@ -117,10 +123,27 @@ export const Row = types
       return data;
     },
 
-    get expanded(): boolean {
+    get collapsed(): boolean {
       const table = getParent(self, self.depth * 2) as ITableStore;
+      if (table.dragging) {
+        return true;
+      }
 
-      return !table.dragging && table.isExpanded(self as IRow);
+      let from: IRow = self as any;
+
+      while (from && (from as any) !== table) {
+        if (!table.isExpanded(from)) {
+          return true;
+        }
+
+        from = getParent(from, 2);
+      }
+
+      return false;
+    },
+
+    get expanded(): boolean {
+      return !this.collapsed;
     },
 
     get moved() {
@@ -171,6 +194,10 @@ export const Row = types
       self.data = self.pristine;
     },
 
+    setCheckdisable(bool: boolean) {
+      self.checkdisable = bool;
+    },
+
     setIsHover(value: boolean) {
       self.isHover = value;
     },
@@ -208,7 +235,7 @@ export const Row = types
     }
   }));
 
-export type IRow = typeof Row.Type;
+export type IRow = Instance<typeof Row>;
 export type SRow = SnapshotIn<typeof Row>;
 
 export const TableStore = iRendererStore
@@ -238,13 +265,27 @@ export const TableStore = iRendererStore
     itemCheckableOn: '',
     itemDraggableOn: '',
     hideCheckToggler: false,
-    combineNum: 0
+    combineNum: 0,
+    formsRef: types.optional(types.array(types.frozen()), []),
+    maxKeepItemSelectionLength: 0,
+    keepItemSelectionOnPageChange: false
   })
   .views(self => {
+    function getForms() {
+      return self.formsRef.map(item => ({
+        store: getStoreById(item.id) as IFormStore,
+        rowIndex: item.rowIndex
+      }));
+    }
+
     function getFilteredColumns() {
       return self.columns.filter(
         item =>
-          isVisible(item.pristine, self.data) &&
+          item &&
+          isVisible(
+            item.pristine,
+            hasVisibleExpression(item.pristine) ? self.data : {}
+          ) &&
           (item.type === '__checkme'
             ? self.selectable &&
               !self.dragging &&
@@ -425,6 +466,10 @@ export const TableStore = iRendererStore
     }
 
     return {
+      get forms() {
+        return getForms();
+      },
+
       get filteredColumns() {
         return getFilteredColumns();
       },
@@ -503,6 +548,17 @@ export const TableStore = iRendererStore
         return getHoverIndex();
       },
 
+      get disabledHeadCheckbox() {
+        const selectedLength = self.data?.selectedItems.length;
+        const maxLength = self.maxKeepItemSelectionLength;
+
+        if (!self.data || !self.keepItemSelectionOnPageChange || !maxLength) {
+          return false;
+        }
+
+        return maxLength === selectedLength;
+      },
+
       getData,
 
       get columnGroup() {
@@ -511,6 +567,12 @@ export const TableStore = iRendererStore
 
       getRowById(id: string) {
         return findTree(self.rows, item => item.id === id);
+      },
+
+      getItemsByName(name: string): any {
+        return this.forms
+          .filter(form => form.rowIndex === parseInt(name, 10))
+          .map(item => item.store);
       }
     };
   })
@@ -544,8 +606,15 @@ export const TableStore = iRendererStore
       config.combineNum !== void 0 &&
         (self.combineNum = parseInt(config.combineNum as any, 10) || 0);
 
+      config.maxKeepItemSelectionLength !== void 0 &&
+        (self.maxKeepItemSelectionLength = config.maxKeepItemSelectionLength);
+      config.keepItemSelectionOnPageChange !== void 0 &&
+        (self.keepItemSelectionOnPageChange = config.keepItemSelectionOnPageChange);
+
       if (config.columns && Array.isArray(config.columns)) {
-        let columns: Array<SColumn> = config.columns.concat();
+        let columns: Array<SColumn> = config.columns
+          .filter(column => column)
+          .concat();
         if (!columns.length) {
           columns.push({
             type: 'text',
@@ -787,13 +856,27 @@ export const TableStore = iRendererStore
           self.selectedRows.push(item);
         }
       });
+      updateCheckDisable();
     }
 
     function toggleAll() {
+      const maxLength = self.maxKeepItemSelectionLength;
+      const keep = self.keepItemSelectionOnPageChange;
+
       if (self.allChecked) {
         self.selectedRows.clear();
       } else {
-        self.selectedRows.replace(self.checkableRows);
+        const selectedItems = self.data?.selectedItems;
+
+        if (keep && maxLength && selectedItems && maxLength >= selectedItems.length) {
+          const restCheckableRows = self.checkableRows.filter(item => !item.checked);
+          const checkableRows = restCheckableRows.filter((item, i) => i < maxLength - selectedItems.length);
+
+          self.selectedRows.replace([...self.selectedRows, ...checkableRows]);
+        }
+        else {
+          self.selectedRows.replace(self.checkableRows);
+        }
       }
     }
 
@@ -810,6 +893,22 @@ export const TableStore = iRendererStore
         ~idx
           ? self.selectedRows.splice(idx, 1)
           : self.selectedRows.replace([row]);
+      }
+    }
+
+    function updateCheckDisable() {
+      if (!self.data) {
+        return;
+      }
+      const maxLength = self.maxKeepItemSelectionLength;
+      const selectedItems = self.data.selectedItems;
+
+      self.selectedRows.map(item => item.setCheckdisable(false));
+      if (maxLength && maxLength <= selectedItems.length) {
+        self.unSelectedRows.map(item => !item.checked && item.setCheckdisable(true));
+      }
+      else {
+        self.unSelectedRows.map(item => item.checkdisable && item.setCheckdisable(false));
       }
     }
 
@@ -911,6 +1010,13 @@ export const TableStore = iRendererStore
       );
     }
 
+    function addForm(form: IFormStore, rowIndex: number) {
+      self.formsRef.push({
+        id: form.id,
+        rowIndex
+      });
+    }
+
     return {
       update,
       initRows,
@@ -926,11 +1032,12 @@ export const TableStore = iRendererStore
       toggleDragging,
       stopDragging,
       exchange,
+      addForm,
 
       persistSaveToggledColumns,
 
       // events
-      afterAttach() {
+      afterCreate() {
         setTimeout(() => {
           if (!isAlive(self)) {
             return;
@@ -939,6 +1046,7 @@ export const TableStore = iRendererStore
             location.pathname +
             self.path +
             self.toggableColumns.map(item => item.name || item.index).join('-');
+
           const data = localStorage.getItem(key);
 
           if (data) {
@@ -952,5 +1060,5 @@ export const TableStore = iRendererStore
     };
   });
 
-export type ITableStore = typeof TableStore.Type;
+export type ITableStore = Instance<typeof TableStore>;
 export type STableStore = SnapshotIn<typeof TableStore>;

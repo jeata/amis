@@ -3,10 +3,10 @@ import isEqual from 'lodash/isEqual';
 import uniq from 'lodash/uniq';
 import {Schema, PlainObject, FunctionPropertyNames} from '../types';
 import {evalExpression} from './tpl';
-import {boundMethod} from 'autobind-decorator';
 import qs from 'qs';
 import {IIRendererStore} from '../store';
 import {IFormStore} from '../store/form';
+import {autobindMethod} from './autobind';
 
 // 方便取值的时候能够把上层的取到，但是获取的时候不会全部把所有的数据获取到。
 export function createObject(
@@ -159,17 +159,15 @@ export function getVariable(
     return data[key];
   }
 
-  return key
-    .split('.')
-    .reduce(
-      (obj, key) =>
-        obj &&
-        typeof obj === 'object' &&
-        (canAccessSuper ? key in obj : obj.hasOwnProperty(key))
-          ? obj[key]
-          : undefined,
-      data
-    );
+  return keyToPath(key).reduce(
+    (obj, key) =>
+      obj &&
+      typeof obj === 'object' &&
+      (canAccessSuper ? key in obj : obj.hasOwnProperty(key))
+        ? obj[key]
+        : undefined,
+    data
+  );
 }
 
 export function setVariable(
@@ -184,7 +182,7 @@ export function setVariable(
     return;
   }
 
-  const parts = key.split('.');
+  const parts = keyToPath(key);
   const last = parts.pop() as string;
 
   while (parts.length) {
@@ -218,7 +216,7 @@ export function deleteVariable(data: {[propName: string]: any}, key: string) {
     return;
   }
 
-  const parts = key.split('.');
+  const parts = keyToPath(key);
   const last = parts.pop() as string;
 
   while (parts.length) {
@@ -243,7 +241,7 @@ export function hasOwnProperty(
   data: {[propName: string]: any},
   key: string
 ): boolean {
-  const parts = key.split('.');
+  const parts = keyToPath(key);
 
   while (parts.length) {
     let key = parts.shift() as string;
@@ -415,6 +413,15 @@ export function makeColumnClassBuild(
   };
 }
 
+export function hasVisibleExpression(schema: {
+  visibleOn?: string;
+  hiddenOn?: string;
+  visible?: boolean;
+  hidden?: boolean;
+}) {
+  return schema?.visibleOn || schema?.hiddenOn;
+}
+
 export function isVisible(
   schema: {
     visibleOn?: string;
@@ -430,6 +437,15 @@ export function isVisible(
     (schema.hiddenOn && evalExpression(schema.hiddenOn, data) === true) ||
     (schema.visibleOn && evalExpression(schema.visibleOn, data) === false)
   );
+}
+
+/**
+ * 过滤掉被隐藏的数组元素
+ */
+export function visibilityFilter(items: any, data?: object) {
+  return items.filter((item: any) => {
+    return isVisible(item, data);
+  });
 }
 
 export function isDisabled(
@@ -557,7 +573,7 @@ export function difference<
   U extends {[propName: string]: any}
 >(object: T, base: U, keepProps?: Array<string>): {[propName: string]: any} {
   function changes(object: T, base: U) {
-    if (isPlainObject(object) && isPlainObject(base)) {
+    if (isObject(object) && isObject(base)) {
       const keys: Array<keyof T & keyof U> = uniq(
         Object.keys(object).concat(Object.keys(base))
       );
@@ -671,7 +687,7 @@ export function until(
   getCanceler: (fn: () => any) => void,
   interval: number = 5000
 ) {
-  let timer: NodeJS.Timeout;
+  let timer: ReturnType<typeof setTimeout>;
   let stoped: boolean = false;
 
   return new Promise((resolve, reject) => {
@@ -726,6 +742,28 @@ export function isEmpty(thing: any) {
  */
 export const uuid = () => {
   return (+new Date()).toString(36);
+};
+
+// 参考 https://github.com/streamich/v4-uuid
+const str = () =>
+  (
+    '00000000000000000' + (Math.random() * 0xffffffffffffffff).toString(16)
+  ).slice(-16);
+
+export const uuidv4 = () => {
+  const a = str();
+  const b = str();
+  return (
+    a.slice(0, 8) +
+    '-' +
+    a.slice(8, 12) +
+    '-4' +
+    a.slice(13) +
+    '-a' +
+    b.slice(1, 4) +
+    '-' +
+    b.slice(4)
+  );
 };
 
 export interface TreeItem {
@@ -865,7 +903,7 @@ export function getTree<T extends TreeItem>(
   tree: Array<T>,
   idx: Array<number> | number
 ): T | undefined | null {
-  const indexes = Array.isArray(idx) ? idx : [idx];
+  const indexes = Array.isArray(idx) ? idx.concat() : [idx];
   const lastIndex = indexes.pop()!;
   let list: Array<T> | null = tree;
   for (let i = 0, len = indexes.length; i < len; i++) {
@@ -1061,6 +1099,42 @@ export function getTreeDepth<T extends TreeItem>(tree: Array<T>): number {
   );
 }
 
+/**
+ * 从树中获取某个值的所有祖先
+ * @param tree
+ * @param value
+ */
+export function getTreeAncestors<T extends TreeItem>(
+  tree: Array<T>,
+  value: T,
+  includeSelf = false
+): Array<T> | null {
+  let ancestors: Array<T> | null = null;
+
+  findTree(tree, (item, index, level, paths) => {
+    if (item === value) {
+      ancestors = paths;
+      if (includeSelf) {
+        ancestors.push(item);
+      }
+      return true;
+    }
+    return false;
+  });
+
+  return ancestors;
+}
+
+/**
+ * 从树中获取某个值的上级
+ * @param tree
+ * @param value
+ */
+export function getTreeParent<T extends TreeItem>(tree: Array<T>, value: T) {
+  const ancestors = getTreeAncestors(tree, value);
+  return ancestors?.length ? ancestors[ancestors.length - 1] : null;
+}
+
 export function ucFirst(str?: string) {
   return str ? str.substring(0, 1).toUpperCase() + str.substring(1) : '';
 }
@@ -1121,7 +1195,7 @@ export function pickEventsProps(props: any) {
   return ret;
 }
 
-export const autobind = boundMethod;
+export const autobind = autobindMethod;
 
 export const bulkBindFunctions = function <
   T extends {
@@ -1290,3 +1364,84 @@ export function loadScript(src: string) {
 }
 
 export class SkipOperation extends Error {}
+
+/**
+ * 将例如像 a.b.c 或 a[1].b 的字符串转换为路径数组
+ *
+ * @param string 要转换的字符串
+ */
+export const keyToPath = (string: string) => {
+  const result = [];
+
+  if (string.charCodeAt(0) === '.'.charCodeAt(0)) {
+    result.push('');
+  }
+
+  string.replace(
+    new RegExp(
+      '[^.[\\]]+|\\[(?:([^"\'][^[]*)|(["\'])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2)\\]|(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))',
+      'g'
+    ),
+    (match, expression, quote, subString) => {
+      let key = match;
+      if (quote) {
+        key = subString.replace(/\\(\\)?/g, '$1');
+      } else if (expression) {
+        key = expression.trim();
+      }
+      result.push(key);
+      return '';
+    }
+  );
+
+  return result;
+};
+
+/**
+ * 检查对象是否有循环引用，来自 https://stackoverflow.com/a/34909127
+ * @param obj
+ */
+function isCyclic(obj: any): boolean {
+  const seenObjects: any = [];
+  function detect(obj: any) {
+    if (obj && typeof obj === 'object') {
+      if (seenObjects.indexOf(obj) !== -1) {
+        return true;
+      }
+      seenObjects.push(obj);
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key) && detect(obj[key])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  return detect(obj);
+}
+
+function internalFindObjectsWithKey(obj: any, key: string) {
+  let objects: any[] = [];
+  for (const k in obj) {
+    if (!obj.hasOwnProperty(k)) continue;
+    if (k === key) {
+      objects.push(obj);
+    } else if (typeof obj[k] === 'object') {
+      objects = objects.concat(internalFindObjectsWithKey(obj[k], key));
+    }
+  }
+  return objects;
+}
+
+/**
+ * 深度查找具有某个 key 名字段的对象，实际实现是 internalFindObjectsWithKey，这里包一层是为了做循环引用检测
+ * @param obj
+ * @param key
+ */
+export function findObjectsWithKey(obj: any, key: string) {
+  // 避免循环引用导致死循环
+  if (isCyclic(obj)) {
+    return [];
+  }
+  return internalFindObjectsWithKey(obj, key);
+}

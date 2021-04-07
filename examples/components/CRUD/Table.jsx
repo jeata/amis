@@ -65,7 +65,9 @@ export default {
     type: 'crud',
     draggable: true,
     api: '/api/sample?waitSeconds=1',
+    perPage: 15,
     keepItemSelectionOnPageChange: true,
+    maxKeepItemSelectionLength: 11,
     labelTpl: '${id} ${engine}',
     filter: {
       title: '条件搜索',
@@ -165,6 +167,11 @@ export default {
         label: 'Rendering engine',
         sortable: true,
         searchable: true,
+        popOver: {
+          body: 'Popover 内容：${platform}',
+          trigger: 'hover'
+        },
+        popOverEnableOn: 'this.id === 1',
         type: 'text',
         toggled: true
       },

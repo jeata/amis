@@ -21,6 +21,7 @@ import Spinner from '../../components/Spinner';
 import {FormBaseControl} from './Item';
 import {ActionSchema} from '../Action';
 import {SchemaApi} from '../../Schema';
+import {generateIcon} from '../../utils/icon';
 
 // declare function matchSorter(items:Array<any>, input:any, options:any): Array<any>;
 
@@ -29,7 +30,14 @@ import {SchemaApi} from '../../Schema';
  * 文档：https://doc.jeata.com/amis/docs/components/form/text
  */
 export interface TextControlSchema extends FormOptionsControl {
-  type: 'text' | 'email' | 'url' | 'password';
+  type:
+    | 'text'
+    | 'email'
+    | 'url'
+    | 'password'
+    | 'native-date'
+    | 'native-time'
+    | 'native-number';
 
   addOn?: {
     position?: 'left' | 'right';
@@ -110,7 +118,8 @@ export default class TextControl extends React.PureComponent<
     labelField: 'label',
     valueField: 'value',
     placeholder: '',
-    allowInputText: true
+    allowInputText: true,
+    trimContents: true
   };
 
   componentWillReceiveProps(nextProps: TextProps) {
@@ -125,7 +134,14 @@ export default class TextControl extends React.PureComponent<
   }
 
   componentDidMount() {
-    const {formItem, autoComplete, addHook, formInited, data} = this.props;
+    const {
+      formItem,
+      autoComplete,
+      addHook,
+      formInited,
+      data,
+      name
+    } = this.props;
 
     if (isEffectiveApi(autoComplete, data) && formItem) {
       if (formInited) {
@@ -416,13 +432,19 @@ export default class TextControl extends React.PureComponent<
   }
 
   loadAutoComplete() {
-    const {formItem, autoComplete, data} = this.props;
+    const {
+      formItem,
+      autoComplete,
+      data,
+      multiple,
+      selectedOptions
+    } = this.props;
 
     if (isEffectiveApi(autoComplete, data) && formItem) {
       formItem.loadOptions(
         autoComplete,
         createObject(data, {
-          term: this.state.inputValue || formItem.lastSelectValue
+          term: this.state.inputValue || '' // (multiple ? '' : selectedOptions[selectedOptions.length - 1]?.value)
         })
       );
     }
@@ -509,7 +531,7 @@ export default class TextControl extends React.PureComponent<
               )}
               onClick={this.handleClick}
             >
-              <div className={cx('TextControl-valueWrap')}>
+              <>
                 {placeholder &&
                 !selectedOptions.length &&
                 !this.state.inputValue &&
@@ -553,7 +575,7 @@ export default class TextControl extends React.PureComponent<
                   autoComplete="off"
                   size={10}
                 />
-              </div>
+              </>
 
               {clearable && !disabled && value ? (
                 <a
@@ -588,7 +610,7 @@ export default class TextControl extends React.PureComponent<
                       >
                         {option.isNew ? (
                           <span>
-                            {__('新增：{{label}}', {label: option.label})}
+                            {__('Text.add', {label: option.label})}
                             <Icon icon="enter" className="icon" />
                           </span>
                         ) : (
@@ -618,14 +640,18 @@ export default class TextControl extends React.PureComponent<
       className,
       inputOnly,
       value,
-      type,
       placeholder,
       onChange,
       disabled,
       readOnly,
+      max,
+      min,
+      step,
       clearable,
       name
     } = this.props;
+
+    const type = this.props.type?.replace('native-', '');
 
     return (
       <div className={cx('TextControl-input', inputOnly ? className : '')}>
@@ -638,8 +664,11 @@ export default class TextControl extends React.PureComponent<
           type={type}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
+          max={max}
+          min={min}
           autoComplete="off"
           size={10}
+          step={step}
           onChange={this.handleNormalInputChange}
           value={
             typeof value === 'undefined' || value === null
@@ -660,6 +689,7 @@ export default class TextControl extends React.PureComponent<
 
   render(): JSX.Element {
     const {
+      classnames: cx,
       className,
       classPrefix: ns,
       options,
@@ -684,6 +714,9 @@ export default class TextControl extends React.PureComponent<
       autoComplete !== false && (source || options.length || autoComplete)
         ? this.renderSugestMode()
         : this.renderNormal();
+
+    const iconElement = generateIcon(cx, addOn?.icon, 'Icon');
+
     let addOnDom = addOn ? (
       addOn.actionType ||
       ~['button', 'submit', 'reset', 'action'].indexOf(addOn.type) ? (
@@ -695,7 +728,7 @@ export default class TextControl extends React.PureComponent<
       ) : (
         <div className={cx(`${ns}TextControl-addOn`, addOn.className)}>
           {addOn.label ? filter(addOn.label, data) : null}
-          {addOn.icon && <i className={addOn.icon} />}
+          {iconElement}
         </div>
       )
     ) : null;
@@ -754,3 +787,18 @@ export class EmailControlRenderer extends TextControl {}
   validations: 'isUrl'
 })
 export class UrlControlRenderer extends TextControl {}
+
+@OptionsControl({
+  type: 'native-date'
+})
+export class NativeDateControlRenderer extends TextControl {}
+
+@OptionsControl({
+  type: 'native-time'
+})
+export class NativeTimeControlRenderer extends TextControl {}
+
+@OptionsControl({
+  type: 'native-number'
+})
+export class NativeNumberControlRenderer extends TextControl {}

@@ -172,6 +172,7 @@ export default {
           type: 'checkboxes',
           name: 'checkboxes',
           label: '多选框',
+          value: 3,
           options: [
             {
               label: '选项1',
@@ -218,6 +219,7 @@ export default {
           type: 'radios',
           name: 'radios',
           label: '单选',
+          value: 3,
           options: [
             {
               label: '选项1',
@@ -491,6 +493,19 @@ export default {
           label: '开关'
         },
         {
+          type: 'switch',
+          name: 'switch2',
+          value: true,
+          label: '开关开启'
+        },
+        {
+          type: 'switch',
+          name: 'switch3',
+          value: true,
+          disabled: true,
+          label: '开关禁用'
+        },
+        {
           type: 'divider'
         },
         {
@@ -582,8 +597,8 @@ export default {
           name: 'year-month',
           inline: true,
           label: '年月',
-          "value": "-1month",
-          "inputFormat": "YYYY-MM"
+          value: '-1month',
+          inputFormat: 'YYYY-MM'
         },
         {
           type: 'divider'
@@ -593,8 +608,8 @@ export default {
           name: 'month',
           inline: true,
           label: '月份',
-          "value": "-1month",
-          "inputFormat": "MM"
+          value: '-1month',
+          inputFormat: 'MM'
         },
         {
           type: 'divider'
@@ -769,6 +784,18 @@ export default {
           type: 'image',
           name: 'image',
           label: '图片'
+        },
+        {
+          type: 'divider'
+        },
+        {
+          type: 'image',
+          name: 'image',
+          label: '图片有默认占位图',
+          frameImage:
+            'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3893101144,2877209892&fm=23&gp=0.jpg',
+          fixedSize: true,
+          fixedSizeClassName: 'h-32'
         },
         {
           type: 'divider'
@@ -1034,33 +1061,144 @@ export default {
           type: 'nested-select',
           name: 'nestedSelect',
           label: '级联选择器',
-          size: 'sm',
           options: [
             {
-              label: 'A',
-              value: 'a'
-            },
-            {
-              label: 'B',
-              value: 'b',
+              label: '概念',
+              value: 'concepts',
               children: [
                 {
-                  label: 'B-1',
-                  value: 'b-1'
+                  label: '配置与组件',
+                  value: 'schema'
                 },
                 {
-                  label: 'B-2',
-                  value: 'b-2'
+                  label: '数据域与数据链',
+                  value: 'scope'
                 },
                 {
-                  label: 'B-3',
-                  value: 'b-3'
+                  label: '模板',
+                  value: 'template'
+                },
+                {
+                  label: '数据映射',
+                  value: 'data-mapping'
+                },
+                {
+                  label: '表达式',
+                  value: 'expression'
+                },
+                {
+                  label: '联动',
+                  value: 'linkage'
+                },
+                {
+                  label: '行为',
+                  value: 'action'
+                },
+                {
+                  label: '样式',
+                  value: 'style'
                 }
               ]
             },
             {
-              label: 'C',
-              value: 'c'
+              label: '类型',
+              value: 'types',
+              children: [
+                {
+                  label: 'SchemaNode',
+                  value: 'schemanode'
+                },
+                {
+                  label: 'API',
+                  value: 'api'
+                },
+                {
+                  label: 'Definitions',
+                  value: 'definitions'
+                }
+              ]
+            },
+            {
+              label: '组件',
+              value: 'zujian',
+              children: [
+                {
+                  label: '布局',
+                  value: 'buju',
+                  children: [
+                    {
+                      label: 'Page 页面',
+                      value: 'page'
+                    },
+                    {
+                      label: 'Container 容器',
+                      value: 'container'
+                    },
+                    {
+                      label: 'Collapse 折叠器',
+                      value: 'Collapse'
+                    }
+                  ]
+                },
+                {
+                  label: '功能',
+                  value: 'gongneng',
+                  children: [
+                    {
+                      label: 'Action 行为按钮',
+                      value: 'action-type'
+                    },
+                    {
+                      label: 'App 多页应用',
+                      value: 'app'
+                    },
+                    {
+                      label: 'Button 按钮',
+                      value: 'button'
+                    }
+                  ]
+                },
+                {
+                  label: '数据输入',
+                  value: 'shujushuru',
+                  children: [
+                    {
+                      label: 'Form 表单',
+                      value: 'form'
+                    },
+                    {
+                      label: 'FormItem 表单项',
+                      value: 'formitem'
+                    },
+                    {
+                      label: 'Options 选择器表单项',
+                      value: 'options'
+                    }
+                  ]
+                },
+                {
+                  label: '数据展示',
+                  value: 'shujuzhanshi',
+                  children: [
+                    {
+                      label: 'CRUD 增删改查',
+                      value: 'crud'
+                    },
+                    {
+                      label: 'Table 表格',
+                      value: 'table'
+                    },
+                    {
+                      label: 'Card 卡片',
+                      value: 'card'
+                    }
+                  ]
+                },
+                {
+                  label: '反馈',
+                  value: 'fankui'
+                }
+              ]
             }
           ]
         },
@@ -1068,34 +1206,146 @@ export default {
           type: 'nested-select',
           name: 'nestedSelectMul',
           label: '级联选择器多选',
-          size: 'sm',
           multiple: true,
+          checkAll: false,
           options: [
             {
-              label: 'A',
-              value: 'a'
-            },
-            {
-              label: 'B',
-              value: 'b',
+              label: '概念',
+              value: 'concepts',
               children: [
                 {
-                  label: 'B-1',
-                  value: 'b-1'
+                  label: '配置与组件',
+                  value: 'schema'
                 },
                 {
-                  label: 'B-2',
-                  value: 'b-2'
+                  label: '数据域与数据链',
+                  value: 'scope'
                 },
                 {
-                  label: 'B-3',
-                  value: 'b-3'
+                  label: '模板',
+                  value: 'template'
+                },
+                {
+                  label: '数据映射',
+                  value: 'data-mapping'
+                },
+                {
+                  label: '表达式',
+                  value: 'expression'
+                },
+                {
+                  label: '联动',
+                  value: 'linkage'
+                },
+                {
+                  label: '行为',
+                  value: 'action'
+                },
+                {
+                  label: '样式',
+                  value: 'style'
                 }
               ]
             },
             {
-              label: 'C',
-              value: 'c'
+              label: '类型',
+              value: 'types',
+              children: [
+                {
+                  label: 'SchemaNode',
+                  value: 'schemanode'
+                },
+                {
+                  label: 'API',
+                  value: 'api'
+                },
+                {
+                  label: 'Definitions',
+                  value: 'definitions'
+                }
+              ]
+            },
+            {
+              label: '组件',
+              value: 'zujian',
+              children: [
+                {
+                  label: '布局',
+                  value: 'buju',
+                  children: [
+                    {
+                      label: 'Page 页面',
+                      value: 'page'
+                    },
+                    {
+                      label: 'Container 容器',
+                      value: 'container'
+                    },
+                    {
+                      label: 'Collapse 折叠器',
+                      value: 'Collapse'
+                    }
+                  ]
+                },
+                {
+                  label: '功能',
+                  value: 'gongneng',
+                  children: [
+                    {
+                      label: 'Action 行为按钮',
+                      value: 'action-type'
+                    },
+                    {
+                      label: 'App 多页应用',
+                      value: 'app'
+                    },
+                    {
+                      label: 'Button 按钮',
+                      value: 'button'
+                    }
+                  ]
+                },
+                {
+                  label: '数据输入',
+                  value: 'shujushuru',
+                  children: [
+                    {
+                      label: 'Form 表单',
+                      value: 'form'
+                    },
+                    {
+                      label: 'FormItem 表单项',
+                      value: 'formitem'
+                    },
+                    {
+                      label: 'Options 选择器表单项',
+                      value: 'options'
+                    }
+                  ]
+                },
+                {
+                  label: '数据展示',
+                  value: 'shujuzhanshi',
+                  children: [
+                    {
+                      label: 'CRUD 增删改查',
+                      value: 'crud'
+                    },
+                    {
+                      label: 'Table 表格',
+                      value: 'table'
+                    },
+                    {
+                      label: 'Card 卡片',
+                      value: 'card'
+                    }
+                  ]
+                },
+                {
+                  label: '反馈',
+                  value: 'fankui'
+                }
+              ]
             }
           ]
         },

@@ -10,7 +10,7 @@ export interface DateBaseControlSchema extends FormBaseControl {
   /**
    * 指定为日期选择控件
    */
-  type: 'date' | 'datetime' | 'time' | 'month';
+  type: 'date' | 'datetime' | 'time' | 'month' | 'quarter';
 
   /**
    * 是否显示清除按钮
@@ -179,11 +179,49 @@ export interface MonthControlSchema extends DateBaseControlSchema {
   inputFormat?: string;
 }
 
+/**
+ * 季度选择控件
+ */
+export interface QuarterControlSchema extends DateBaseControlSchema {
+  /**
+   * 指定为月份时间选择控件
+   */
+  type: 'quarter';
+
+  /**
+   * 月份存储格式
+   * @default X
+   */
+  format?: string;
+
+  /**
+   * 月份展示格式
+   * @default YYYY-MM
+   */
+  inputFormat?: string;
+}
+
 export interface DateProps extends FormControlProps {
   inputFormat?: string;
   timeFormat?: string;
   format?: string;
-  timeConstraints?: object;
+  timeConstraints?: {
+    hours?: {
+      min: number;
+      max: number;
+      step: number;
+    };
+    minutes?: {
+      min: number;
+      max: number;
+      step: number;
+    };
+    seconds: {
+      min: number;
+      max: number;
+      step: number;
+    };
+  };
   closeOnSelect?: boolean;
   disabled: boolean;
   iconClassName?: string;
@@ -267,19 +305,32 @@ export default class DateControl extends React.PureComponent<
   }
 
   render() {
-    const {
+    let {
       className,
       defaultValue,
       defaultData,
       classnames: cx,
       minDate,
       maxDate,
+      type,
+      format,
+      timeFormat,
       ...rest
     } = this.props;
 
+    if (type === 'time' && timeFormat) {
+      format = timeFormat;
+    }
+
     return (
       <div className={cx(`DateControl`, className)}>
-        <DatePicker {...rest} {...this.state} classnames={cx} />
+        <DatePicker
+          {...rest}
+          timeFormat={timeFormat}
+          format={format}
+          {...this.state}
+          classnames={cx}
+        />
       </div>
     );
   }
@@ -292,7 +343,7 @@ export default class DateControl extends React.PureComponent<
 export class DateControlRenderer extends DateControl {
   static defaultProps = {
     ...DateControl.defaultProps,
-    placeholder: '请选择日期',
+    placeholder: 'Date.placeholder',
     dateFormat: 'YYYY-MM-DD',
     timeFormat: '',
     strictMode: false
@@ -305,7 +356,7 @@ export class DateControlRenderer extends DateControl {
 export class DatetimeControlRenderer extends DateControl {
   static defaultProps = {
     ...DateControl.defaultProps,
-    placeholder: '请选择日期以及时间',
+    placeholder: 'DateTime.placeholder',
     inputFormat: 'YYYY-MM-DD HH:mm:ss',
     dateFormat: 'LL',
     timeFormat: 'HH:mm:ss',
@@ -320,7 +371,7 @@ export class DatetimeControlRenderer extends DateControl {
 export class TimeControlRenderer extends DateControl {
   static defaultProps = {
     ...DateControl.defaultProps,
-    placeholder: '请选择时间',
+    placeholder: 'Time.placeholder',
     inputFormat: 'HH:mm',
     dateFormat: '',
     timeFormat: 'HH:mm',
@@ -335,11 +386,41 @@ export class TimeControlRenderer extends DateControl {
 export class MonthControlRenderer extends DateControl {
   static defaultProps = {
     ...DateControl.defaultProps,
-    placeholder: '请选择月份',
+    placeholder: 'Month.placeholder',
     inputFormat: 'YYYY-MM',
     dateFormat: 'MM',
-    timeFormat: 'MM',
+    timeFormat: '',
     viewMode: 'months',
-    closeOnSelect: false
+    closeOnSelect: true
+  };
+}
+
+@FormItem({
+  type: 'quarter'
+})
+export class QuarterControlRenderer extends DateControl {
+  static defaultProps = {
+    ...DateControl.defaultProps,
+    placeholder: 'Quarter.placeholder',
+    inputFormat: 'YYYY [Q]Q',
+    dateFormat: 'YYYY [Q]Q',
+    timeFormat: '',
+    viewMode: 'quarters',
+    closeOnSelect: true
+  };
+}
+
+@FormItem({
+  type: 'year'
+})
+export class YearControlRenderer extends DateControl {
+  static defaultProps = {
+    ...DateControl.defaultProps,
+    placeholder: 'Year.placeholder',
+    inputFormat: 'YYYY',
+    dateFormat: 'YYYY',
+    timeFormat: '',
+    viewMode: 'years',
+    closeOnSelect: true
   };
 }

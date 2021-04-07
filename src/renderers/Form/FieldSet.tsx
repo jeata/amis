@@ -28,6 +28,16 @@ export interface FieldSetControlSchema
   controls?: Array<FormControlSchema>;
 
   /**
+   * 是否可折叠
+   */
+  collapsable?: boolean;
+
+  /**
+   * 默认是否折叠
+   */
+  collapsed?: boolean;
+
+  /**
    * 内容区域
    */
   body?: SchemaCollection;
@@ -41,11 +51,24 @@ export interface FieldSetControlSchema
    * 收起的标题
    */
   collapseTitle?: SchemaTpl;
+
+  /**
+   * 点开时才加载内容
+   */
+  mountOnEnter?: boolean;
+
+  /**
+   * 卡片隐藏就销毁内容。
+   */
+  unmountOnExit?: boolean;
 }
 
 export interface FieldSetProps
   extends RendererProps,
-    Omit<FieldSetControlSchema, 'type'> {}
+    Omit<
+      FieldSetControlSchema,
+      'type' | 'className' | 'descriptionClassName' | 'inputClassName'
+    > {}
 
 export default class FieldSetControl extends React.Component<
   FieldSetProps,
@@ -98,11 +121,7 @@ export default class FieldSetControl extends React.Component<
           formClassName
         )}
       >
-        {renderFormItems(
-          {controls},
-          ($path as string).replace(/^.*form\//, ''),
-          props
-        )}
+        {renderFormItems({controls}, 'controls', props)}
       </div>
     );
   }

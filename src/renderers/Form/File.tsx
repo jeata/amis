@@ -121,7 +121,7 @@ export interface FileControlSchema extends FormBaseControl {
    *
    * @default /api/upload/file
    */
-  reciever?: SchemaApi;
+  receiver?: SchemaApi;
 
   /**
    * 默认 `/api/upload/startChunk` 想自己存储时才需要关注。
@@ -190,7 +190,10 @@ export interface FileControlSchema extends FormBaseControl {
 
 export interface FileProps
   extends FormControlProps,
-    Omit<FileControlSchema, 'type'> {
+    Omit<
+      FileControlSchema,
+      'type' | 'className' | 'descriptionClassName' | 'inputClassName'
+    > {
   stateTextMap: {
     init: string;
     pending: string;
@@ -251,8 +254,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
     maxSize: 10240,
     maxLength: 5,
     placeholder: '',
-    btnLabel: '文件上传',
-    reciever: '/api/upload/file',
+    receiver: '/api/upload/file',
     fileField: 'file',
     joinValues: true,
     extractValue: false,
@@ -435,14 +437,11 @@ export default class FileControl extends React.Component<FileProps, FileState> {
     [].slice.call(files, 0, allowed).forEach((file: FileX) => {
       if (maxSize && file.size > maxSize) {
         this.props.env.alert(
-          __(
-            '您选择的文件 {{filename}} 大小为 {{actualSize}} 超出了最大为 {{maxSize}} 的限制，请重新选择。',
-            {
-              filename: file.name,
-              actualSize: ImageControl.formatFileSize(file.size),
-              maxSize: ImageControl.formatFileSize(maxSize)
-            }
-          )
+          __('File.maxSize', {
+            filename: file.name,
+            actualSize: ImageControl.formatFileSize(file.size),
+            maxSize: ImageControl.formatFileSize(maxSize)
+          })
         );
         file.state = 'invalid';
       } else {
@@ -497,7 +496,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
     // });
 
     env.alert(
-      __('您添加的文件{{files}}不符合类型的`{{accept}}`的设定，请仔细检查。', {
+      __('File.invalidType', {
         files: files.map((item: any) => `「${item.name}」`).join(' '),
         accept
       })
@@ -595,6 +594,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                   files: files
                 },
                 () => {
+                  // todo 这个逻辑应该移到 onChange 里面去，因为这个时候并不一定修改了表单项的值。
                   const sendTo =
                     !multiple &&
                     autoFill &&
@@ -633,7 +633,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
           if (this.resolve) {
             this.resolve(
               this.state.files.some(file => file.state === 'error')
-                ? __('文件上传失败请重试')
+                ? __('File.errorRetry')
                 : null
             );
             this.resolve = undefined;
@@ -649,7 +649,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
     onProgress: (progress: number) => void
   ) {
     const {
-      reciever,
+      receiver,
       fileField,
       downloadUrl,
       useChunk,
@@ -702,7 +702,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
 
     fn(
       file,
-      reciever as string,
+      receiver as string,
       {},
       {
         fieldName: fileField,
@@ -716,11 +716,12 @@ export default class FileControl extends React.Component<FileProps, FileState> {
     )
       .then(ret => {
         if (ret.status || !ret.data) {
-          throw new Error(ret.msg || __('上传失败, 请重试'));
+          throw new Error(ret.msg || __('File.errorRetry'));
         }
 
         onProgress(1);
-        const value = (ret.data as any).value || ret.data;
+        let value =
+          (ret.data as any).value || (ret.data as any).url || ret.data;
 
         cb(null, file, {
           ...(isPlainObject(ret.data) ? ret.data : null),
@@ -736,7 +737,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
         });
       })
       .catch(error => {
-        cb(error.message || __('上传失败, 请重试'), file);
+        cb(error.message || __('File.errorRetry'), file);
       });
   }
 
@@ -797,13 +798,13 @@ export default class FileControl extends React.Component<FileProps, FileState> {
 
   uploadFile(
     file: FileX,
-    reciever: string,
+    receiver: string,
     params: object,
     config: Partial<FileProps> = {},
     onProgress: (progress: number) => void
   ): Promise<Payload> {
     const fd = new FormData();
-    const api = buildApi(reciever, createObject(config.data, params), {
+    const api = buildApi(receiver, createObject(config.data, params), {
       method: 'post'
     });
 
@@ -822,7 +823,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
 
   uploadBigFile(
     file: FileX,
-    reciever: string,
+    receiver: string,
     params: object,
     config: Partial<FileProps> = {},
     onProgress: (progress: number) => void
@@ -873,7 +874,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
         progressArr = tasks.map(() => 0);
 
         if (!ret.data) {
-          throw new Error(__('接口返回错误，请仔细检查'));
+          throw new Error(__('File.uploadFailed'));
         }
 
         state = {
@@ -1035,7 +1036,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
         this.startUpload();
       });
     } else if (this.state.files.some(item => item.state === 'error')) {
-      return __('文件上传失败请重试');
+      return __('File.errorRetry');
     }
   }
 
@@ -1095,7 +1096,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
 
               {isDragActive ? (
                 <div className={cx('FileControl-acceptTip')}>
-                  {__('把文件拖到这，然后松完成添加！')}
+                  {__('File.dragDrop')}
                 </div>
               ) : (
                 <>
@@ -1109,10 +1110,12 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                     >
                       <Icon icon="upload" className="icon" />
                       {!multiple && files.length
-                        ? __('重新上传')
+                        ? __('File.repick')
                         : multiple && files.length
-                        ? __('继续添加')
-                        : __('上传文件')}
+                        ? __('File.continueAdd')
+                        : btnLabel
+                        ? btnLabel
+                        : __('File.upload')}
                     </Button>
                   ) : null}
 
@@ -1153,9 +1156,9 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                             file.state === 'error' ? (
                               <Icon icon="fail" className="icon" />
                             ) : null}
-                            {file.state !== 'uploading' ? (
+                            {file.state !== 'uploading' && !disabled ? (
                               <a
-                                data-tooltip={__('移除')}
+                                data-tooltip={__('Select.clear')}
                                 className={cx('FileControl-clear')}
                                 onClick={() => this.removeFile(file, index)}
                               >
@@ -1199,12 +1202,12 @@ export default class FileControl extends React.Component<FileProps, FileState> {
 
         {failed ? (
           <div className={cx('FileControl-sum')}>
-            {__('已成功上传{{uploaded}}个文件，{{failed}}个文件上传失败，', {
+            {__('File.result', {
               uploaded,
               failed
             })}
-            <a onClick={this.retry}>{__('重试上传')}</a>
-            {__('失败文件。')}
+            <a onClick={this.retry}>{__('File.retry')}</a>
+            {__('File.failed')}
           </div>
         ) : null}
 
@@ -1215,7 +1218,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
             className={cx('FileControl-uploadBtn')}
             onClick={this.toggleUpload}
           >
-            {__(uploading ? '暂停上传' : '开始上传')}
+            {__(uploading ? 'File.pause' : 'File.start')}
           </Button>
         ) : null}
       </div>

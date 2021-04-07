@@ -14,7 +14,7 @@ export interface LinkSchema extends BaseSchema {
   /**
    * 指定为 link 链接展示控件
    */
-  type: "link";
+  type: 'link';
 
   /**
    * 是否新窗口打开。
@@ -40,8 +40,9 @@ export interface LinkSchema extends BaseSchema {
   tooltipPlacement?: "top" | "right" | "bottom" | "left";
 }
 
-export interface LinkProps extends RendererProps, LinkSchema {
-}
+export interface LinkProps
+  extends RendererProps,
+    Omit<LinkSchema, 'type' | 'className'> {}
 
 export class LinkField extends React.Component<LinkProps, object> {
   static defaultProps = {
@@ -86,7 +87,7 @@ export class LinkField extends React.Component<LinkProps, object> {
     } = this.props;
 
     let value = this.props.value;
-    const finnalHref = href ? filter(href, data) : "";
+    const finnalHref = href ? filter(href, data, '| raw') : '';
 
     if (tooltip) {
       return (
@@ -100,7 +101,7 @@ export class LinkField extends React.Component<LinkProps, object> {
           <a onClick={this.handleClick.bind(this)}
              className={cx("Link", className)}
           >
-            {body ? render("body", body) : filter(value.toString(), data) || __("链接")}
+            {body ? render("body", body) : filter(value.toString(), data) || __("link")}
           </a>
         </TooltipWrapper>
       );
@@ -112,7 +113,7 @@ export class LinkField extends React.Component<LinkProps, object> {
         <a onClick={this.handleClick.bind(this)}
            className={cx("Link", className)}
         >
-          {body ? render("body", body) : filter(value.toString(), data) || finnalHref || __("链接")}
+          {body ? render("body", body) : filter(value.toString(), data) || finnalHref || __("link")}
         </a>
       );
     }
@@ -120,10 +121,10 @@ export class LinkField extends React.Component<LinkProps, object> {
     return (
       <a
         href={finnalHref || value}
-        target={htmlTarget || (blank ? "_blank" : "_self")}
-        className={cx("Link", className)}
+        target={htmlTarget || (blank ? '_blank' : '_self')}
+        className={cx('Link', className)}
       >
-        {body ? render("body", body) : finnalHref || value || __("链接")}
+        {body ? render('body', body) : finnalHref || value || __('link')}
       </a>
     );
   }
@@ -131,7 +132,6 @@ export class LinkField extends React.Component<LinkProps, object> {
 
 @Renderer({
   test: /(^|\/)link$/,
-  name: "link"
+  name: 'link'
 })
-export class LinkFieldRenderer extends LinkField {
-}
+export class LinkFieldRenderer extends LinkField {}

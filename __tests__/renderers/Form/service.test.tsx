@@ -1,34 +1,34 @@
 import React = require('react');
 import {render, cleanup} from 'react-testing-library';
 import '../../../src/themes/default';
-import {
-    render as amisRender
-} from '../../../src/index';
+import {render as amisRender} from '../../../src/index';
 import {makeEnv, wait} from '../../helper';
-import { clearStoresCache } from '../../../src/factory';
+import {clearStoresCache} from '../../../src/factory';
 
 afterEach(() => {
-    cleanup();
-    clearStoresCache();
+  cleanup();
+  clearStoresCache();
 });
 
 test('Renderer:service', async () => {
-    const fetcher = jest.fn().mockImplementation(() => Promise.resolve({
+  const fetcher = jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      data: {
+        status: 0,
+        msg: 'ok',
         data: {
-            status: 0,
-            msg: 'ok',
-            data: {
-                controls: [
-                    {type: "text", label: "动态字段1", name: "dy_1", required: true},
-                    {type: "text", label: "动态字段2", name: "dy_2"}
-                ]
-            }
+          controls: [
+            {type: 'text', label: '动态字段1', name: 'dy_1', required: true},
+            {type: 'text', label: '动态字段2', name: 'dy_2'}
+          ]
         }
-    }));
+      }
+    })
+  );
 
-    const {
-        container
-    } = render(amisRender({
+  const {container} = render(
+    amisRender(
+      {
         type: 'form',
         title: 'The form',
         controls: [
@@ -63,11 +63,15 @@ test('Renderer:service', async () => {
         ],
         submitText: null,
         actions: []
-    }, {}, makeEnv({
+      },
+      {},
+      makeEnv({
         fetcher
-    })));
+      })
+    )
+  );
 
-    await wait(100);
-    expect(fetcher).toHaveBeenCalled();
-    expect(container).toMatchSnapshot();
+  await wait(100);
+  expect(fetcher).toHaveBeenCalled();
+  expect(container).toMatchSnapshot();
 });

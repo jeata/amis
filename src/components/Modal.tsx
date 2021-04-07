@@ -65,7 +65,7 @@ export class Modal extends React.Component<ModalProps, ModalState> {
         <div {...rest} className={cx('Modal-header', className)}>
           {showCloseButton !== false ? (
             <a
-              data-tooltip={__('关闭弹窗')}
+              data-tooltip={__('Dialog.close')}
               data-position="left"
               onClick={onClose}
               className={cx('Modal-close')}
@@ -132,6 +132,7 @@ export class Modal extends React.Component<ModalProps, ModalState> {
 
   componentDidMount() {
     if (this.props.show) {
+      this.handleEnter();
       this.handleEntered();
     }
   }
@@ -188,18 +189,17 @@ export class Modal extends React.Component<ModalProps, ModalState> {
     } = this.props;
 
     return (
-      // @ts-ignore
-      <Portal container={container}>
-        <Transition
-          mountOnEnter
-          unmountOnExit
-          in={show}
-          timeout={500}
-          onEnter={this.handleEnter}
-          onExited={this.handleExited}
-          onEntered={this.handleEntered}
-        >
-          {(status: string) => (
+      <Transition
+        mountOnEnter
+        unmountOnExit
+        in={show}
+        timeout={500}
+        onEnter={this.handleEnter}
+        onExited={this.handleExited}
+        onEntered={this.handleEntered}
+      >
+        {(status: string) => (
+          <Portal container={container}>
             <div
               ref={this.modalRef}
               role="dialog"
@@ -224,9 +224,9 @@ export class Modal extends React.Component<ModalProps, ModalState> {
                 {children}
               </div>
             </div>
-          )}
-        </Transition>
-      </Portal>
+          </Portal>
+        )}
+      </Transition>
     );
   }
 }

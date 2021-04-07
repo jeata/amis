@@ -9,6 +9,9 @@
 @import '../layout/hbox';
 @import '../layout/vbox';
 @import '../components/button'; // 这个要放在最前面
+@import '../components/avatar';
+@import '../components/breadcrumb';
+@import '../components/badge';
 @import '../components/modal';
 @import '../components/drawer';
 @import '../components/tooltip';
@@ -16,6 +19,7 @@
 @import '../components/popover';
 @import '../components/toast';
 @import '../components/alert';
+@import '../components/app';
 @import '../components/array-input';
 @import '../components/tabs';
 @import '../components/nav';
@@ -26,6 +30,7 @@
 @import '../components/audio';
 @import '../components/panel';
 @import '../components/service';
+@import '../components/sparkline';
 @import '../components/spinner';
 @import '../components/button-group';
 @import '../components/dropdown';
@@ -43,6 +48,7 @@
 @import '../components/quick-edit';
 @import '../components/popoverable';
 @import '../components/progress';
+@import '../components/property';
 @import '../components/copyable';
 @import '../components/divider';
 @import '../components/pagination';
@@ -55,7 +61,9 @@
 @import '../components/result-box';
 @import '../components/search-box';
 @import '../components/list-menu';
+@import '../components/log';
 @import '../components/json';
+@import '../components/icon';
 
 @import '../components/form/fieldset';
 @import '../components/form/group';
@@ -95,5 +103,6 @@
 @import '../components/form/nested-select';
 @import '../components/form/icon-picker';
 @import '../components/form/form';
+@import '../components/anchor-nav';
 
 @import '../utilities';

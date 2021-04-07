@@ -46,14 +46,16 @@ export interface DateSchema extends BaseSchema {
   updateFrequency?: number;
 }
 
-export interface DateProps extends RendererProps, DateSchema {}
+export interface DateProps
+  extends RendererProps,
+    Omit<DateSchema, 'type' | 'className'> {}
 
 export interface DateState {
   random?: number;
 }
 
 export class DateField extends React.Component<DateProps, DateState> {
-  refreshInterval: NodeJS.Timeout;
+  refreshInterval: ReturnType<typeof setTimeout>;
 
   static defaultProps: Pick<
     DateProps,
@@ -120,7 +122,7 @@ export class DateField extends React.Component<DateProps, DateState> {
     }
 
     viewValue = !viewValue ? (
-      <span className="text-danger">{__('日期无效')}</span>
+      <span className="text-danger">{__('Date.invalid')}</span>
     ) : (
       viewValue
     );

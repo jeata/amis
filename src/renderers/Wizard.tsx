@@ -169,7 +169,9 @@ export interface WizardSchema extends BaseSchema {
   steps: Array<WizardStepSchema>;
 }
 
-export interface WizardProps extends RendererProps, WizardSchema {
+export interface WizardProps
+  extends RendererProps,
+    Omit<WizardSchema, 'className'> {
   store: IServiceStore;
   onFinished: (values: object, action: any) => any;
 }
@@ -184,10 +186,10 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
     readOnly: false,
     messages: {},
     actionClassName: '',
-    actionPrevLabel: '上一步',
-    actionNextLabel: '下一步',
-    actionNextSaveLabel: '保存并下一步',
-    actionFinishLabel: '完成'
+    actionPrevLabel: 'Wizard.prev',
+    actionNextLabel: 'Wizard.next',
+    actionNextSaveLabel: 'Wizard.saveAndNext',
+    actionFinishLabel: 'Wizard.finish'
   };
 
   static propsList: Array<string> = [
@@ -289,6 +291,10 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
     }
 
     const dom = findDOMNode(this) as HTMLElement;
+    if (!(dom instanceof Element)) {
+      return;
+    }
+
     let parent: HTMLElement | Window | null = dom ? getScrollParent(dom) : null;
     if (!parent || parent === document.body) {
       parent = window;
@@ -659,6 +665,11 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
                 (ret: any) => ret && ret[finishedField || 'finished'],
                 cancel => (this.asyncCancel = cancel)
               );
+            },
+            onFailed: json => {
+              if (json.status === 422 && json.errors && this.form) {
+                this.form.props.store.handleRemoteError(json.errors);
+              }
             }
           })
           .then((value: any) =>
@@ -943,7 +954,8 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
       classPrefix: ns,
       classnames: cx,
       popOverContainer,
-      mode
+      mode,
+      translate: __
     } = this.props;
 
     const currentStep = this.state.currentStep;
@@ -989,9 +1001,9 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
                 }
               )
             ) : currentStep === -1 ? (
-              '初始中。。'
+              __('loading')
             ) : (
-              <p className="text-danger">配置错误</p>
+              <p className="text-danger">{__('Wizard.configError')}</p>
             )}
           </div>
           {this.renderFooter()}

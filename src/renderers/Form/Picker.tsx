@@ -7,7 +7,7 @@ import {
 } from './Options';
 import cx from 'classnames';
 import Button from '../../components/Button';
-import {SchemaNode, Schema, Action} from '../../types';
+import {SchemaNode, Schema, Action, PlainObject} from '../../types';
 import find from 'lodash/find';
 import {
   anyChanged,
@@ -25,6 +25,7 @@ import {isEmpty} from '../../utils/helper';
 import {dataMapping} from '../../utils/tpl-builtin';
 import {SchemaCollection, SchemaTpl} from '../../Schema';
 import {CRUDSchema} from '../CRUD';
+import {isApiOutdated, isEffectiveApi} from '../../utils/api';
 
 /**
  * Picker
@@ -67,7 +68,7 @@ export interface PickerControlSchema extends FormOptionsControl {
 
 export interface PickerProps extends OptionsControlProps {
   modalMode: 'dialog' | 'drawer';
-  pickerSchema: object;
+  pickerSchema: PlainObject;
   labelField: string;
 }
 
@@ -98,7 +99,7 @@ export default class PickerControl extends React.PureComponent<
   static defaultProps: Partial<PickerProps> = {
     modalMode: 'dialog',
     multiple: false,
-    placeholder: '请点击按钮选择',
+    placeholder: '请点击右侧的图标',
     labelField: 'label',
     valueField: 'value',
     pickerSchema: {
@@ -137,6 +138,10 @@ export default class PickerControl extends React.PureComponent<
 
     if (JSON.stringify(props.value) !== JSON.stringify(prevProps.value)) {
       this.fetchOptions();
+    } else if (
+      isApiOutdated(prevProps.source, props.source, prevProps.data, props.data)
+    ) {
+      this.fetchOptions();
     }
   }
 
@@ -147,6 +152,7 @@ export default class PickerControl extends React.PureComponent<
     if (
       !source ||
       !formItem ||
+      (valueField || 'value') === (labelField || 'label') ||
       ((selectedOptions = formItem.getSelectedOptions(value)) &&
         (!selectedOptions.length ||
           selectedOptions[0][valueField || 'value'] !==
@@ -155,21 +161,22 @@ export default class PickerControl extends React.PureComponent<
       return;
     }
 
-    formItem.loadOptions(
-      source,
-      createObject(data, {
-        value: value,
-        op: 'loadOptions'
-      }),
-      {
+    const ctx = createObject(data, {
+      value: value,
+      op: 'loadOptions'
+    });
+
+    isEffectiveApi(source, ctx) &&
+      formItem.loadOptions(source, ctx, {
         autoAppend: true
-      }
-    );
+      });
   }
 
   buildSchema(props: PickerProps) {
     return {
+      checkOnItemClick: true,
       ...props.pickerSchema,
+      labelTpl: props.pickerSchema?.labelTpl ?? props.labelTpl,
       type: 'crud',
       pickerMode: true,
       syncLocation: false,
@@ -177,7 +184,6 @@ export default class PickerControl extends React.PureComponent<
       keepItemSelectionOnPageChange: true,
       valueField: props.valueField,
       labelField: props.labelField,
-      checkOnItemClick: true,
 
       // 不支持批量操作，会乱套
       bulkActions: props.multiple
@@ -244,9 +250,7 @@ export default class PickerControl extends React.PureComponent<
       multiple,
       options,
       setOptions,
-      onChange,
-      autoFill,
-      onBulkChange
+      onChange
     } = this.props;
 
     let value: any = items;
@@ -276,12 +280,6 @@ export default class PickerControl extends React.PureComponent<
     });
 
     additionalOptions.length && setOptions(options.concat(additionalOptions));
-    const sendTo =
-      !multiple &&
-      autoFill &&
-      !isEmpty(autoFill) &&
-      dataMapping(autoFill, value as Option);
-    sendTo && onBulkChange(sendTo);
     onChange(value);
   }
 
@@ -361,6 +359,7 @@ export default class PickerControl extends React.PureComponent<
       labelTpl,
       disabled
     } = this.props;
+
     return (
       <div className={`${ns}Picker-values`}>
         {selectedOptions.map((item, index) => (
@@ -485,7 +484,7 @@ export default class PickerControl extends React.PureComponent<
             {render(
               'modal',
               {
-                title: __('请选择'),
+                title: __('Select.placeholder'),
                 size: size,
                 type: modalMode,
                 body: {

@@ -4,12 +4,13 @@ import Layout from '../../src/components/Layout';
 import AsideNav from '../../src/components/AsideNav';
 import {
   AlertComponent,
+  Button,
   Drawer,
   ToastComponent
 } from '../../src/components/index';
-import {mapTree} from '../../src/utils/helper';
+import {eachTree, mapTree} from '../../src/utils/helper';
 import {Icon} from '../../src/components/icons';
-import '../../src/locale/en';
+import '../../src/locale/en-US';
 import {
   Router,
   Route,
@@ -21,18 +22,24 @@ import {
   withRouter
 } from 'react-router';
 import Select from '../../src/components/Select';
+import InputBox from '../../src/components/InputBox';
 import DocSearch from './DocSearch';
-import Doc, {docs} from './Doc';
+import Doc from './Doc';
+import DocNavCN from './DocNavCN';
 import Example, {examples} from './Example';
+import CSSDocs, {cssDocs} from './CssDocs';
+import Components, {components} from './Components';
 
-let ExamplePathPrefix = '/examples';
-let DocPathPrefix = '/docs';
+declare const _hmt: any;
+
 let ContextPath = '';
 
 if (process.env.NODE_ENV === 'production') {
-  ExamplePathPrefix = '';
-  DocPathPrefix = '';
   ContextPath = '/amis';
+}
+
+export function getContextPath() {
+  return ContextPath;
 }
 
 const themes = [
@@ -51,18 +58,23 @@ const themes = [
     label: 'Dark',
     ns: 'dark-',
     value: 'dark'
+  },
+  {
+    label: '仿 AntD',
+    ns: 'antd-',
+    value: 'antd'
   }
 ];
 
 const locales = [
   {
     label: '中文',
-    value: 'zh-cn'
+    value: 'zh-CN'
   },
 
   {
     label: 'English',
-    value: 'en'
+    value: 'en-US'
   }
 ];
 
@@ -116,41 +128,34 @@ class BackTop extends React.PureComponent {
     );
   }
 }
-
-@withRouter
-export class App extends React.PureComponent {
+// @ts-ignore
+@withRouter // @ts-ignore
+export class App extends React.PureComponent<{
+  location: Location;
+}> {
   state = {
     viewMode: 'pc', //localStorage.getItem('viewMode') || 'pc',
     offScreen: false,
+    folded: false,
     headerVisible: true,
     themeIndex: 0,
     themes: themes,
-    theme: themes[0],//themes[localStorage.getItem('themeIndex') || 0],
-    locale: 'zh-cn', //localStorage.getItem('locale') || '',
+    theme: themes[0],
+      // themes.find(item => item?.value === localStorage.getItem('theme')) ||
+      // themes[0],
+    locale: localStorage.getItem('locale')
+      ? localStorage.getItem('locale').replace('zh-cn', 'zh-CN')
+      : '',
+    navigations: [],
     inIFrame: false,
-    navigations: []
+    filter: '' // 导航过滤，方便找组件
   };
-
   docSearch:any;
 
   constructor(props) {
     super(props);
     this.setNavigations = this.setNavigations.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.state.theme.value !== 'default') {
-      document.querySelectorAll('link[title]').forEach(item => {
-        item.disabled = true;
-      });
-
-      document.querySelector(
-        `link[title=${this.state.theme.value}]`
-      ).disabled = false;
-
-      if (this.state.theme.value === 'dark') {
-        document.querySelector('body').classList.add('dark');
-      }
+    this.setNavigationFilter = this.setNavigationFilter.bind(this);
     }
 
     if(window != top.window || location.search.indexOf('_inIframe=1') != -1) {
@@ -165,13 +170,15 @@ export class App extends React.PureComponent {
     const props = this.props;
 
     if (preState.theme.value !== this.state.theme.value) {
-      document.querySelector(
-        `link[title=${preState.theme.value}]`
-      ).disabled = true;
-
-      document.querySelector(
-        `link[title=${this.state.theme.value}]`
-      ).disabled = false;
+      [].slice
+        .call(document.querySelectorAll('link[title]'))
+        .forEach((item: HTMLLinkElement) => {
+          const theme = item.getAttribute('title');
+          item.disabled = theme !== this.state.theme.value;
+        });
+      const body = document.querySelector('body');
+      body.classList.remove(preState.theme.value);
+      body.classList.add(this.state.theme.value);
     }
 
     if (props.location.pathname !== preProps.location.pathname) {
@@ -216,7 +223,7 @@ export class App extends React.PureComponent {
   }
 
 
-  renderHeader() {
+  renderHeader(docPage = true) {
     const location = this.props.location;
     const theme = this.state.theme;
     const inIframe = this.state.inIFrame;
@@ -231,9 +238,14 @@ export class App extends React.PureComponent {
 
     return (
       <>
-        <div className={`${theme.ns}Layout-brandBar`}>
-
-          <div className={`${theme.ns}Layout-offScreen-group visible-xs`}>
+        <div
+          className={`${theme.ns}Layout-brandBar ${
+            docPage ? 'DocLayout-brandBar' : ''
+          }`}
+        >
+          <div className={`${theme.ns}Layout-offScreen-group ${
+              docPage ? 'DocLayout-offScreen-btn' : ''
+            } visible-xs`}>
             <div
               onClick={() => this.setState({offScreen: !this.state.offScreen})}
               className={`${theme.ns}Layout-offScreen-btn`}
@@ -268,23 +280,59 @@ export class App extends React.PureComponent {
           </div>
         </div>
 
-        <div className={`${theme.ns}Layout-headerBar`}>
-          <ul className={`${theme.ns}Layout-headerBar-links pull-left`}>
+        <div
+          className={`${theme.ns}Layout-headerBar ${
+            docPage ? 'DocLayout-headerBar' : ''
+          } pc:flex items-center`}
+        >
+          {docPage ? null : (
+            <Button
+              onClick={() => this.setState({folded: !this.state.folded})}
+              type="button"
+              level="link"
+              className="navbar-btn"
+            >
+              <i
+                className={`fa fa-${
+                  this.state.folded ? 'indent' : 'dedent'
+                } fa-fw`}
+              ></i>
+            </Button>
+          )}
+
+          <ul className={`HeaderLinks`}>
             <a href="/">文档首页</a>
             <a href="/docs/cloud">使用文档</a>
-            <Link to={`${ContextPath}/docs`} activeClassName="is-active">
+            <Link to={`${ContextPath}/zh-CN/docs`} activeClassName="is-active">
               页面文档
+            </Link>
+
+            <Link
+              to={`${ContextPath}/zh-CN/components`}
+              activeClassName="is-active"
+            >
+              组件
+            </Link>
+            <Link to={`${ContextPath}/zh-CN/style`} activeClassName="is-active">
+              样式
             </Link>
             <Link to={`${ContextPath}/examples`} activeClassName="is-active">
               页面示例
             </Link>
           </ul>
+
+          <div id="Header-toolbar"></div>
         </div>
 
-        <div className={`${theme.ns}Layout-searchBar hidden-xs hidden-sm`}>
+        {docPage ? (
+          <>
+            <div
+              className={`${theme.ns}Layout-searchBar ${
+                docPage ? 'DocLayout-searchBar' : ''
+              } hidden-xs hidden-sm`}
+            >
           <DocSearch theme={theme} onRef={this.onSearchRef.bind(this)} />
-        </div>
-
+            </div>
         <div className={`${theme.ns}Layout-searchIcon visible-sm`}>
           <div
             onClick={this.onSearchClick.bind(this)}
@@ -293,84 +341,200 @@ export class App extends React.PureComponent {
             <i className="bui-icon iconfont icon-search"></i>
           </div>
         </div>
+          </>
+        ) : null}
       </>
     );
+  }
+
+  setNavigationFilter(value: string) {
+    this.setState({
+      filter: value
+    });
   }
 
   renderNavigation() {
     return (
       <div className="Doc-navigation">
-        <AsideNav
-          navigations={this.state.navigations.map(item => ({
-            ...item,
-            children: item.children
-              ? item.children.map(item => ({
-                  ...item,
-                  className: 'is-top'
-                }))
-              : []
-          }))}
-          renderLink={({
-            link,
-            active,
-            toggleExpand,
-            classnames: cx,
-            depth
-          }: any) => {
-            let children = [];
-
-            if (link.children && link.children.length) {
-              children.push(
-                <span
-                  key="expand-toggle"
-                  className={cx('AsideNav-itemArrow')}
-                  onClick={e => toggleExpand(link, e)}
-                ></span>
-              );
-            }
-
-            children.push(
-              <span className={cx('AsideNav-itemLabel')} key="label">
-                {link.label}
-              </span>
-            );
-
-            return link.path ? (
-              /^https?\:/.test(link.path) ? (
-                <a target="_blank" href={link.path} rel="noopener">
-                  {children}
-                </a>
-              ) : (
-                <Link
-                  to={
-                    getPath(link.path) ||
-                    (link.children && getPath(link.children[0].path))
-                  }
-                >
-                  {children}
-                </Link>
-              )
-            ) : (
-              <a onClick={link.children ? () => toggleExpand(link) : undefined}>
-                {children}
-              </a>
-            );
-          }}
-          isActive={(link: any) => isActive(link, location)}
+        <InputBox
+          theme={this.state.theme.value}
+          placeholder={'过滤...'}
+          onChange={this.setNavigationFilter}
+          className="m-b m-r-md"
         />
+        {this.renderAsideNav()}
       </div>
     );
   }
 
-  render() {
+  renderAsideNav() {
+    const filterReg = new RegExp(
+      this.state.filter.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'),
+      'i'
+    );
+
+    return (
+      <AsideNav
+        navigations={this.state.navigations.map(item => ({
+          ...item,
+          children: item.children
+            ? item.children
+                .filter(item => {
+                  if (item.label) {
+                    return filterReg.exec(item.label);
+                  }
+                  return true;
+                })
+                .map(item => ({
+                  ...item,
+                  className: 'is-top'
+                }))
+            : []
+        }))}
+        renderLink={({
+          link,
+          active,
+          toggleExpand,
+          classnames: cx,
+          depth
+        }: any) => {
+          let children = [];
+
+          if (link.children && link.children.length) {
+            children.push(
+              <span
+                key="expand-toggle"
+                className={cx('AsideNav-itemArrow')}
+                onClick={e => toggleExpand(link, e)}
+              ></span>
+            );
+          }
+
+          link.badge &&
+            children.push(
+              <b
+                key="badge"
+                className={cx(
+                  `AsideNav-itemBadge`,
+                  link.badgeClassName || 'bg-info'
+                )}
+              >
+                {link.badge}
+              </b>
+            );
+
+          if (link.icon) {
+            children.push(
+              <i key="icon" className={cx(`AsideNav-itemIcon`, link.icon)} />
+            );
+          } else if (this.state.folded && depth === 1) {
+            children.push(
+              <i
+                key="icon"
+                className={cx(
+                  `AsideNav-itemIcon`,
+                  link.children ? 'fa fa-folder' : 'fa fa-info'
+                )}
+              />
+            );
+          }
+
+          children.push(
+            <span className={cx('AsideNav-itemLabel')} key="label">
+              {link.label}
+            </span>
+          );
+
+          return link.path ? (
+            /^https?\:/.test(link.path) ? (
+              <a target="_blank" href={link.path} rel="noopener">
+                {children}
+              </a>
+            ) : (
+              <Link
+                to={
+                  getPath(link.path) ||
+                  (link.children && getPath(link.children[0].path))
+                }
+              >
+                {children}
+              </Link>
+            )
+          ) : (
+            <a onClick={link.children ? () => toggleExpand(link) : undefined}>
+              {children}
+            </a>
+          );
+        }}
+        isActive={(link: any) => isActive(link, location)}
+      />
+    );
+  }
+
+  renderExamples() {
     const theme = this.state.theme;
 
     return (
       <Layout
         theme={theme.value}
+        offScreen={this.state.offScreen}
+        folded={this.state.folded}
+        header={this.renderHeader(false)}
+        aside={this.renderAsideNav()}
+      >
+        <ToastComponent theme={theme.value} locale={this.state.locale} />
+        <AlertComponent theme={theme.value} locale={this.state.locale} />
+
+        {React.cloneElement(this.props.children as any, {
+          key: theme.value,
+          ...(this.props.children as any).props,
+          setNavigations: this.setNavigations,
+          theme: theme.value,
+          classPrefix: theme.ns,
+          viewMode: this.state.viewMode,
+          locale: this.state.locale,
+          offScreen: this.state.offScreen,
+          ContextPath
+        })}
+      </Layout>
+    );
+  }
+
+  render() {
+    const theme = this.state.theme;
+    const location = this.props.location;
+
+    if (/examples\/jssdk/.test(location.pathname)) {
+      return (
+        <>
+          <ToastComponent theme={theme.value} locale={this.state.locale} />
+          <AlertComponent theme={theme.value} locale={this.state.locale} />
+          {React.cloneElement(this.props.children as any, {
+            key: theme.value,
+            ...(this.props.children as any).props,
+            setNavigations: this.setNavigations,
+            theme: theme.value,
+            classPrefix: theme.ns,
+            viewMode: this.state.viewMode,
+            locale: this.state.locale,
+            offScreen: this.state.offScreen,
+            ContextPath,
+            showCode: false
+          })}
+        </>
+      );
+    } else if (/examples/.test(location.pathname)) {
+      return this.renderExamples();
+    }
+
+    return (
+      <Layout
+        className={':DocLayout'}
+        theme={theme.value}
         boxed={true}
         offScreen={this.state.offScreen}
         header={this.state.headerVisible ? this.renderHeader() : null}
+        headerClassName={':DocLayout-header'}
       >
         <ToastComponent theme={theme.value} locale={this.state.locale} />
         <AlertComponent theme={theme.value} locale={this.state.locale} />
@@ -390,14 +554,35 @@ export class App extends React.PureComponent {
             show={this.state.offScreen}
             position="left"
           >
+            <ul className={`HeaderLinks`}>
+              <Link
+                to={`${ContextPath}/zh-CN/docs`}
+                activeClassName="is-active"
+              >
+                文档
+              </Link>
+
+              <Link
+                to={`${ContextPath}/zh-CN/components`}
+                activeClassName="is-active"
+              >
+                组件
+              </Link>
+              <Link
+                to={`${ContextPath}/zh-CN/style`}
+                activeClassName="is-active"
+              >
+                样式
+              </Link>
+            </ul>
             {this.renderNavigation()}
           </Drawer>
 
           <BackTop />
 
-          {React.cloneElement(this.props.children, {
+          {React.cloneElement(this.props.children as any, {
             key: theme.value,
-            ...this.props.children.props,
+            ...(this.props.children as any).props,
             setNavigations: this.setNavigations,
             theme: theme.value,
             classPrefix: theme.ns,
@@ -416,12 +601,12 @@ function isActive(link: any, location: any) {
   return !!(link.path && getPath(link.path) === location.pathname);
 }
 
-function navigations2route(pathPrefix = DocPathPrefix, navigations) {
+function navigations2route(navigations) {
   let routes = [];
 
   navigations.forEach(root => {
     root.children &&
-      mapTree(root.children, item => {
+      eachTree(root.children, (item: any) => {
         if (item.path && item.component) {
           routes.push(
             <Route
@@ -455,25 +640,74 @@ function navigations2route(pathPrefix = DocPathPrefix, navigations) {
 
 export default function entry({pathPrefix}) {
   // PathPrefix = pathPrefix || DocPathPrefix;
+  const locate = 'zh-CN'; // 暂时不支持切换，因为目前只有中文文档
   return (
     <Router history={browserHistory}>
       <Route component={App}>
-        <Redirect from={`/`} to={`${ContextPath}/docs/index`} exact/>
-        {ContextPath != '' && <Redirect from={`${ContextPath}`} to={`${ContextPath}/docs/index`} exact />}
+        <Redirect
+          from={`${ContextPath}/`}
+          to={`${ContextPath}/${locate}/docs/index`}
+        />
+
+        {/* docs */}
         <Redirect
           from={`${ContextPath}/docs`}
-          to={`${ContextPath}/docs/index`}
+          to={`${ContextPath}/${locate}/docs/index`}
         />
+        <Redirect
+          from={`${ContextPath}/docs/index`}
+          to={`${ContextPath}/${locate}/docs/index`}
+        />
+        <Redirect
+          from={`${ContextPath}/docs/*`}
+          to={`${ContextPath}/${locate}/docs/*`}
+        />
+        <Redirect
+          from={`${ContextPath}/${locate}/docs`}
+          to={`${ContextPath}/${locate}/docs/index`}
+        />
+
+        {/* components */}
+        <Redirect
+          from={`${ContextPath}/components`}
+          to={`${ContextPath}/${locate}/components/page`}
+        />
+        <Redirect
+          from={`${ContextPath}/components/page`}
+          to={`${ContextPath}/${locate}/components/page`}
+        />
+        <Redirect
+          from={`${ContextPath}/components/*`}
+          to={`${ContextPath}/${locate}/components/*`}
+        />
+        <Redirect
+          from={`${ContextPath}/${locate}/components`}
+          to={`${ContextPath}/${locate}/components/page`}
+        />
+
+        {/* expamles */}
         <Redirect
           from={`${ContextPath}/examples`}
           to={`${ContextPath}/examples/pages/simple`}
         />
-
-        <Route path={`${ContextPath}/docs`} component={Doc}>
-          {navigations2route(DocPathPrefix, docs)}
+        <Redirect
+          from={`${ContextPath}/${locate}/style`}
+          to={`${ContextPath}/${locate}/style/index`}
+        />
+        <Route path={`${ContextPath}/${locate}/docs`} component={Doc}>
+          {navigations2route(DocNavCN)}
+        </Route>
+        <Route
+          path={`${ContextPath}/${locate}/components`}
+          component={Components}
+        >
+          {navigations2route(components)}
         </Route>
         <Route path={`${ContextPath}/examples`} component={Example}>
-          {navigations2route(ExamplePathPrefix, examples)}
+          {navigations2route(examples)}
+        </Route>
+        <Route path={`${ContextPath}/${locate}/style`} component={CSSDocs}>
+          {navigations2route(cssDocs)}
         </Route>
       </Route>
 

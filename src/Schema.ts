@@ -20,6 +20,7 @@ import {DividerSchema} from './renderers/Divider';
 import {DropdownButtonSchema} from './renderers/DropDownButton';
 import {EachSchema} from './renderers/Each';
 import {GridSchema} from './renderers/Grid';
+import {Grid2DSchema} from './renderers/Grid2D';
 import {HBoxSchema} from './renderers/HBox';
 import {IconSchema} from './renderers/Icon';
 import {IFrameSchema} from './renderers/IFrame';
@@ -45,9 +46,14 @@ import {VideoSchema} from './renderers/Video';
 import {WizardSchema} from './renderers/Wizard';
 import {WrapperSchema} from './renderers/Wrapper';
 import {TableSchema} from './renderers/Table';
-import {DialogSchema} from './renderers/Dialog';
+import {DialogSchema, DialogSchemaBase} from './renderers/Dialog';
 import {DrawerSchema} from './renderers/Drawer';
 import {SearchBoxSchema} from './renderers/SearchBox';
+import {SparkLineSchema} from './renderers/SparkLine';
+import {PaginationWrapperSchema} from './renderers/PaginationWrapper';
+import {PaginationSchema} from './renderers/Pagination';
+import {AnchorNavSchema} from './renderers/AnchorNav';
+import {AvatarSchema} from './renderers/Avatar';
 
 // 每加个类型，这补充一下。
 export type SchemaType =
@@ -56,9 +62,12 @@ export type SchemaType =
   | 'submit'
   | 'reset'
   | 'alert'
+  | 'app'
   | 'audio'
+  | 'avatar'
   | 'button-group'
   | 'button-toolbar'
+  | 'breadcrumb'
   | 'card'
   | 'cards'
   | 'carousel'
@@ -67,6 +76,7 @@ export type SchemaType =
   | 'color'
   | 'container'
   | 'crud'
+  | 'custom'
   | 'date'
   | 'static-date' // 这个几个跟表单项同名，再form下面用必须带前缀 static-
   | 'datetime'
@@ -80,7 +90,9 @@ export type SchemaType =
   | 'dropdown-button'
   | 'drawer'
   | 'each'
+  | 'flex'
   | 'grid'
+  | 'grid-2d'
   | 'hbox'
   | 'icon'
   | 'iframe'
@@ -92,11 +104,15 @@ export type SchemaType =
   | 'static-json' // 这个几个跟表单项同名，再form下面用必须带前缀 static-
   | 'link'
   | 'list'
+  | 'log'
   | 'static-list' // 这个几个跟表单项同名，再form下面用必须带前缀 static-
   | 'map'
   | 'mapping'
   | 'nav'
   | 'page'
+  | 'pagination'
+  | 'pagination-wrapper'
+  | 'property'
   | 'operation'
   | 'panel'
   | 'plain'
@@ -107,6 +123,7 @@ export type SchemaType =
   | 'remark'
   | 'search-box'
   | 'service'
+  | 'sparkline'
   | 'status'
   | 'switch'
   | 'table'
@@ -118,7 +135,8 @@ export type SchemaType =
   | 'vbox'
   | 'video'
   | 'wizard'
-  | 'wrapper';
+  | 'wrapper'
+  | 'anchor-nav';
 
 export type SchemaObject =
   | PageSchema
@@ -127,6 +145,7 @@ export type SchemaObject =
   | ActionSchema
   | AlertSchema
   | AudioSchema
+  | AvatarSchema
   | ButtonGroupSchema
   | ButtonToolbarSchema
   | CardSchema
@@ -144,6 +163,7 @@ export type SchemaObject =
   | DropdownButtonSchema
   | EachSchema
   | GridSchema
+  | Grid2DSchema
   | HBoxSchema
   | IconSchema
   | IFrameSchema
@@ -155,12 +175,15 @@ export type SchemaObject =
   | MappingSchema
   | NavSchema
   | OperationSchema
+  | PaginationSchema
+  | PaginationWrapperSchema
   | PanelSchema
   | PlainSchema
   | ProgressSchema
   | QRCodeSchema
   | SearchBoxSchema
   | ServiceSchema
+  | SparkLineSchema
   | StatusSchema
   | SwitchSchema
   | TableSchema
@@ -170,7 +193,8 @@ export type SchemaObject =
   | VideoSchema
   | WizardSchema
   | WrapperSchema
-  | FormSchema;
+  | FormSchema
+  | AnchorNavSchema;
 
 export type SchemaCollection =
   | SchemaObject
@@ -182,10 +206,28 @@ export type SchemaCollection =
  */
 export type SchemaExpression = string;
 
+/**
+ * css类名，配置字符串，或者对象。
+ *
+ *     className: "red"
+ *
+ * 用对象配置时意味着你能跟表达式一起搭配使用，如：
+ *
+ *     className: {
+ *         "red": "data.progress > 80",
+ *         "blue": "data.progress > 60"
+ *     }
+ */
+export type SchemaClassName =
+  | string
+  | {
+      [propName: string]: true | false | null | SchemaExpression;
+    };
+
 // /**
 //  * css类名，配置字符串，或者对象。
 //  *
-//  *     className: "red"
+//  *   className: "red"
 //  *
 //  * 用对象配置时意味着你能跟表达式一起搭配使用，如：
 //  *
@@ -194,16 +236,7 @@ export type SchemaExpression = string;
 //  *         "blue": "data.progress > 60"
 //  *     }
 //  */
-// export type SchemaClassName =
-//   | string
-//   | {
-//       [propName: string]: true | false | null | SchemaExpression;
-//     };
-
-/**
- * css类名，字符串格式
- */
-export type SchemaClassName = string; // todo 支持上面那种格式。
+// export type SchemaClassName = string;
 
 export interface SchemaApiObject {
   /**
@@ -220,6 +253,13 @@ export interface SchemaApiObject {
    * 用来控制携带数据. 当key 为 `&` 值为 `$$` 时, 将所有原始数据打平设置到 data 中. 当值为 $$ 将所有原始数据赋值到对应的 key 中. 当值为 $ 打头时, 将变量值设置到 key 中.
    */
   data?: {
+    [propName: string]: any;
+  };
+
+  /**
+   * 用来做接口返回的数据映射。
+   */
+  responseData?: {
     [propName: string]: any;
   };
 
@@ -247,7 +287,7 @@ export interface SchemaApiObject {
    * 携带 headers，用法和 data 一样，可以用变量。
    */
   headers?: {
-    [propName: string]: string;
+    [propName: string]: string | number;
   };
 
   /**
@@ -529,4 +569,90 @@ export interface BaseSchema {
 
 }
 
-export {PageSchema};
+export interface Option {
+  /**
+   * 用来显示的文字
+   */
+  label?: string;
+
+  /**
+   * 可以用来给 Option 标记个范围，让数据展示更清晰。
+   *
+   * 这个只有在数值展示的时候显示。
+   */
+  scopeLabel?: string;
+
+  /**
+   * 请保证数值唯一，多个选项值一致会认为是同一个选项。
+   */
+  value?: any;
+
+  /**
+   * 是否禁用
+   */
+  disabled?: boolean;
+
+  /**
+   * 支持嵌套
+   */
+  children?: Options;
+
+  /**
+   * 是否可见
+   */
+  visible?: boolean;
+
+  /**
+   * 最好不要用！因为有 visible 就够了。
+   *
+   * @deprecated 用 visible
+   */
+  hidden?: boolean;
+
+  /**
+   * 描述，部分控件支持
+   */
+  description?: string;
+
+  /**
+   * 标记后数据延时加载
+   */
+  defer?: boolean;
+
+  /**
+   * 如果设置了，优先级更高，不设置走 source 接口加载。
+   */
+  deferApi?: SchemaApi;
+
+  /**
+   * 标记正在加载。只有 defer 为 true 时有意义。内部字段不可以外部设置
+   */
+  loading?: boolean;
+
+  /**
+   * 只有设置了 defer 才有意义，内部字段不可以外部设置
+   */
+  loaded?: boolean;
+
+  [propName: string]: any;
+}
+export interface Options extends Array<Option> {}
+
+export interface FeedbackDialog extends DialogSchemaBase {
+  /**
+   * 可以用来配置 feedback 的出现条件
+   */
+  visibleOn?: string;
+
+  /**
+   * feedback 弹框取消是否中断后续操作
+   */
+  skipRestOnCancel?: boolean;
+
+  /**
+   * feedback 弹框确认是否中断后续操作
+   */
+  skipRestOnConfirm?: boolean;
+}
+
+export type RootSchema = PageSchema;

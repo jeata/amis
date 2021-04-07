@@ -7,10 +7,14 @@ import {filter, evalExpression} from '../utils/tpl';
 import cx from 'classnames';
 import LazyComponent from '../components/LazyComponent';
 import {resizeSensor} from '../utils/resize-sensor';
-import {resolveVariableAndFilter, isPureVariable} from '../utils/tpl-builtin';
+import {
+  resolveVariableAndFilter,
+  isPureVariable,
+  dataMapping
+} from '../utils/tpl-builtin';
 import {isApiOutdated, isEffectiveApi} from '../utils/api';
 import {ScopedContext, IScopedContext} from '../Scoped';
-import {createObject} from '../utils/helper';
+import {createObject, findObjectsWithKey} from '../utils/helper';
 import Spinner from '../components/Spinner';
 import {
   BaseSchema,
@@ -21,6 +25,7 @@ import {
   SchemaTokenizeableString
 } from '../Schema';
 import {ActionSchema} from './Action';
+import {isAlive} from 'mobx-state-tree';
 
 /**
  * Chart 图表渲染器。
@@ -31,6 +36,11 @@ export interface ChartSchema extends BaseSchema {
    * 指定为 chart 类型
    */
   type: 'chart';
+
+  /**
+   * Chart 主题配置
+   */
+  chartTheme?: any;
 
   /**
    * 图表配置接口
@@ -50,9 +60,14 @@ export interface ChartSchema extends BaseSchema {
   initFetchOn?: SchemaExpression;
 
   /**
-   * 配置echart的config
+   * 配置echart的config，支持数据映射。如果用了数据映射，为了同步更新，请设置 trackExpression
    */
   config?: any;
+
+  /**
+   * 跟踪表达式，如果这个表达式的运行结果发生变化了，则会更新 Echart，当 config 中用了数据映射时有用。
+   */
+  trackExpression?: string;
 
   /**
    * 宽度设置
@@ -83,6 +98,11 @@ export interface ChartSchema extends BaseSchema {
   source?: SchemaTokenizeableString;
 
   /**
+   * 默认开启 Config 中的数据映射，如果想关闭，请开启此功能。
+   */
+  disableDataMapping?: boolean;
+
+  /**
    * 点击行为配置，可以用来满足下钻操作等。
    */
   clickAction?: ActionSchema;
@@ -96,29 +116,6 @@ export interface ChartSchema extends BaseSchema {
    * 不可见的时候隐藏
    */
   unMountOnHidden?: boolean;
-
-  /**
-   * 主题
-   */
-  chartTheme?: string;
-}
-
-/**
- * 深度查找具有某个 key 名字段的对象
- * @param obj
- * @param key
- */
-function findObjectsWithKey(obj: any, key: string) {
-  let objects: any[] = [];
-  for (const k in obj) {
-    if (!obj.hasOwnProperty(k)) continue;
-    if (typeof obj[k] === 'object') {
-      objects = objects.concat(findObjectsWithKey(obj[k], key));
-    } else if (k === key) {
-      objects.push(obj);
-    }
-  }
-  return objects;
 }
 
 const EVAL_CACHE: {[key: string]: Function} = {};
@@ -129,11 +126,11 @@ const EVAL_CACHE: {[key: string]: Function} = {};
  * @param config ECharts 配置
  */
 function recoverFunctionType(config: object) {
-  ['formatter', 'sort'].forEach((key: string) => {
+  ['formatter', 'sort', 'renderItem'].forEach((key: string) => {
     const objects = findObjectsWithKey(config, key);
     for (const object of objects) {
       const code = object[key];
-      if (typeof code === 'string' && code.trim().startsWith('function ')) {
+      if (typeof code === 'string' && code.trim().startsWith('function')) {
         try {
           if (!(code in EVAL_CACHE)) {
             EVAL_CACHE[code] = eval('(' + code + ')');
@@ -147,25 +144,30 @@ function recoverFunctionType(config: object) {
   });
 }
 
-export interface ChartProps extends RendererProps, ChartSchema {
+export interface ChartProps
+  extends RendererProps,
+    Omit<ChartSchema, 'type' | 'className'> {
   chartRef?: (echart: any) => void;
   onDataFilter?: (config: any, echarts: any) => any;
+  onChartWillMount?: (echarts: any) => void | Promise<void>;
+  onChartMount?: (chart: any, echarts: any) => void;
+  onChartUnMount?: (chart: any, echarts: any) => void;
   store: IServiceStore;
 }
 export class Chart extends React.Component<ChartProps> {
   static defaultProps: Partial<ChartProps> = {
-    offsetY: 50,
     replaceChartOption: false,
-    unMountOnHidden: true
+    unMountOnHidden: false
   };
 
   static propsList: Array<string> = [];
 
   ref: any;
-  echarts: any;
+  echarts?: any;
   unSensor: Function;
   pending?: object;
-  timer: NodeJS.Timeout;
+  pendingCtx?: any;
+  timer: ReturnType<typeof setTimeout>;
   mounted: boolean;
   reloadCancel?: Function;
 
@@ -194,8 +196,6 @@ export class Chart extends React.Component<ChartProps> {
 
   componentDidUpdate(prevProps: ChartProps) {
     const props = this.props;
-    const api: string =
-      (props.api && (props.api as ApiObject).url) || (props.api as string);
 
     if (isApiOutdated(prevProps.api, props.api, prevProps.data, props.data)) {
       this.reload();
@@ -209,6 +209,13 @@ export class Chart extends React.Component<ChartProps> {
         this.renderChart(ret || {});
       }
     } else if (props.config !== prevProps.config) {
+      this.renderChart(props.config || {});
+    } else if (
+      props.config &&
+      props.trackExpression &&
+      filter(props.trackExpression, props.data) !==
+        filter(prevProps.trackExpression, prevProps.data)
+    ) {
       this.renderChart(props.config || {});
     }
   }
@@ -227,38 +234,72 @@ export class Chart extends React.Component<ChartProps> {
   }
 
   refFn(ref: any) {
-    const {chartRef, chartTheme} = this.props;
-    if (ref) {
-      (require as any)(
-        [
-          'echarts',
-          'echarts/extension/dataTool',
-          'echarts/extension/bmap/bmap',
-          'echarts/map/js/china',
-          'echarts/map/js/world',
-          'echarts/theme/macarons'
-        ],
-        (echarts: any, dataTool: any) => {
-          (window as any).echarts = echarts;
-          echarts.dataTool = dataTool;
-          this.echarts = echarts.init(ref, (chartTheme)?chartTheme:'macarons');
-          this.echarts.on('click', this.handleClick);
-          this.unSensor = resizeSensor(ref, () => {
-            const width = ref.offsetWidth;
-            const height = ref.offsetHeight;
-            this.echarts.resize({
-              width,
-              height
-            });
-          });
+    const chartRef = this.props.chartRef;
+    const {chartTheme, onChartWillMount, onChartUnMount, env} = this.props;
+    let onChartMount = this.props.onChartMount;
 
-          chartRef && chartRef(this.echarts);
-          this.renderChart();
+    if (ref) {
+      Promise.all([
+        import('echarts'),
+        import('echarts-stat'),
+        import('echarts/extension/dataTool'),
+        import('echarts/extension/bmap/bmap'),
+	import('echarts/theme/macarons')
+      ]).then(async ([echarts, ecStat]) => {
+        (window as any).echarts = echarts;
+        (window as any).ecStat = ecStat;
+        let theme = 'macarons';
+
+        if (chartTheme) {
+          echarts.registerTheme('custom', chartTheme);
+          theme = 'custom';
         }
-      );
+
+        if (onChartWillMount) {
+          await onChartWillMount(echarts);
+        }
+
+        (echarts as any).registerTransform(
+          (ecStat as any).transform.regression
+        );
+        (echarts as any).registerTransform((ecStat as any).transform.histogram);
+        (echarts as any).registerTransform(
+          (ecStat as any).transform.clustering
+        );
+
+        if (env.loadChartExtends) {
+          await env.loadChartExtends();
+        }
+
+        this.echarts = echarts.init(ref, theme);
+
+        if (typeof onChartMount === 'string') {
+          onChartMount = new Function('chart', 'echarts') as any;
+        }
+
+        onChartMount?.(this.echarts, echarts);
+        this.echarts.on('click', this.handleClick);
+        this.unSensor = resizeSensor(ref, () => {
+          const width = ref.offsetWidth;
+          const height = ref.offsetHeight;
+          this.echarts?.resize({
+            width,
+            height
+          });
+        });
+
+        chartRef && chartRef(this.echarts);
+        this.renderChart();
+      });
     } else {
       chartRef && chartRef(null);
       this.unSensor && this.unSensor();
+
+      if (this.echarts) {
+        onChartUnMount?.(this.echarts, (window as any).echarts);
+        this.echarts.dispose();
+        delete this.echarts;
+      }
     }
 
     this.ref = ref;
@@ -277,15 +318,18 @@ export class Chart extends React.Component<ChartProps> {
     if (this.reloadCancel) {
       this.reloadCancel();
       delete this.reloadCancel;
-      this.echarts && this.echarts.hideLoading();
+      this.echarts?.hideLoading();
     }
-    this.echarts && this.echarts.showLoading();
+    this.echarts?.showLoading();
 
+    store.markFetching(true);
     env
       .fetcher(api, store.data, {
         cancelExecutor: (executor: Function) => (this.reloadCancel = executor)
       })
       .then(result => {
+        isAlive(store) && store.markFetching(false);
+
         if (!result.ok) {
           return env.notify(
             'error',
@@ -299,20 +343,30 @@ export class Chart extends React.Component<ChartProps> {
           );
         }
         delete this.reloadCancel;
-        this.renderChart(result.data || {});
-        this.echarts && this.echarts.hideLoading();
+
+        const data = result.data || {};
+        // 说明返回的是数据接口。
+        if (!data.series && this.props.config) {
+          const ctx = createObject(this.props.data, data);
+          this.renderChart(this.props.config, ctx);
+        } else {
+          this.renderChart(result.data || {});
+        }
+
+        this.echarts?.hideLoading();
 
         interval &&
           this.mounted &&
-          (this.timer = setTimeout(this.reload, Math.max(interval, 3000)));
+          (this.timer = setTimeout(this.reload, Math.max(interval, 1000)));
       })
       .catch(reason => {
         if (env.isCancel(reason)) {
           return;
         }
 
+        isAlive(store) && store.markFetching(false);
         env.notify('error', reason);
-        this.echarts && this.echarts.hideLoading();
+        this.echarts?.hideLoading();
       });
   }
 
@@ -323,11 +377,15 @@ export class Chart extends React.Component<ChartProps> {
     this.reload();
   }
 
-  renderChart(config?: object) {
+  renderChart(config?: object, data?: any) {
     config && (this.pending = config);
+    data && (this.pendingCtx = data);
+
     if (!this.echarts) {
       return;
     }
+
+    const store = this.props.store;
     let onDataFilter = this.props.onDataFilter;
     const dataFilter = this.props.dataFilter;
 
@@ -336,6 +394,8 @@ export class Chart extends React.Component<ChartProps> {
     }
 
     config = config || this.pending;
+    data = data || this.pendingCtx || this.props.data;
+
     if (typeof config === 'string') {
       config = new Function('return ' + config)();
     }
@@ -348,8 +408,25 @@ export class Chart extends React.Component<ChartProps> {
 
     if (config) {
       try {
-        recoverFunctionType(config);
-        this.echarts.setOption(config, this.props.replaceChartOption);
+        if (!this.props.disableDataMapping) {
+          config = dataMapping(
+            config,
+            data,
+            (key: string, value: any) =>
+              typeof value === 'function' ||
+              (typeof value === 'string' && value.startsWith('function'))
+          );
+        }
+
+        recoverFunctionType(config!);
+
+        if (isAlive(store) && store.loading) {
+          this.echarts?.showLoading();
+        } else {
+          this.echarts?.hideLoading();
+        }
+
+        this.echarts?.setOption(config!, this.props.replaceChartOption);
       } catch (e) {
         console.warn(e);
       }

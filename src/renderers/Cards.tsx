@@ -134,7 +134,9 @@ export interface Column {
   [propName: string]: any;
 }
 
-export interface GridProps extends RendererProps, CardsSchema {
+export interface GridProps
+  extends RendererProps,
+    Omit<CardsSchema, 'className' | 'itemClassName'> {
   store: IListStore;
   selectable?: boolean;
   selected?: Array<any>;
@@ -179,7 +181,7 @@ export default class Cards extends React.Component<GridProps, object> {
   ];
   static defaultProps: Partial<GridProps> = {
     className: '',
-    placeholder: '没有数据',
+    placeholder: 'placeholder.noData',
     source: '$items',
     selectable: false,
     headerClassName: '',
@@ -378,7 +380,12 @@ export default class Cards extends React.Component<GridProps, object> {
     const clip = (this.body as HTMLElement).getBoundingClientRect();
     const offsetY =
       this.props.affixOffsetTop ?? this.props.env.affixOffsetTop ?? 0;
-    const affixed = clip.top < offsetY && clip.top + clip.height - 40 > offsetY;
+    // 50 是 headerToolbar 的高度
+    const toolbarHeight =
+      this.renderedToolbars.length || this.props.headerToolbarRender ? 50 : 0;
+    const affixed =
+      clip.top - toolbarHeight < offsetY &&
+      clip.top + clip.height - 40 > offsetY;
     const afixedDom = dom.querySelector(`.${ns}Cards-fixedTop`) as HTMLElement;
 
     this.body.offsetWidth &&
@@ -706,7 +713,7 @@ export default class Cards extends React.Component<GridProps, object> {
           {child}
           {store.dragging ? (
             <div className={cx('Cards-dragTip')} ref={this.dragTipRef}>
-              {__('请拖动顶部的按钮进行排序')}
+              {__('Card.dragTip')}
             </div>
           ) : null}
         </div>
@@ -804,7 +811,7 @@ export default class Cards extends React.Component<GridProps, object> {
       <Button
         iconOnly
         key="dragging-toggle"
-        tooltip={__('对卡片进行排序操作')}
+        tooltip={__('Card.toggleDrag')}
         tooltipContainer={
           env && env.getModalContainer ? env.getModalContainer : undefined
         }
