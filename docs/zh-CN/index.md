@@ -79,8 +79,8 @@ order: 8
         }
       }
     ],
-    "quickSaveApi": "https://houtai.baidu.com/api/sample/bulkUpdate",
-    "quickSaveItemApi": "https://houtai.baidu.com/api/sample/$id",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
+    "quickSaveItemApi": "https://mock.jeata.com/crud/sample/$id",
     "filterTogglable": true,
     "headerToolbar": [
       "filter-toggler",

@@ -35,7 +35,7 @@ export type FlexItem = FlexItemProps & SchemaObject;
 
 /**
  * Flex 布局
- * 文档：https://baidu.gitee.io/amis/docs/components/flex
+ * 文档：https://doc.jeata.com/amis/components/flex
  */
 export interface FlexSchema extends BaseSchema {
   /**

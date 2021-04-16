@@ -10,7 +10,7 @@ import {FormSchema} from '.';
 
 /**
  * SubForm 子表单
- * 文档：https://doc.jeata.com/amis/docs/components/form/subform
+ * 文档：https://doc.jeata.com/amis/components/form/subform
  */
 export interface SubFormControlSchema extends FormBaseControl {
   /**

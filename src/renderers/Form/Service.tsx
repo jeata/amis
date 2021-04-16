@@ -12,7 +12,7 @@ import {FormBaseControl, FormControlSchema} from './Item';
 
 /**
  * Sevice
- * 文档：https://doc.jeata.com/amis/docs/components/form/sevice
+ * 文档：https://doc.jeata.com/amis/components/form/sevice
  */
 export interface ServiceControlSchema extends FormBaseControl, ServiceSchema {
   type: 'service';

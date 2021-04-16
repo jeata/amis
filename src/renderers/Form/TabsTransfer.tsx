@@ -12,7 +12,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * TabsTransfer
- * 文档：https://doc.jeata.com/amis/docs/components/form/tabs-transfer
+ * 文档：https://doc.jeata.com/amis/components/form/tabs-transfer
  */
 export interface TabsTransferControlSchema extends FormOptionsControl {
   type: 'tabs-transfer';

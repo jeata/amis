@@ -114,7 +114,7 @@ export interface ListItemSchema extends Omit<BaseSchema, 'type'> {
 
 /**
  * List 列表展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/card
+ * 文档：https://doc.jeata.com/amis/components/card
  */
 export interface ListSchema extends BaseSchema {
   /**

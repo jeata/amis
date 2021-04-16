@@ -11,7 +11,7 @@ import {BaseSchema, SchemaClassName, SchemaCollection} from '../Schema';
 
 /**
  * AnchorNavSection 锚点区域渲染器
- * 文档：https://baidu.gitee.io/amis/docs/components/anchor-nav
+ * 文档：https://doc.jeata.com/amis/components/anchor-nav
  */
 
 export type AnchorNavSectionSchema = {
@@ -33,7 +33,7 @@ export type AnchorNavSectionSchema = {
 
 /**
  * AnchorNav 锚点导航渲染器
- * 文档：https://baidu.gitee.io/amis/docs/components/anchor-nav
+ * 文档：https://doc.jeata.com/amis/components/anchor-nav
  */
 export interface AnchorNavSchema extends BaseSchema {
   /**

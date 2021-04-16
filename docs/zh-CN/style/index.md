@@ -4,47 +4,12 @@ title: 快速开始
 
 > 这是 1.1.0 版本中新增的功能
 
-在 amis 中自定义样式有四种方式：
+自定义样式有四种方式：
 
-1. 使用 CSS 变量动态修改，通过这种方式修改大部分 amis 组件的样式，所有组件都会生效，注意这种方法不支持 IE11。
-2. 使用辅助 class，可以对单个组件做定制修改。
-3. 自己生成主题 CSS，可以修改所有配置，目前只能通过源码方式，请参考 `scss\themes\default.scss` 文件，修改变量后重新编译一个 css，需要注意这种方式在更新 amis 版本的时候最好重新编译，否则就会出现使用旧版 css 的情况，可能导致出错，因此不推荐使用。
-4. `wrapper` 组件可以直接写内嵌 `style`。
+1. 使用辅助 class，可以对单个组件做定制修改。
+2. 自己生成主题 CSS，可以修改所有配置，目前只能通过源码方式，请参考 `scss\themes\default.scss` 文件，修改变量后重新编译一个 css，需要注意这种方式在更新 amis 版本的时候最好重新编译，否则就会出现使用旧版 css 的情况，可能导致出错，因此不推荐使用。
+3. `wrapper` 组件可以直接写内嵌 `style`。
 
-本文主要介绍前两种方法：
-
-## CSS 变量
-
-在 page 下可以设置 cssVars 属性，通过它来动态修改 amis 内的 css 变量。
-
-```schema
-{
-  "type": "page",
-  "cssVars": {
-    "--text-color": "#CD3632",
-    "--primary": "#CD3632",
-    "--primary-onHover": "#F23F3A",
-    "--primary-onActive": "#BB312D"
-  },
-  "body": {
-    "type": "form",
-    "controls": [
-      {
-        "type": "text",
-        "label": "文本",
-        "name": "text"
-      },
-      {
-        "type": "password",
-        "label": "密码",
-        "name": "password"
-      }
-    ]
-  }
-}
-```
-
-具体有哪些变量请参考左侧的 [CSS 变量](css-vars) 说明。
 
 ## 辅助 class
 
@@ -59,7 +24,7 @@ title: 快速开始
 
 目前这个文件没有和主题文件合并在一起，用户可以选择性加载。
 
-大部分 amis 组件都有 `className` 或者 `xxxClassName` 的配置，比如下面的配置给表单增加了边框、圆角和阴影
+大部分组件都有 `className` 或者 `xxxClassName` 的配置，比如下面的配置给表单增加了边框、圆角和阴影
 
 ```schema: scope="body"
 {

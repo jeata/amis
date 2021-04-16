@@ -179,7 +179,7 @@ body {
     &-brandBar {
       background-color: transparent;
 
-      .DocLayout-brand {
+      .a-Layout-brand, .cxd-Layout-brand, .antd-Layout-brand {
         height: $nav-header-height;
         line-height: $nav-header-height;
         font-size: 24px;
@@ -191,6 +191,7 @@ body {
           height: 40px;
           width: 130px;
           margin-top: 12px;
+          opacity: .9;
         }
 
         .title {
@@ -229,6 +230,7 @@ body {
         cursor: pointer;
         color: #ccc;
 
+
         > svg {
           width: 14px;
           height: 14px;
@@ -240,7 +242,7 @@ body {
         }
 
         &:hover {
-          color: #333;
+          color: #fff;
         }
 
         & + a {
@@ -300,26 +302,28 @@ body {
   font-size: 14px;
   padding-left: 35px;
   margin: 0;
-  padding: 0;
+  // padding: 0;
   line-height: 50px;
 
   > a {
     display: inline-block;
-    color: #333;
-    padding: 0px 5px;
+    color: var(--primary);
+    padding: 0 5px;
     margin: 0 5px;
     font-weight: 500;
     text-decoration: none;
+    opacity: 0.8;
 
     &:hover,
     &.is-active {
-      color: #108cee;
+      color: var(--primary);
       position: relative;
       text-decoration: none;
+      opacity: 1;
 
       &::before {
         content: '';
-        border-bottom: 2px solid #108cee;
+        border-bottom: 2px solid var(--primary);
         position: absolute;
         width: 100%;
         left: 0;
@@ -329,11 +333,31 @@ body {
   }
 }
 
+.DocLayout-headerBar .HeaderLinks {
+  margin: 0;
+  padding: 0;
+  line-height: 50px;
+
+  > a {
+    color: #fff;
+
+    &:hover,
+    &.is-active {
+      color: #fff;
+
+      &::before {
+        border-bottom: 2px solid #fff;
+      }
+    }
+  }
+}
+
 .a-Layout-offScreen-btn,
 .cxd-Layout-offScreen-btn,
 .antd-Layout-offScreen-btn,
 .dark-Layout-offScreen-btn {
-  line-height: 50px;
+  display:inline-block;
+  line-height: 64px;
   padding: 0 10px;
 }
 
@@ -343,6 +367,12 @@ body {
   cursor: pointer;
   position: absolute;
   left: 0;
+
+  &.right {
+    left: auto;
+    top: 0;
+    right: 0;
+  }
 }
 
 .Doc {
@@ -427,7 +457,7 @@ body {
 
         a {
           font-size: px2rem(14px);
-          font-weight: 700;
+          // font-weight: 700;
           color: #666;
           padding: px2rem(3px) 0;
           background: transparent;
@@ -916,38 +946,6 @@ body {
   }
 }
 
-@media screen and (min-width: 1640px) {
-  .Doc {
-    &-toc {
-      width: 1px;
-    }
-
-    &-nav {
-      width: 1px;
-
-      > div {
-        margin-left: -$menu-width;
-      }
-    }
-  }
-
-  .app-wrapper {
-    .DocLayout {
-      &-brandBar {
-        width: 1px;
-
-        > div {
-          margin-left: -$menu-width;
-        }
-      }
-
-      &-searchBar {
-        width: 1px;
-      }
-    }
-  }
-}
-
 .Doc-searchDrawer {
   border: 0;
 
@@ -1064,7 +1062,7 @@ body.dark {
 
 .Playgroud {
   border: 1px solid #ddd;
-  background: var(--body-bg);
+  background: #fcfcfc;
 
   body.dark & {
     background: #191c22;
@@ -1257,5 +1255,33 @@ body.dark {
 
   .Doc-navigation .a-AsideNav-item a, .Doc-navigation .cxd-AsideNav-item a, .Doc-navigation .dark-AsideNav-item a {
     font-weight: 400;
+  }
+}
+
+.ExampleLayout-brandBar {
+  .a-Layout-brand a {
+    color: var(--Layout-asideLink-color);
+    text-decoration: none;
+  }
+}
+
+.ExampleLayout-headerBar {
+  .navbar-btn {
+    color: #666;
+  }
+
+  .HeaderLinks > a {
+    color: #666;
+
+    &.is-active, &:hover {
+
+      &::before {
+        border-bottom: 2px solid #666;
+      }
+    }
+  }
+
+  #Header-toolbar {
+    margin-left: auto;
   }
 }

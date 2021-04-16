@@ -14,7 +14,7 @@ import {DividerSchema} from './Divider';
 
 /**
  * 下拉按钮渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/dropdown-button
+ * 文档：https://doc.jeata.com/amis/components/dropdown-button
  */
 export interface DropdownButtonSchema extends BaseSchema {
   /**

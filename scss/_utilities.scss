@@ -1589,12 +1589,12 @@ a.label {
 }
 
 .label-secondary {
-  @include label-variant($label--secondary-bg);
+  @include label-variant(var(--label--secondary-bg));
 }
 
 .label-light {
-  @include label-variant($label--light-bg);
-  color: $text-color;
+  @include label-variant(var(--label--light-bg));
+  color: var(--text-color);
 }
 
 @keyframes apearSensor {
@@ -1641,6 +1641,14 @@ a.label {
 
 // sm
 @media (min-width: 768px) and (max-width: 991px) {
+  .visible-sm {
+    display: block !important;
+  }
+
+  .hidden-sm {
+    display: none !important;
+  }
+
   .hidden-sm.show {
     display: inherit !important;
   }

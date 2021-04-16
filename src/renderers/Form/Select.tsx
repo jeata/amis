@@ -17,7 +17,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * Select 下拉选择框。
- * 文档：https://doc.jeata.com/amis/docs/components/form/select
+ * 文档：https://doc.jeata.com/amis/components/form/select
  */
 export interface SelectControlSchema extends FormOptionsControl {
   type: 'select' | 'multi-select';

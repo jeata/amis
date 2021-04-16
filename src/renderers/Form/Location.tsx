@@ -5,7 +5,7 @@ import LocationPicker from '../../components/LocationPicker';
 
 /**
  * Location 选点组件
- * 文档：https://doc.jeata.com/amis/docs/components/form/location
+ * 文档：https://doc.jeata.com/amis/components/form/location
  */
 export interface LocationControlSchema extends FormBaseControl {
   type: 'location';
@@ -38,6 +38,7 @@ export interface LocationControlProps
 export class LocationControl extends React.Component<LocationControlProps> {
   static defaultProps = {
     vendor: 'baidu',
+    ak: 'QVfZxBXZwgYQ7M7Gpibhgnvrif49HVRn',
     coordinatesType: 'bd09'
   };
 

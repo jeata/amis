@@ -17,7 +17,7 @@ import ListMenu from '../../components/ListMenu';
 
 /**
  * Tag 输入框
- * 文档：https://doc.jeata.com/amis/docs/components/form/tag
+ * 文档：https://doc.jeata.com/amis/components/form/tag
  */
 export interface TagControlSchema extends FormOptionsControl {
   type: 'tag';

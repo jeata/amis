@@ -9,7 +9,7 @@ import {BaseSchema, SchemaClassName} from '../Schema';
 
 /**
  * 二维码展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/qrcode
+ * 文档：https://doc.jeata.com/amis/components/qrcode
  */
 export interface QRCodeSchema extends BaseSchema {
   type: 'qrcode' | 'qr-code';

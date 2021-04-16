@@ -10,7 +10,7 @@ import {SchemaObject, SchemaTpl, SchemaType} from '../../Schema';
 
 /**
  * Static
- * 文档：https://doc.jeata.com/amis/docs/components/form/static
+ * 文档：https://doc.jeata.com/amis/components/form/static
  */
 export interface StaticExactControlSchema extends FormBaseControl {
   type: 'static';

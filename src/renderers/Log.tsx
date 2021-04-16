@@ -10,7 +10,7 @@ import {buildApi} from '../utils/api';
 
 /**
  * 日志展示组件
- * 文档：https://baidu.gitee.io/amis/docs/components/log
+ * 文档：https://doc.jeata.com/amis/components/log
  */
 export interface LogSchema extends BaseSchema {
   /**

@@ -6,7 +6,7 @@ import {ActionSchema} from '../Action';
 
 /**
  * 按钮控件。
- * 文档：https://doc.jeata.com/amis/docs/components/form/button
+ * 文档：https://doc.jeata.com/amis/components/form/button
  */
 export type ButtonControlSchema = ActionSchema & FormBaseControl;
 

@@ -5,7 +5,7 @@ import Checkbox from '../../components/Checkbox';
 
 /**
  * Checkbox 勾选框。
- * 文档：https://doc.jeata.com/amis/docs/components/form/checkbox
+ * 文档：https://doc.jeata.com/amis/components/form/checkbox
  */
 export interface CheckboxControlSchema extends FormBaseControl {
   /**

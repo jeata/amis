@@ -139,7 +139,7 @@ api 返回支持两种格式，一种是直接返回完整 echarts 配置，数�
 ```schema: scope="body"
 {
     "type": "chart",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/chart/chartData",
+    "api": "https://mock.jeata.com/api/chart/chartData",
     "config": {
         "xAxis": {
             "type": "category",
@@ -177,7 +177,7 @@ api 返回支持两种格式，一种是直接返回完整 echarts 配置，数�
 ```schema: scope="body"
 {
     "type": "service",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/chart/chartData",
+    "api": "https://mock.jeata.com/api/chart/chartData",
     "interval": 3000,
     "body": [
         {
@@ -417,21 +417,6 @@ ECharts 中有些配置项可以写函数，比如 formatter 和 sort，但在 J
 }
 ```
 
-## 使用地图
-
-从 amis 1.1.0 版本开始，ECharts 版本升级到 5.0.0，为了规避政策风险，在这个版本删除了之前的地图 geojson，如果需要这个功能需要手动引入。
-
-方法是去 `https://github.com/apache/incubator-echarts/tree/master/test/data/map/js` 下载 `china.js` 和 `world.js`。
-
-对于 npm 版本，直接 `import` 这两个文件就行。
-
-对于 JS SDK 版本，需要先加入如下代码如下方式：
-
-```javascript
-window.echarts = amisRequire('echarts');
-```
-
-然后通过 script 标签引入这两个文件。
 
 ## 属性表
 

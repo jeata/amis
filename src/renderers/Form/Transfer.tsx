@@ -22,7 +22,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * Transfer
- * 文档：https://doc.jeata.com/amis/docs/components/form/transfer
+ * 文档：https://doc.jeata.com/amis/components/form/transfer
  */
 export interface TransferControlSchema extends FormOptionsControl {
   type: 'transfer';

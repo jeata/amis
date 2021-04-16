@@ -8,7 +8,7 @@ import {BaseSchema, SchemaTpl} from '../Schema';
 
 /**
  * Mapping 映射展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/mapping
+ * 文档：https://doc.jeata.com/amis/components/mapping
  */
 export interface MappingSchema extends BaseSchema {
   /**

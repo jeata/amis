@@ -12,7 +12,7 @@ import MonthRangePicker from '../../components/MonthRangePicker';
 
 /**
  * MonthRange 月范围控件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/month-range
+ * 文档：https://doc.jeata.com/amis/components/form/month-range
  */
 export interface MonthRangeControlSchema extends FormBaseControl {
   /**

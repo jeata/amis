@@ -7,7 +7,7 @@ import {BaseSchema, SchemaCollection} from '../Schema';
 
 /**
  * Each 循环功能渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/each
+ * 文档：https://doc.jeata.com/amis/components/each
  */
 export interface EachSchema extends BaseSchema {
   /**

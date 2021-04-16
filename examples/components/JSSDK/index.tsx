@@ -476,7 +476,7 @@ export default {
 
         {
           label: '外部链接',
-          link: 'http://baidu.gitee.io/amis'
+          link: 'http://doc.jeata.com/amis'
         },
 
         {

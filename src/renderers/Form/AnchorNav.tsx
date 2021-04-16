@@ -12,7 +12,7 @@ export type AnchorNavSectionControlSchema = AnchorNavSectionSchema & {
 
 /**
  * AnchorNav
- * 文档：https://baidu.gitee.io/amis/docs/components/form/anchor-nav
+ * 文档：https://doc.jeata.com/amis/components/form/anchor-nav
  */
 export interface AnchorNavControlSchema
   extends FormBaseControl,

@@ -27,7 +27,7 @@ export type BreadcrumbItemSchema = {
 
 /**
  * Breadcrumb 显示渲染器
- * 文档：https://baidu.gitee.io/amis/docs/components/breadcrumb
+ * 文档：https://doc.jeata.com/amis/components/breadcrumb
  */
 export interface BreadcrumbSchema extends BaseSchema {
   /**

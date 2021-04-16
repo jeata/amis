@@ -6,7 +6,7 @@ import {filter} from '../utils/tpl';
 
 /**
  * Date 展示渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/date
+ * 文档：https://doc.jeata.com/amis/components/date
  */
 export interface DateSchema extends BaseSchema {
   /**

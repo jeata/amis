@@ -36,11 +36,17 @@ export interface DateBaseControlSchema extends FormBaseControl {
    * 是否为内联模式？
    */
   emebed?: boolean;
+
+  /**
+   * 是否返回数字类型？
+   * 只针对
+   */
+  toNumber?: boolean;
 }
 
 /**
  * Date日期选择控件
- * 文档：https://doc.jeata.com/amis/docs/components/form/date
+ * 文档：https://doc.jeata.com/amis/components/form/date
  */
 export interface DateControlSchema extends DateBaseControlSchema {
   /**
@@ -78,7 +84,7 @@ export interface DateControlSchema extends DateBaseControlSchema {
 
 /**
  * Datetime日期时间选择控件
- * 文档：https://doc.jeata.com/amis/docs/components/form/datetime
+ * 文档：https://doc.jeata.com/amis/components/form/datetime
  */
 export interface DateTimeControlSchema extends DateBaseControlSchema {
   /**
@@ -123,7 +129,7 @@ export interface DateTimeControlSchema extends DateBaseControlSchema {
 
 /**
  * Time 时间选择控件
- * 文档：https://doc.jeata.com/amis/docs/components/form/time
+ * 文档：https://doc.jeata.com/amis/components/form/time
  */
 export interface TimeControlSchema extends DateBaseControlSchema {
   /**
@@ -158,7 +164,7 @@ export interface TimeControlSchema extends DateBaseControlSchema {
 
 /**
  * Month 月份选择控件
- * 文档：https://doc.jeata.com/amis/docs/components/form/Month
+ * 文档：https://doc.jeata.com/amis/components/form/Month
  */
 export interface MonthControlSchema extends DateBaseControlSchema {
   /**
@@ -228,6 +234,7 @@ export interface DateProps extends FormControlProps {
   utc?: boolean; // 设定是否存储 utc 时间。
   minDate?: string;
   maxDate?: string;
+  toNumber?: boolean; // 是否转换成数字
 }
 
 interface DateControlState {
@@ -260,12 +267,18 @@ export default class DateControl extends React.PureComponent<
       setPrinstineValue,
       data,
       format,
-      utc
+      utc,
+      toNumber
     } = this.props;
 
     if (defaultValue && value === defaultValue) {
       const date = filterDate(defaultValue, data, format);
-      setPrinstineValue((utc ? moment.utc(date) : date).format(format));
+      if(toNumber && format && ['M', 'Q', 'D', 'DDD', 'd', 'e', 'E', 'w', 'W', 'YYYY', 'Y', 'H', 'h', 'k', 'm', 's', 'S', 'X','x'].indexOf(format) != -1) {
+        setPrinstineValue(parseInt((utc ? moment.utc(date) : date).format(format)));
+      } else {
+        setPrinstineValue((utc ? moment.utc(date) : date).format(format));
+      }
+
     }
 
     this.setState({
@@ -283,9 +296,16 @@ export default class DateControl extends React.PureComponent<
         nextProps.data,
         nextProps.format
       );
-      nextProps.setPrinstineValue(
-        (nextProps.utc ? moment.utc(date) : date).format(nextProps.format)
-      );
+      if(nextProps.toNumber && nextProps.format && ['M', 'Q', 'D', 'DDD', 'd', 'e', 'E', 'w', 'W', 'YYYY', 'Y', 'H', 'h', 'k', 'm', 's', 'S', 'X','x'].indexOf(nextProps.format) != -1) {
+        nextProps.setPrinstineValue(
+          parseInt((nextProps.utc ? moment.utc(date) : date).format(nextProps.format))
+        );
+      } else {
+        nextProps.setPrinstineValue(
+          (nextProps.utc ? moment.utc(date) : date).format(nextProps.format)
+        );
+      }
+
     }
 
     if (

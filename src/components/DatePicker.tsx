@@ -270,6 +270,8 @@ export interface DateProps extends LocaleProps, ThemeProps {
   // 是否为内嵌模式，如果开启就不是 picker 了，直接页面点选。
   embed?: boolean;
 
+  toNumber?:boolean; // 尽量转成数字
+
   // 下面那个千万不要写，写了就会导致 keyof DateProps 得到的结果是 string | number;
   // [propName: string]: any;
 }
@@ -384,8 +386,14 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
   clearValue(e: React.MouseEvent<any>) {
     e.preventDefault();
     e.stopPropagation();
-    const onChange = this.props.onChange;
-    onChange('');
+    const {onChange, toNumber, format} = this.props;
+
+    // 尽量转成数字
+    if(toNumber && format && ['M', 'Q', 'D', 'DDD', 'd', 'e', 'E', 'w', 'W', 'YYYY', 'Y', 'H', 'h', 'k', 'm', 's', 'S', 'X','x'].indexOf(format) != -1) {
+      onChange(0);
+    } else {
+      onChange('');
+    }
   }
 
   handleChange(value: moment.Moment) {
@@ -398,7 +406,8 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
       timeFormat,
       closeOnSelect,
       utc,
-      viewMode
+      viewMode,
+      toNumber
     } = this.props;
 
     if (!moment.isMoment(value)) {
@@ -411,7 +420,12 @@ export class DatePicker extends React.Component<DateProps, DatePickerState> {
       value = maxTime;
     }
 
-    onChange(utc ? moment.utc(value).format(format) : value.format(format));
+    // 尽量转成数字
+    if(toNumber && format && ['M', 'Q', 'D', 'DDD', 'd', 'e', 'E', 'w', 'W', 'YYYY', 'Y', 'H', 'h', 'k', 'm', 's', 'S', 'X','x'].indexOf(format) != -1) {
+      onChange(parseInt(utc ? moment.utc(value).format(format) : value.format(format)));
+    } else {
+      onChange(utc ? moment.utc(value).format(format) : value.format(format));
+    }
 
     if (closeOnSelect && dateFormat && !timeFormat) {
       this.close();

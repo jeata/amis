@@ -14,7 +14,7 @@ import {FormBaseControl} from './Item';
 
 /**
  * 按钮组控件。
- * 文档：https://doc.jeata.com/amis/docs/components/form/button-group
+ * 文档：https://doc.jeata.com/amis/components/form/button-group
  */
 export interface ButtonGroupControlSchema
   extends ButtonGroupSchema,

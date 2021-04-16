@@ -9,7 +9,7 @@ import {BaseSchema, SchemaClassName, SchemaTpl, SchemaUrlPath} from '../Schema';
 
 /**
  * 图片展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/image
+ * 文档：https://doc.jeata.com/amis/components/image
  */
 export interface ImageSchema extends BaseSchema {
   /**

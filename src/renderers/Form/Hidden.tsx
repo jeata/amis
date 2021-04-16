@@ -3,7 +3,7 @@ import {FormItem, FormControlProps, FormBaseControl} from './Item';
 
 /**
  * Hidden 隐藏域。功能性组件
- * 文档：https://doc.jeata.com/amis/docs/components/form/hidden
+ * 文档：https://doc.jeata.com/amis/components/form/hidden
  */
 export interface HiddenControlSchema extends FormBaseControl {
   type: 'hidden';

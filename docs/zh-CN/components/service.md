@@ -312,7 +312,7 @@ const ws = new WebSocket.Server({port: 8777});
 ws.on('connection', function connection(ws) {
   setInterval(() => {
     const random = Math.floor(Math.random() * Math.floor(100));
-    // 返回给 amis 的数据
+    // 返回给基塔后台的数据
     const data = {
       random
     };
@@ -345,7 +345,7 @@ wsFetcher(ws, onMessage, onError) {
 }
 ```
 
-通过 onMessage 来通知 amis 数据修改了，并返回 close 函数来关闭连接。
+通过 onMessage 来通知基塔后台数据修改了，并返回 close 函数来关闭连接。
 
 ## 属性表
 

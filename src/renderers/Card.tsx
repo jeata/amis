@@ -58,7 +58,7 @@ export type CardBodyField = SchemaObject & {
 
 /**
  * Card 卡片渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/card
+ * 文档：https://doc.jeata.com/amis/components/card
  */
 export interface CardSchema extends BaseSchema {
   /**

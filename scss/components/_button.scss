@@ -331,7 +331,7 @@ fieldset:disabled a.#{$ns}Button {
 
   // 链接方式的下拉菜单
   > .#{$ns}DropDown-caret {
-    margin-left: $gap-xs;
+    margin-left: var(--gap-xs);
   }
 }
 
@@ -341,7 +341,7 @@ fieldset:disabled a.#{$ns}Button {
   width: auto;
   min-width: auto;
   font-weight: 400;
-  color: $text-color;
+  color: var(--text-color);
   text-decoration: none;
   padding-top: 0;
   padding-bottom: 0;
@@ -351,14 +351,14 @@ fieldset:disabled a.#{$ns}Button {
   box-shadow: none;
 
   @include hover-focus {
-    color: $text--loud-color;
+    color: var(--text--loud-color);
     text-decoration: none;
     box-shadow: none;
   }
 
   &:disabled,
   &.is-disabled {
-    color: $text--muted-color;
+    color: var(--text--muted-color);
     pointer-events: none;
     background-color: transparent;
   }

@@ -22,7 +22,7 @@ import {IIRendererStore} from '../../store/iRenderer';
 
 /**
  * Grid 格子布局
- * 文档：https://doc.jeata.com/amis/docs/components/form/grid
+ * 文档：https://doc.jeata.com/amis/components/form/grid
  */
 export interface GridControlSchema
   extends FormBaseControl,

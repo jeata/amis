@@ -4,7 +4,7 @@ import {BaseSchema, SchemaCollection} from '../Schema';
 import {IPaginationStore, PaginationStore} from '../store/pagination';
 
 /**
- * 分页容器功能性渲染器。详情请见：https://baidu.gitee.io/amis/docs/components/pagination-wrapper
+ * 分页容器功能性渲染器。详情请见：https://doc.jeata.com/amis/components/pagination-wrapper
  */
 export interface PaginationWrapperSchema extends BaseSchema {
   /**

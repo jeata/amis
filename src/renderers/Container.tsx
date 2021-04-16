@@ -5,7 +5,7 @@ import {SchemaNode} from '../types';
 
 /**
  * Container 容器渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/container
+ * 文档：https://doc.jeata.com/amis/components/container
  */
 export interface ContainerSchema extends BaseSchema {
   /**

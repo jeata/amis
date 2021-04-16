@@ -557,7 +557,7 @@ order: 67
 ```schema: scope="body"
 {
     "type": "crud",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample?waitSeconds=1",
+    "api": "https://mock.jeata.com/crud/sample?waitSeconds=1",
     "columns": [
         {
             "name": "id",
@@ -1166,7 +1166,7 @@ order: 67
 ```schema: scope="body"
 {
     "type": "service",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample?perPage=10",
+    "api": "https://mock.jeata.com/crud/sample?perPage=10",
     "body": [
         {
             "type": "table",
@@ -1204,7 +1204,7 @@ order: 67
 ```schema: scope="body"
 {
     "type": "service",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample?perPage=10",
+    "api": "https://mock.jeata.com/crud/sample?perPage=10",
     "body": [
         {
             "type": "table",
@@ -1250,7 +1250,7 @@ order: 67
 ```schema: scope="body"
 {
     "type": "service",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample?perPage=10",
+    "api": "https://mock.jeata.com/crud/sample?perPage=10",
     "body": [
         {
             "type": "table",

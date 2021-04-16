@@ -4,7 +4,7 @@ import {FormItem, FormControlProps, FormBaseControl} from './Item';
 
 /**
  * UUID 功能性组件
- * 文档：https://baidu.gitee.io/amis/docs/components/form/uuid
+ * 文档：https://doc.jeata.com/amis/components/form/uuid
  */
 export interface UUIDControlSchema extends FormBaseControl {
   type: 'uuid';

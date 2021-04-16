@@ -41,7 +41,7 @@ export type NavItemSchema = {
 
 /**
  * Nav 导航渲染器
- * 文档：https://doc.jeata.com/amis/docs/components/nav
+ * 文档：https://doc.jeata.com/amis/components/nav
  */
 export interface NavSchema extends BaseSchema {
   /**

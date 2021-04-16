@@ -13,7 +13,7 @@ import {dataMapping} from '../../utils/tpl-builtin';
 
 /**
  * Radio 单选框。
- * 文档：https://doc.jeata.com/amis/docs/components/form/radios
+ * 文档：https://doc.jeata.com/amis/components/form/radios
  */
 export interface RadiosControlSchema extends FormOptionsControl {
   type: 'radios';

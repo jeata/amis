@@ -318,7 +318,7 @@ export type CRUDTableSchem = CRUDCommonSchema & {
 
 /**
  * CRUD 增删改查渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/crud
+ * 文档：https://doc.jeata.com/amis/components/crud
  */
 export type CRUDSchema = CRUDCardsSchema | CRUDListSchema | CRUDTableSchem;
 

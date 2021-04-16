@@ -7,7 +7,7 @@ import {FormBaseControl, FormControlSchema} from './Item';
 
 /**
  * FieldSet 表单项集合
- * 文档：https://doc.jeata.com/amis/docs/components/form/fieldset
+ * 文档：https://doc.jeata.com/amis/components/form/fieldset
  */
 export interface FieldSetControlSchema
   extends Omit<FormBaseControl, 'size'>,

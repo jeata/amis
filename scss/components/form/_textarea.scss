@@ -31,7 +31,7 @@
   }
 
   &::placeholder {
-    color: $Form-input-placeholderColor;
+    color: var(--Form-input-placeholderColor);
     user-select: none;
   }
 }

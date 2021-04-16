@@ -33,7 +33,7 @@ export type HBoxColumn = HBoxColumnObject & SchemaObject; // 不能用 SchemaObj
 
 /**
  * Hbox 水平布局渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/hbox
+ * 文档：https://doc.jeata.com/amis/components/hbox
  */
 export interface HBoxSchema extends BaseSchema {
   /**

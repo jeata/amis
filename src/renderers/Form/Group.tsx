@@ -25,7 +25,7 @@ export type GroupSubControl = FormControlSchema & {
 
 /**
  * Group 表单集合渲染器，能让多个表单在一行显示
- * 文档：https://doc.jeata.com/amis/docs/components/form/group
+ * 文档：https://doc.jeata.com/amis/components/form/group
  */
 export interface GroupControlSchema extends FormBaseControl {
   type: 'group';

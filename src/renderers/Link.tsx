@@ -8,7 +8,7 @@ import TooltipWrapper from "../components/TooltipWrapper";
 
 /**
  * Link 链接展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/link
+ * 文档：https://doc.jeata.com/amis/components/link
  */
 export interface LinkSchema extends BaseSchema {
   /**

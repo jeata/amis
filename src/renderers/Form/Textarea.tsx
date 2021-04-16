@@ -6,7 +6,7 @@ import {findDOMNode} from 'react-dom';
 import {autobind} from '../../utils/helper';
 /**
  * TextArea 多行文本输入框。
- * 文档：https://doc.jeata.com/amis/docs/components/form/textarea
+ * 文档：https://doc.jeata.com/amis/components/form/textarea
  */
 export interface TextareaControlSchema extends FormBaseControl {
   /**

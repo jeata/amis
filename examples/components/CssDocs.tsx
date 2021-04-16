@@ -13,17 +13,17 @@ export const cssDocs = [
             cb(null, makeMarkdownRenderer(doc));
           })
       },
-      {
-        label: 'CSS 变量',
-        path: '/zh-CN/style/css-vars',
-        getComponent: (location: any, cb: any) =>
-          (require as any)(
-            ['../../docs/zh-CN/style/css-vars.md'],
-            (doc: any) => {
-              cb(null, makeMarkdownRenderer(doc));
-            }
-          )
-      },
+      // {
+      //   label: 'CSS 变量',
+      //   path: '/zh-CN/style/css-vars',
+      //   getComponent: (location: any, cb: any) =>
+      //     (require as any)(
+      //       ['../../docs/zh-CN/style/css-vars.md'],
+      //       (doc: any) => {
+      //         cb(null, makeMarkdownRenderer(doc));
+      //       }
+      //     )
+      // },
       {
         label: '辅助类 - 响应式设计',
         path: '/zh-CN/style/responsive-design',

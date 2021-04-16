@@ -6,7 +6,7 @@ import {ButtonToolbarSchema} from '../ButtonToolbar';
 
 /**
  * 按钮工具栏控件。
- * 文档：https://doc.jeata.com/amis/docs/components/form/button-toolbar
+ * 文档：https://doc.jeata.com/amis/components/form/button-toolbar
  */
 export interface ButtonToolbarControlSchema
   extends ButtonToolbarSchema,

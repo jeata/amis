@@ -33,7 +33,7 @@ import {SchemaRemark} from './Remark';
 import {onAction} from 'mobx-state-tree';
 
 /**
- * Page 渲染器。详情请见：https://doc.jeata.com/amis/docs/components/page
+ * Page 渲染器。详情请见：https://doc.jeata.com/amis/components/page
  */
 export interface PageSchema extends BaseSchema {
   /**
@@ -504,24 +504,25 @@ export default class Page extends React.Component<PageProps> {
     const hasAside = aside && (!Array.isArray(aside) || aside.length);
 
     let cssVarsContent = '';
-    if (cssVars) {
-      for (const key in cssVars) {
-        if (key.startsWith('--')) {
-          if (key.indexOf(':') !== -1) {
-            continue;
-          }
-          const value = cssVars[key];
-          // 这是为了防止 xss，可能还有别的
-          if (
-            typeof value === 'string' &&
-            (value.indexOf('expression(') !== -1 || value.indexOf(';') !== -1)
-          ) {
-            continue;
-          }
-          cssVarsContent += `${key}: ${value}; \n`;
-        }
-      }
-    }
+    // jeata 不开放此功能
+    // if (cssVars) {
+    //   for (const key in cssVars) {
+    //     if (key.startsWith('--')) {
+    //       if (key.indexOf(':') !== -1) {
+    //         continue;
+    //       }
+    //       const value = cssVars[key];
+    //       // 这是为了防止 xss，可能还有别的
+    //       if (
+    //         typeof value === 'string' &&
+    //         (value.indexOf('expression(') !== -1 || value.indexOf(';') !== -1)
+    //       ) {
+    //         continue;
+    //       }
+    //       cssVarsContent += `${key}: ${value}; \n`;
+    //     }
+    //   }
+    // }
 
     return (
       <div

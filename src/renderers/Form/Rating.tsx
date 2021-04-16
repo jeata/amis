@@ -4,7 +4,7 @@ import Rating from '../../components/Rating';
 
 /**
  * Rating
- * 文档：https://doc.jeata.com/amis/docs/components/form/rating
+ * 文档：https://doc.jeata.com/amis/components/form/rating
  */
 export interface RatingControlSchema extends FormBaseControl {
   type: 'rating';

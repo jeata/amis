@@ -11,7 +11,7 @@ import {Option} from '../../components/Select';
 
 /**
  * 图标选择器
- * 文档：https://doc.jeata.com/amis/docs/components/form/icon-picker
+ * 文档：https://doc.jeata.com/amis/components/form/icon-picker
  */
 export interface IconPickerControlSchema extends FormBaseControl {
   type: 'icon-picker';

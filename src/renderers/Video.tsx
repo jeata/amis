@@ -24,7 +24,7 @@ import {BaseSchema, SchemaClassName, SchemaUrlPath} from '../Schema';
 
 /**
  * 视频播放器
- * 文档：https://doc.jeata.com/amis/docs/components/video
+ * 文档：https://doc.jeata.com/amis/components/video
  */
 export interface VideoSchema extends BaseSchema {
   /**

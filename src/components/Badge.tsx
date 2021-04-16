@@ -11,7 +11,7 @@ import {ClassNamesFn} from 'classnames/types';
 
 /**
  * Badge 角标。
- * 文档：https://baidu.gitee.io/amis/docs/components/badge
+ * 文档：https://doc.jeata.com/amis/components/badge
  */
 export interface BadgeSchema extends BaseSchema {
   /**

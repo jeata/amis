@@ -14,7 +14,7 @@ import {resolveVariable, resolveVariableAndFilter} from '../utils/tpl-builtin';
 
 /**
  * Avatar 用户头像显示
- * 文档：https://baidu.gitee.io/amis/docs/components/avatar
+ * 文档：https://doc.jeata.com/amis/components/avatar
  */
 export interface AvatarSchema extends BaseSchema {
   /**

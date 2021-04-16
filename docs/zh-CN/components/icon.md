@@ -8,8 +8,6 @@ icon:
 order: 50
 ---
 
-> 在 React 项目中使用 Icon 需要引入 `font-awesome@4.7.0`，然后在代码中 `import 'font-awesome/css/font-awesome.css'`，还有相关的 webpack 配置，具体请参考 [amis-react-starter](https://github.com/aisuda/amis-react-starter) 里的配置
-
 ## 基本使用
 
 ```schema
@@ -24,7 +22,7 @@ order: 50
 
 ## 颜色及大小调整
 
-icon 基于字体实现，所以可以通过[文字颜色](../../../style/typography/text-color)或[大小](../../../style/typography/font-size)来控制它。
+icon 基于字体实现，所以可以通过[样式](../../docs/concepts/style)来控制它。
 
 ```schema
 {

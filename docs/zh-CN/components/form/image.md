@@ -15,13 +15,13 @@ order: 27
 ```schema: scope="body"
 {
     "type": "form",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
             "name": "image",
             "label": "image",
-            "receiver": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/upload/file"
+            "receiver": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -48,14 +48,14 @@ order: 27
 ```schema: scope="body"
 {
     "type": "form",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
             "name": "image",
             "label": "限制只能上传jpg图片",
             "accept": ".jpg",
-            "receiver": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/upload/file"
+            "receiver": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -70,7 +70,7 @@ order: 27
 ```schema: scope="body"
 {
     "type": "form",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
@@ -80,7 +80,7 @@ order: 27
             "limit": {
               "minWidth": 1000
             },
-            "receiver": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/upload/file"
+            "receiver": "https://mock.jeata.com/api/upload/file"
         }
     ]
 }
@@ -91,14 +91,14 @@ order: 27
 ```schema: scope="body"
 {
     "type": "form",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "controls": [
         {
             "type": "image",
             "name": "image",
             "label": "限制只能上传jpg图片",
             "accept": ".jpg",
-            "receiver": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/upload/file",
+            "receiver": "https://mock.jeata.com/api/upload/file",
             "crop": true
         }
     ]
@@ -112,13 +112,13 @@ order: 27
 ```schema: scope="body"
 {
   "type": "form",
-  "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "controls": [
     {
       "type": "image",
       "name": "image",
       "label": "image",
-      "receiver": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/upload/file",
+      "receiver": "https://mock.jeata.com/api/upload/file",
       "autoFill": {
         "myUrl": "${url}"
       }

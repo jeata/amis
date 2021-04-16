@@ -14,7 +14,7 @@ import {Chart} from '../Chart';
 
 /**
  * 图表 Radio 单选框。
- * 文档：https://baidu.gitee.io/amis/docs/components/form/chart-radios
+ * 文档：https://doc.jeata.com/amis/components/form/chart-radios
  */
 export interface ChartRadiosControlSchema extends FormOptionsControl {
   type: 'chart-radios';

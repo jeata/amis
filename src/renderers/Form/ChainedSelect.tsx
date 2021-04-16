@@ -13,7 +13,7 @@ import {SchemaApi} from '../../Schema';
 
 /**
  * 级联选择框
- * 文档：https://doc.jeata.com/amis/docs/components/form/chained-select
+ * 文档：https://doc.jeata.com/amis/components/form/chained-select
  */
 export interface ChainedSelectControlSchema extends FormOptionsControl {
   type: 'chained-select';

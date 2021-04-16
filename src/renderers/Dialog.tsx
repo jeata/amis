@@ -24,7 +24,7 @@ import {isAlive} from 'mobx-state-tree';
 
 /**
  * Dialog 弹框渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/dialog
+ * 文档：https://doc.jeata.com/amis/components/dialog
  */
 export interface DialogSchema extends BaseSchema {
   type: 'dialog';

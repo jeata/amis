@@ -14,7 +14,7 @@ import {ActionSchema} from './Action';
 
 /**
  * Panel渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/panel
+ * 文档：https://doc.jeata.com/amis/components/panel
  */
 export interface PanelSchema extends BaseSchema {
   /**

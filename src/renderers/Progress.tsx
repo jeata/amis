@@ -8,7 +8,7 @@ import {BaseSchema, SchemaClassName} from '../Schema';
 
 /**
  * 进度展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/progress
+ * 文档：https://doc.jeata.com/amis/components/progress
  */
 export interface ProgressSchema extends BaseSchema {
   type: 'progress';

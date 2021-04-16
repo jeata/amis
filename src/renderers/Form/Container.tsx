@@ -12,7 +12,7 @@ import {SchemaCollection} from '../../Schema';
 
 /**
  * 容器空间
- * 文档：https://doc.jeata.com/amis/docs/components/form/contaier
+ * 文档：https://doc.jeata.com/amis/components/form/contaier
  */
 export interface ContainerControlSchema
   extends FormBaseControl,

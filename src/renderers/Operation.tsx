@@ -10,7 +10,7 @@ import {ActionSchema} from './Action';
 
 /**
  * 操作栏渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/operation
+ * 文档：https://doc.jeata.com/amis/components/operation
  */
 export interface OperationSchema extends BaseSchema {
   /**

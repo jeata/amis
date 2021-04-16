@@ -5,7 +5,7 @@ import {SchemaNode} from '../types';
 
 /**
  * Wrapper 容器渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/wrapper
+ * 文档：https://doc.jeata.com/amis/components/wrapper
  */
 export interface WrapperSchema extends BaseSchema {
   /**

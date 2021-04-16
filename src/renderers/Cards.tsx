@@ -27,7 +27,7 @@ import {CardSchema} from './Card';
 
 /**
  * Cards 卡片集合渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/card
+ * 文档：https://doc.jeata.com/amis/components/card
  */
 export interface CardsSchema extends BaseSchema {
   /**

@@ -10,7 +10,7 @@ import {FormOptionsControl} from './Options';
 
 /**
  * Range
- * 文档：https://doc.jeata.com/amis/docs/components/form/range
+ * 文档：https://doc.jeata.com/amis/components/form/range
  */
 export interface RangeControlSchema extends FormBaseControl {
   type: 'range';

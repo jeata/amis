@@ -27,7 +27,7 @@ import {filter} from '../../utils/tpl';
 
 /**
  * Image 图片上传控件
- * 文档：https://doc.jeata.com/amis/docs/components/form/image
+ * 文档：https://doc.jeata.com/amis/components/form/image
  */
 export interface ImageControlSchema extends FormBaseControl {
   /**

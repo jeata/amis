@@ -7,7 +7,7 @@ import {BaseSchema} from '../Schema';
 import {resolveVariableAndFilter, isPureVariable} from '../utils/tpl-builtin';
 /**
  * JSON 数据展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/json
+ * 文档：https://doc.jeata.com/amis/components/json
  */
 export interface JsonSchema extends BaseSchema {
   /**

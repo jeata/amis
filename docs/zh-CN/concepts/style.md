@@ -10,10 +10,6 @@ order: 18
 
 有大量的功能类 class 可以使用，即可以用在 schema 中，也可以用在自定义组件开发中，掌握这些 class, 几乎可以不用写样式。
 
-<div class="bg-pink-500 text-light shadow p-4 rounded-md hover:bg-pink-600">
-  <div class="text-lg b-b p-b-sm">注意</div>
-  <div class="p-t-xs">CSS辅助类样式做了全新的升级，请点击顶部的「样式」查看新版。旧版本可以继续，但将不再更新。</div>
-</div>
 
 ## 基本使用
 

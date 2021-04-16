@@ -26,7 +26,7 @@ import {isEqual} from 'lodash';
 
 /**
  * Nested Select
- * 文档：https://doc.jeata.com/amis/docs/components/form/nested-select
+ * 文档：https://doc.jeata.com/amis/components/form/nested-select
  */
 export interface NestedSelectControlSchema extends FormOptionsControl {
   type: 'nested-select';

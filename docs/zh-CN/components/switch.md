@@ -15,8 +15,8 @@ order: 66
 ```schema: scope="body"
 {
     "type": "crud",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample",
-    "quickSaveItemApi": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample/$id",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveItemApi": "https://mock.jeata.com/crud/sample/$id",
     "syncLocation": false,
     "columns": [
         {

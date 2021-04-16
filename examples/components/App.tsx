@@ -156,7 +156,7 @@ export class App extends React.PureComponent<{
     super(props);
     this.setNavigations = this.setNavigations.bind(this);
     this.setNavigationFilter = this.setNavigationFilter.bind(this);
-    }
+
 
     if(window != top.window || location.search.indexOf('_inIframe=1') != -1) {
       this.setState({
@@ -240,11 +240,11 @@ export class App extends React.PureComponent<{
       <>
         <div
           className={`${theme.ns}Layout-brandBar ${
-            docPage ? 'DocLayout-brandBar' : ''
+            docPage ? 'DocLayout-brandBar' : 'ExampleLayout-brandBar'
           }`}
         >
           <div className={`${theme.ns}Layout-offScreen-group ${
-              docPage ? 'DocLayout-offScreen-btn' : ''
+              docPage ? 'DocLayout-offScreen-btn' : 'ExampleLayout-offScreen-btn'
             } visible-xs`}>
             <div
               onClick={() => this.setState({offScreen: !this.state.offScreen})}
@@ -262,6 +262,18 @@ export class App extends React.PureComponent<{
             >
               <i className="bui-icon iconfont icon-search"></i>
             </div>
+          </div>
+
+          <div className={`${theme.ns}Layout-brand`}>
+            <a href="https://www.jeata.com/">
+              <div className="logo"></div>
+              <span className="title">{docPage?'页面文档':'页面示例'}</span>
+            </a>
+          </div>
+
+          <div className={`${theme.ns}Layout-offScreen-group ${
+            docPage ? 'DocLayout-offScreen-btn' : ''
+          } right visible-xs`}>
             {inIframe && <div
               onClick={this.onExternalLinkClick.bind(this)}
               className={`${theme.ns}Layout-offScreen-btn`}
@@ -271,18 +283,11 @@ export class App extends React.PureComponent<{
               <i className="fa fa-external-link" aria-hidden="true"></i>
             </div> }
           </div>
-
-          <div className={`${theme.ns}Layout-brand`}>
-            <a href="https://www.jeata.com/">
-              <div className="logo"></div>
-              <span className="title">页面文档</span>
-            </a>
-          </div>
         </div>
 
         <div
           className={`${theme.ns}Layout-headerBar ${
-            docPage ? 'DocLayout-headerBar' : ''
+            docPage ? 'DocLayout-headerBar' : 'ExampleLayout-headerBar'
           } pc:flex items-center`}
         >
           {docPage ? null : (
@@ -313,9 +318,9 @@ export class App extends React.PureComponent<{
             >
               组件
             </Link>
-            <Link to={`${ContextPath}/zh-CN/style`} activeClassName="is-active">
-              样式
-            </Link>
+            {/*<Link to={`${ContextPath}/zh-CN/style`} activeClassName="is-active">*/}
+            {/*  样式*/}
+            {/*</Link>*/}
             <Link to={`${ContextPath}/examples`} activeClassName="is-active">
               页面示例
             </Link>
@@ -333,14 +338,14 @@ export class App extends React.PureComponent<{
             >
           <DocSearch theme={theme} onRef={this.onSearchRef.bind(this)} />
             </div>
-        <div className={`${theme.ns}Layout-searchIcon visible-sm`}>
-          <div
-            onClick={this.onSearchClick.bind(this)}
-            className={`${theme.ns}Layout-offScreen-btn`}
-          >
-            <i className="bui-icon iconfont icon-search"></i>
-          </div>
-        </div>
+        {/*<div className={`${theme.ns}Layout-searchIcon visible-sm`}>*/}
+        {/*  <div*/}
+        {/*    onClick={this.onSearchClick.bind(this)}*/}
+        {/*    className={`${theme.ns}Layout-offScreen-btn`}*/}
+        {/*  >*/}
+        {/*    <i className="bui-icon iconfont icon-search"></i>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
           </>
         ) : null}
       </>
@@ -568,12 +573,12 @@ export class App extends React.PureComponent<{
               >
                 组件
               </Link>
-              <Link
-                to={`${ContextPath}/zh-CN/style`}
-                activeClassName="is-active"
-              >
-                样式
-              </Link>
+              {/*<Link*/}
+              {/*  to={`${ContextPath}/zh-CN/style`}*/}
+              {/*  activeClassName="is-active"*/}
+              {/*>*/}
+              {/*  样式*/}
+              {/*</Link>*/}
             </ul>
             {this.renderNavigation()}
           </Drawer>

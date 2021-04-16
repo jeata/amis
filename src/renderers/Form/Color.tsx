@@ -5,7 +5,7 @@ import ColorPicker from '../../components/ColorPicker';
 
 /**
  * Color 颜色选择框
- * 文档：https://doc.jeata.com/amis/docs/components/form/color
+ * 文档：https://doc.jeata.com/amis/components/form/color
  */
 export interface ColorControlSchema extends FormBaseControl {
   /**

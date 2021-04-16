@@ -9,7 +9,7 @@ import {BaseSchema, SchemaUrlPath} from '../Schema';
 
 /**
  * Audio 音频渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/audio
+ * 文档：https://doc.jeata.com/amis/components/audio
  */
 export interface AudioSchema extends BaseSchema {
   /**

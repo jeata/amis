@@ -2,19 +2,21 @@
 set -e
 
 
-echo "building"
+echo "生成搜索数据 ..."
 node ./scripts/generate-search-data.js
 
 # npm run build-schemas
 
+echo "生成gh-page ..."
 ./node_modules/.bin/fis3 release gh-pages -c
 
 # 拷贝一份兼容之前的访问路径
 cp -r gh-pages/zh-CN/docs/* gh-pages/docs/
 
-cp ./schema.json ./gh-pages
-
+echo "构建项目 build.sh ..."
 sh build.sh
+
+cp ./schema.json ./gh-pages
 
 tar -zcvf sdk.tar.gz sdk
 

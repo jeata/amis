@@ -5,7 +5,7 @@ import Switch from '../../components/Switch';
 
 /**
  * Switch
- * 文档：https://doc.jeata.com/amis/docs/components/form/switch
+ * 文档：https://doc.jeata.com/amis/components/form/switch
  */
 export interface SwitchControlSchema extends FormBaseControl {
   /**

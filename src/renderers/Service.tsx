@@ -21,7 +21,7 @@ import {
 
 /**
  * Service 服务类控件。
- * 文档：https://doc.jeata.com/amis/docs/components/service
+ * 文档：https://doc.jeata.com/amis/components/service
  */
 export interface ServiceSchema extends BaseSchema {
   /**

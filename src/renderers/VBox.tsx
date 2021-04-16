@@ -11,7 +11,7 @@ export type HboxRow = SchemaObject & {
 
 /**
  * 垂直布局控件
- * 文档：https://doc.jeata.com/amis/docs/components/vbox
+ * 文档：https://doc.jeata.com/amis/components/vbox
  */
 export interface VBoxSchema extends BaseSchema {
   type: 'vbox';

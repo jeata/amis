@@ -29,7 +29,7 @@ import {isAlive} from 'mobx-state-tree';
 
 /**
  * Chart 图表渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/carousel
+ * 文档：https://doc.jeata.com/amis/components/carousel
  */
 export interface ChartSchema extends BaseSchema {
   /**
@@ -239,12 +239,14 @@ export class Chart extends React.Component<ChartProps> {
     let onChartMount = this.props.onChartMount;
 
     if (ref) {
+
       Promise.all([
         import('echarts'),
         import('echarts-stat'),
         import('echarts/extension/dataTool'),
         import('echarts/extension/bmap/bmap'),
-	import('echarts/theme/macarons')
+        // @ts-ignore
+	      import('../../node_modules/echarts/theme/macarons')
       ]).then(async ([echarts, ecStat]) => {
         (window as any).echarts = echarts;
         (window as any).ecStat = ecStat;

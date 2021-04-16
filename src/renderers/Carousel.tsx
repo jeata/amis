@@ -17,7 +17,7 @@ import {BaseSchema, SchemaCollection, SchemaName, SchemaTpl} from '../Schema';
 
 /**
  * Carousel 轮播图渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/carousel
+ * 文档：https://doc.jeata.com/amis/components/carousel
  */
 export interface CarouselSchema extends BaseSchema {
   /**

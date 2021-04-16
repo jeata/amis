@@ -3,7 +3,7 @@
     <img width="284" src="https://github.com/baidu/amis/raw/master/examples/static/logo.png">
   </p>
   
-  [文档（国内）](https://baidu.gitee.io/amis/) |
+  [文档（国内）](https://doc.jeata.com/amis/) |
   [文档（国外）](https://baidu.github.io/amis/) |
   [可视化编辑器](https://aisuda.github.io/amis-editor-demo/) |
   [amis-admin](https://github.com/aisuda/amis-admin) |

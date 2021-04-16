@@ -83,7 +83,7 @@ export interface AppPage {
 
 /**
  * App 渲染器，适合 JSSDK 用来做多页渲染。
- * 文档：https://baidu.gitee.io/amis/docs/components/app
+ * 文档：https://doc.jeata.com/amis/components/app
  */
 export interface AppSchema extends BaseSchema {
   /**

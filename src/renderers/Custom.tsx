@@ -12,7 +12,7 @@ export interface CustomSchema extends BaseSchema {
   /**
    * 实现自定义功能的渲染器，主要给 JS SDK 和可视化编辑器里使用。
    *
-   * 文档：https://baidu.gitee.io/amis/components/custom
+   * 文档：https://doc.jeata.com/amis/components/custom
    */
   type: 'custom';
   onMount?: Function | string;

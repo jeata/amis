@@ -9,7 +9,7 @@ import {BaseSchema} from '../Schema';
 
 /**
  * 状态展示控件。
- * 文档：https://doc.jeata.com/amis/docs/components/status
+ * 文档：https://doc.jeata.com/amis/components/status
  */
 export interface StatusSchema extends BaseSchema {
   /**

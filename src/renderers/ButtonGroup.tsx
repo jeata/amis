@@ -6,7 +6,7 @@ import {ActionSchema} from './Action';
 
 /**
  * Button Group 渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/button-group
+ * 文档：https://doc.jeata.com/amis/components/button-group
  */
 export interface ButtonGroupSchema extends BaseSchema {
   /**

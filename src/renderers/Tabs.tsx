@@ -86,7 +86,7 @@ export interface TabSchema extends Omit<BaseSchema, 'type'> {
 
 /**
  * 选项卡控件。
- * 文档：https://doc.jeata.com/amis/docs/components/tabs
+ * 文档：https://doc.jeata.com/amis/components/tabs
  */
 export interface TabsSchema extends BaseSchema {
   type: 'tabs';

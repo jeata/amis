@@ -8,7 +8,7 @@ import {resolveVariableAndFilter} from '../utils/tpl-builtin';
 
 /**
  * Color 显示渲染器，格式说明。
- * 文档：https://doc.jeata.com/amis/docs/components/color
+ * 文档：https://doc.jeata.com/amis/components/color
  */
 export interface ColorSchema extends BaseSchema {
   /**

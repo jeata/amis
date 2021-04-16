@@ -68,7 +68,7 @@ icon:
               "label": "动态选项",
               "type": "select",
               "name": "select2",
-              "source": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/getOptions?waitSeconds=1"
+              "source": "https://mock.jeata.com/api/form/getOptions?waitSeconds=1"
             },
             {
               "label": "日期",
@@ -347,7 +347,7 @@ type Value = ValueGroup;
               "label": "A",
               "type": "select",
               "name": "a",
-              "source": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/getOptions?waitSeconds=1",
+              "source": "https://mock.jeata.com/api/form/getOptions?waitSeconds=1",
               "searchable": true
             }
           ]

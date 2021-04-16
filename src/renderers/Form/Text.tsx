@@ -27,7 +27,7 @@ import {generateIcon} from '../../utils/icon';
 
 /**
  * Text 文本输入框。
- * 文档：https://doc.jeata.com/amis/docs/components/form/text
+ * 文档：https://doc.jeata.com/amis/components/form/text
  */
 export interface TextControlSchema extends FormOptionsControl {
   type:

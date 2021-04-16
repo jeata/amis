@@ -30,7 +30,7 @@ export type TabControlSchema = TabSchema & {
 
 /**
  * Tabs
- * 文档：https://doc.jeata.com/amis/docs/components/form/tabs
+ * 文档：https://doc.jeata.com/amis/components/form/tabs
  */
 export interface TabsControlSchema
   extends FormBaseControl,

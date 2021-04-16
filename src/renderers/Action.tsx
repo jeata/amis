@@ -154,7 +154,7 @@ export interface DialogActionSchema extends ButtonSchema {
 
   /**
    * 弹框详情
-   * 文档：https://doc.jeata.com/amis/docs/components/dialog
+   * 文档：https://doc.jeata.com/amis/components/dialog
    */
   dialog: DialogSchemaBase;
 
@@ -174,7 +174,7 @@ export interface DrawerActionSchema extends ButtonSchema {
 
   /**
    * 抽出式弹框详情
-   * 文档：https://doc.jeata.com/amis/docs/components/drawer
+   * 文档：https://doc.jeata.com/amis/components/drawer
    */
   drawer: DrawerSchemaBase;
 
@@ -242,7 +242,7 @@ export interface VanillaAction extends ButtonSchema {
 
 /**
  * 按钮动作渲染器。
- * 文档：https://doc.jeata.com/amis/docs/components/action
+ * 文档：https://doc.jeata.com/amis/components/action
  */
 export type ActionSchema =
   | AjaxActionSchema
