@@ -37,6 +37,7 @@
             theme !== 'default' ? 'disabled' : ''
           }  href="${__uri('../scss/themes/default.scss')}" />`
         );
+        /*
         document.write(
           `<link rel="stylesheet" title="cxd" ${
             theme !== 'cxd' ? 'disabled' : ''
@@ -52,12 +53,14 @@
             theme !== 'antd' ? 'disabled' : ''
           } href="${__uri('../scss/themes/antd.scss')}" />`
         );
+        */
       } else {
         document.write(
           `<link rel="stylesheet" title="default" ${
             theme !== 'default' ? 'disabled' : ''
           }  href="${__uri('../scss/themes/default-ie11.scss')}" />`
         );
+        /*
         document.write(
           `<link rel="stylesheet" title="cxd" ${
             theme !== 'cxd' ? 'disabled' : ''
@@ -73,6 +76,7 @@
             theme !== 'antd' ? 'disabled' : ''
           } href="${__uri('../scss/themes/antd-ie11.scss')}" />`
         );
+        */
       }
     </script>
     <!--ignore-->
