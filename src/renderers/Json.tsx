@@ -5,6 +5,8 @@ import JSONTree from 'react-json-tree';
 import {autobind} from '../utils/helper';
 import {BaseSchema} from '../Schema';
 import {resolveVariableAndFilter, isPureVariable} from '../utils/tpl-builtin';
+import JSON5 from 'json5';
+
 /**
  * JSON 数据展示控件。
  * 文档：https://doc.jeata.com/amis/components/json
@@ -165,7 +167,7 @@ export class JSONField extends React.Component<JSONProps, object> {
       data = resolveVariableAndFilter(source, this.props.data, '| raw');
     } else if (typeof value === 'string') {
       try {
-        data = JSON.parse(value);
+        data = JSON5.parse(value);
       } catch (e) {
         data = {
           error: e.message

@@ -1,6 +1,7 @@
 import {createObject} from './helper';
 import {filter} from './tpl';
 import {isPureVariable, resolveVariableAndFilter} from './tpl-builtin';
+import JSON5 from 'json5';
 const isExisty = (value: any) => value !== null && value !== undefined;
 const isEmpty = (value: any) => value === '';
 const makeRegexp = (reg: string | RegExp) => {
@@ -155,6 +156,16 @@ export const validations: {
     }
     return true;
   },
+  isJson5: function (values, value, minimum) {
+    if (isExisty(value) && !isEmpty(value) && typeof value === 'string') {
+      try {
+        JSON5.parse(value);
+      } catch (e) {
+        return false;
+      }
+    }
+    return true;
+  },
   isPhoneNumber: function (values, value) {
     return (
       !isExisty(value) || isEmpty(value) || /^[1]([3-9])[0-9]{9}$/.test(value)
@@ -243,6 +254,7 @@ export const validateMessages: {
   minimum: 'validate.minimum',
   gt: 'validate.gt',
   isJson: 'validate.isJson',
+  isJson5: 'validate.isJson',
   isLength: 'validate.isLength',
   notEmptyString: 'validate.notEmptyString',
   equalsField: 'validate.equalsField',

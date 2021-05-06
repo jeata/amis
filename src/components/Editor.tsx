@@ -7,6 +7,7 @@
 import React from 'react';
 import cx from 'classnames';
 import {ClassNamesFn, themeable} from '../theme';
+import JSON5 from 'json5';
 import {__uri} from '../utils/helper';
 
 // 用于发布 sdk 版本的时候替换，因为不确定 sdk 版本怎么部署，而 worker 地址路径不可知。
@@ -116,7 +117,7 @@ export class Editor extends React.Component<EditorProps, any> {
 
       if (this.props.language === 'json') {
         try {
-          value = JSON.stringify(JSON.parse(value), null, 2);
+          value = JSON.stringify(JSON5.parse(value), null, 2);
         } catch (e) {}
       }
 
@@ -198,7 +199,7 @@ export class Editor extends React.Component<EditorProps, any> {
     if (this.props.language === 'json') {
       try {
         value = JSON.stringify(
-          typeof value === "string" ? JSON.parse(value) : value,
+          typeof value === "string" ? JSON5.parse(value) : value,
           null,
           2
         );
@@ -251,7 +252,20 @@ export class Editor extends React.Component<EditorProps, any> {
     editor.onDidChangeModelContent &&
       this.disposes.push(
         editor.onDidChangeModelContent((event: any) => {
-          const value = editor.getValue();
+          let value = editor.getValue();
+
+          // 如果是JSON，尝试使用JSON5解析后，返回压缩后的数据 by xubin
+          // 优点 支持最后一个逗号，支持注释、返回数据更小
+          if (this.props.language === 'json') {
+            try {
+              let tmp = JSON5.parse(value);
+              value = JSON.stringify(tmp);
+              tmp = '';
+            } catch (ex) {
+
+            }
+          }
+
           // Always refer to the latest value
           this.currentValue = value;
 

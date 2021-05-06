@@ -13,6 +13,7 @@ import {
 import {Enginer} from './tpl';
 import uniqBy from 'lodash/uniqBy';
 import uniq from 'lodash/uniq';
+import JSON5 from 'json5';
 
 const UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
@@ -188,7 +189,7 @@ export const filters: {
   toJson: input => {
     let ret;
     try {
-      ret = JSON.parse(input);
+      ret = JSON5.parse(input);
     } catch (e) {
       ret = null;
     }

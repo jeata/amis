@@ -20,17 +20,17 @@ order: 58
     "links": [
         {
             "label": "Nav 1",
-            "to": "/docs/index",
-            "icon": "https://suda.cdn.bcebos.com/images%2F2021-01%2Fdiamond.svg",
+            "to": "/amis/docs/index",
+            "icon": "fa fa-user",
             "active": true
         },
         {
             "label": "Nav 2",
-            "to": "/docs/api"
+            "to": "/amis/components/page"
         },
         {
             "label": "Nav 3",
-            "to": "/docs/renderers"
+            "to": "/amis/components/container"
         }
     ]
 }
@@ -46,7 +46,7 @@ order: 58
     "links": [
         {
             "label": "Nav 1",
-            "to": "/docs/index",
+            "to": "/amis/docs/index",
             "icon": "fa fa-user",
             "active": true
         },
@@ -59,19 +59,19 @@ order: 58
                     "children": [
                         {
                             "label": "Nav 2-1-1",
-                            "to": "/docs/api-2-1-1"
+                            "to": "/amis/components/page"
                         }
                     ]
                 },
                 {
                     "label": "Nav 2-2",
-                    "to": "/docs/api-2-2"
+                    "to": "/amis/components/container"
                 }
             ]
         },
         {
             "label": "Nav 3",
-            "to": "/docs/renderers"
+            "to": "/amis/components/action"
         }
     ]
 }
@@ -86,16 +86,16 @@ order: 58
     "links": [
         {
             "label": "Nav 1",
-            "to": "/docs/index",
+            "to": "/amis/docs/index",
             "icon": "fa fa-user"
         },
         {
             "label": "Nav 2",
-            "to": "/docs/api"
+            "to": "/amis/components/page"
         },
         {
             "label": "Nav 3",
-            "to": "/docs/renderers"
+            "to": "/amis/components/container"
         }
     ]
 }

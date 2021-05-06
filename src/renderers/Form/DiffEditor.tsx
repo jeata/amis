@@ -8,6 +8,7 @@ import {
 } from '../../utils/tpl-builtin';
 import {SchemaTokenizeableString} from '../../Schema';
 import {autobind} from '../../utils/helper';
+import JSON5 from 'json5';
 
 /**
  * Diff 编辑器
@@ -54,7 +55,7 @@ function normalizeValue(value: any, language?: string) {
   if (language && language === 'json') {
     try {
       value = JSON.stringify(
-        typeof value === 'string' ? JSON.parse(value) : value,
+        typeof value === 'string' ? JSON5.parse(value) : value,
         null,
         2
       );
