@@ -236,3 +236,49 @@
     }
   }
 }
+
+// 为了对话框居中 by xubin
+@media screen and (min-height: 700px) {
+  // 对话框垂直居中
+  .amis-dialog-widget {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+
+    .a-Modal-content {
+      margin-top: var(--gap-sm);
+      margin-bottom: var(--gap-sm);
+
+      // 防止出现滚动条时不能向上滚动
+      max-height: 100%;
+      overflow-y: auto;
+    }
+
+
+  }
+
+  // TIP: 如果预计对话框高度超过700则不能设置 dialog-vertical！！！！
+  .dialog-vertical {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+
+  .dialog-vertical .a-Modal-content {
+    //top: 30%;
+    //transform: translate(0, -30%);
+    margin-top: var(--gap-sm);
+    margin-bottom: var(--gap-sm);
+
+    // 防止出现滚动条时不能向上滚动
+    max-height: 100%;
+    overflow-y: auto;
+  }
+}
+

@@ -575,7 +575,17 @@ export default class NestedSelectControl extends React.Component<
           allowInput={searchable}
           inputPlaceholder={''}
         >
-          {loading ? <Spinner size="sm" /> : undefined}
+          <>
+            {loading ? <Spinner size="sm" /> : undefined}
+
+            {/* 单选时，在右侧显示三角，类似select */}
+            { !loading && !clearable && !multiple &&
+              <span className={cx('NestedSelect-arrow')}>
+                <Icon icon="caret" className="icon" />
+              </span>
+            }
+          </>
+
         </ResultBox>
         {this.state.isOpened ? this.renderOuter() : null}
       </div>
