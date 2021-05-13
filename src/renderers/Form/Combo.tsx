@@ -350,6 +350,7 @@ export default class ComboControl extends React.Component<ComboProps> {
     this.dragTipRef = this.dragTipRef.bind(this);
     this.flush = this.flush.bind(this);
     this.handleComboTypeChange = this.handleComboTypeChange.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
     this.defaultValue = {
       ...props.scaffold
     };
@@ -550,6 +551,10 @@ export default class ComboControl extends React.Component<ComboProps> {
     this.props.onChange(value);
   }
 
+  handleConfirm(values: object) {
+    debugger;
+  }
+
   handleChange(values: any, diff: any, {index}: any) {
     const {
       flat,
@@ -663,9 +668,19 @@ export default class ComboControl extends React.Component<ComboProps> {
   }
 
   handleAction(action: Action): any {
+    debugger;
     const {onAction} = this.props;
 
-    if (action.actionType === 'delete') {
+    if(!action) {
+      action = arguments[1];
+      let data = arguments[2];
+      // @ts-ignore
+      if (action.actionType === 'combo-merge' && action.index !== void 0) {
+        console.log('合并组合数据', action.index);
+        let value = this.getValueAsArray();
+        this.handleChange(extendObject(value[action.index], arguments[2]), arguments[2], action);
+      }
+    } else if (action?.actionType === 'delete') {
       action.index !== void 0 && this.removeItem(action.index);
       return;
     }
@@ -1264,6 +1279,7 @@ export default class ComboControl extends React.Component<ComboProps> {
                       render(
                         `multiple/${index}`,
                         {
+                          name: `__combo/${index}`, // 为了更容易使用target定位 by xubin
                           type: 'form',
                           controls: finnalControls,
                           wrapperComponent: 'div',

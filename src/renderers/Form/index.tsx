@@ -696,9 +696,16 @@ export default class Form extends React.Component<FormProps, object> {
   }
 
   receive(values: object) {
-    const {store} = this.props;
+    const {store, onChange} = this.props;
 
     store.updateData(values);
+    // 接受参数后不能实时更新
+    onChange &&
+    onChange(
+      store.data,
+      difference(store.data, store.pristine),
+      this.props
+    );
     this.reload();
   }
 
@@ -852,13 +859,14 @@ export default class Form extends React.Component<FormProps, object> {
       onFailed,
       redirect,
       reload,
-      target,
+      // target,
       env,
       onChange,
       clearPersistDataAfterSubmit,
       trimValues,
       translate: __
     } = this.props;
+    let target = this.props.target;
 
     // 做动作之前，先把数据同步一下。
     this.flush();
@@ -886,6 +894,11 @@ export default class Form extends React.Component<FormProps, object> {
           );
         }
       });
+    }
+
+    // target 支持变量,为了支持combo中的index，因此使用 this.props by xubin
+    if(target) {
+      target = filter(target, this.props);
     }
 
     if (
