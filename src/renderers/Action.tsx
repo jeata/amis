@@ -21,6 +21,11 @@ export interface ButtonSchema extends BaseSchema {
   icon?: SchemaIcon;
 
   /**
+   * 图标位置
+   */
+  iconPosition?: 'left' | 'right';
+
+  /**
    * icon 上的css 类名
    */
   iconClassName?: SchemaClassName;
@@ -332,6 +337,7 @@ export interface ActionProps
   data?: any;
   isMenuItem?: boolean;
   active?: boolean;
+  iconPosition?: 'left' | 'right';
 }
 
 const allowedType = ['button', 'submit', 'reset'];
@@ -435,6 +441,7 @@ export class Action extends React.Component<ActionProps, ActionState> {
       btnLabel,
       icon,
       iconClassName,
+      iconPosition,
       primary,
       size,
       level,
@@ -487,8 +494,9 @@ export class Action extends React.Component<ActionProps, ActionState> {
         data-position="bottom"
         onClick={this.handleAction}
       >
+        {(iconPosition || iconPosition === 'left') ? iconElement : null}
         {label}
-        {iconElement}
+        {(!iconPosition || iconPosition === 'right') ? iconElement : null}
       </a>
     ) : (
       <Button
@@ -512,9 +520,10 @@ export class Action extends React.Component<ActionProps, ActionState> {
         block={block}
         iconOnly={!!(icon && !label && level !== 'link')}
       >
+        {(iconPosition || iconPosition === 'left') ? iconElement : null}
         {!btnLabel && label ? <span>{filter(String(label), data)}</span> : null}
         {btnLabel ? <span>{filter(btnLabel, data)}</span> : null}
-        {iconElement}
+        {(!iconPosition || iconPosition === 'right') ? iconElement : null}
       </Button>
     );
   }

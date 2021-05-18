@@ -83,8 +83,6 @@ order: 72
 
 ## style
 
-> 1.1.5 版本
-
 wrapper 可以设置 style，当成一个 `div` 标签来用
 
 ## 属性表

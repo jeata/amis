@@ -68,8 +68,6 @@ order: 51
 
 ## 配置开启和关闭状态的文本
 
-> 1.1.5 版本之后支持
-
 ```schema: scope="body"
 {
     "type": "form",
