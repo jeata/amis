@@ -496,7 +496,7 @@ export class Action extends React.Component<ActionProps, ActionState> {
       >
         {(iconPosition || iconPosition === 'left') ? iconElement : null}
         {label}
-        {(!iconPosition || iconPosition === 'right') ? iconElement : null}
+        {(!iconPosition || iconPosition !== 'left') ? iconElement : null}
       </a>
     ) : (
       <Button
@@ -523,7 +523,7 @@ export class Action extends React.Component<ActionProps, ActionState> {
         {(iconPosition || iconPosition === 'left') ? iconElement : null}
         {!btnLabel && label ? <span>{filter(String(label), data)}</span> : null}
         {btnLabel ? <span>{filter(btnLabel, data)}</span> : null}
-        {(!iconPosition || iconPosition === 'right') ? iconElement : null}
+        {(!iconPosition || iconPosition !== 'left') ? iconElement : null}
       </Button>
     );
   }
