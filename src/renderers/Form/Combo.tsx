@@ -552,7 +552,7 @@ export default class ComboControl extends React.Component<ComboProps> {
   }
 
   handleConfirm(values: object) {
-    debugger;
+
   }
 
   handleChange(values: any, diff: any, {index}: any) {
@@ -668,7 +668,6 @@ export default class ComboControl extends React.Component<ComboProps> {
   }
 
   handleAction(action: Action): any {
-    debugger;
     const {onAction} = this.props;
 
     if(!action) {
@@ -1137,6 +1136,7 @@ export default class ComboControl extends React.Component<ComboProps> {
     }
 
     const {
+      name,
       classPrefix: ns,
       classnames: cx,
       formClassName,
@@ -1279,7 +1279,7 @@ export default class ComboControl extends React.Component<ComboProps> {
                       render(
                         `multiple/${index}`,
                         {
-                          name: `__combo/${index}`, // 为了更容易使用target定位 by xubin
+                          name: `${name}/${index}`, // 为了更容易使用target定位 by xubin
                           type: 'form',
                           controls: finnalControls,
                           wrapperComponent: 'div',

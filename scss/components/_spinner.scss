@@ -84,7 +84,7 @@
 
 @include media-breakpoint-up(md) {
   .#{$ns}Layout .#{$ns}Page-body > .#{$ns}Spinner-overlay {
-    left: var(--Layout-aside-width);
+    // left: var(--Layout-aside-width); 因为上层已经有 position:relative 导致不能完全覆盖
   }
 
   .#{$ns}Layout--folded .#{$ns}Page-body > .#{$ns}Spinner-overlay {

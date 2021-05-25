@@ -83,7 +83,7 @@ export interface RenderOptions {
   ) => void;
   isCancel?: (value: any) => boolean;
   notify?: (
-    type: 'error' | 'success',
+    type: 'error' | 'success' | 'warning' | 'info',
     msg: string,
     conf?: {
       closeButton?: boolean;
