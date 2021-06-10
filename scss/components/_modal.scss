@@ -193,6 +193,11 @@
     max-width: var(--Modal-widthBase);
   }
 
+  // 增加 比md稍小，为了新建页面 by xubin
+  .#{$ns}Modal--mds .#{$ns}Modal-content {
+    max-width: px2rem(600px);
+  }
+
   .#{$ns}Modal--md .#{$ns}Modal-content {
     max-width: var(--Modal-widthMd);
   }

@@ -129,7 +129,7 @@ export default class NestedSelectControl extends React.Component<
     return (
       <span className={cx('Select-valueLabel')} key={key}>
         {`${
-          ancestors
+          ancestors && !item.renderOnlySelf
             ? ancestors
                 .map(item => `${item[labelField || 'label']}`)
                 .join(' / ')

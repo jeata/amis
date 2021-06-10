@@ -508,6 +508,7 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
           </div>
         ) : showCloseButton !== false && !store.loading ? (
           <a
+            data-position="left"
             data-tooltip={__('Dialog.close')}
             onClick={this.handleSelfClose}
             className={cx('Modal-close')}
