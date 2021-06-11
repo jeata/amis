@@ -9,6 +9,11 @@
     min-width: auto;
     width: var(--Form-control-widthSm);
   }
+  // 新增 by xubin
+  &.#{$ns}Form-control--sizeMds {
+    min-width: auto;
+    width: px2rem(200px);
+  }
   &.#{$ns}Form-control--sizeMd {
     min-width: auto;
     width: var(--Form-control-widthMd);
@@ -178,6 +183,18 @@
     &.#{$ns}NumberControl {
       width: var(--Form-control-widthSm);
     }
+
+    &.#{$ns}TextareaControl {
+      width: auto;
+    }
+  }
+
+  // 新增 by xubin
+  .#{$ns}Form-control--sizeMds {
+    min-width: px2rem(200px);
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: top;
 
     &.#{$ns}TextareaControl {
       width: auto;

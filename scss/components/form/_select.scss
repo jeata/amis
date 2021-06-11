@@ -344,6 +344,7 @@
 @include media-breakpoint-up(sm) {
   .#{$ns}Form-control--sizeXs > .#{$ns}Select,
   .#{$ns}Form-control--sizeSm > .#{$ns}Select,
+  .#{$ns}Form-control--sizeMds > .#{$ns}Select,  // 新增 by xubin
   .#{$ns}Form-control--sizeMd > .#{$ns}Select,
   .#{$ns}Form-control--sizeLg > .#{$ns}Select {
     min-width: 100%;

@@ -415,6 +415,7 @@
   @include media-breakpoint-up(sm) {
     &.#{$ns}Form-control--sizeXs > &-input,
     &.#{$ns}Form-control--sizeSm > &-input,
+    &.#{$ns}Form-control--sizeMds > &-input,  // 新增 by xubin
     &.#{$ns}Form-control--sizeMd > &-input,
     &.#{$ns}Form-control--sizeLg > &-input {
       min-width: 100%;
