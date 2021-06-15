@@ -56,6 +56,11 @@ export interface TextControlSchema extends FormOptionsControl {
    * 接口可以返回匹配到的选项，帮助用户输入。
    */
   autoComplete?: SchemaApi;
+
+  /**
+   * 单选的 options 模式时，是否允许自由输入，不用"回车"
+   */
+  allowInputOption?: boolean;
 }
 
 export interface TextProps extends OptionsControlProps {
@@ -72,6 +77,8 @@ export interface TextProps extends OptionsControlProps {
   autoComplete?: any;
   allowInputText?: boolean;
   spinnerClassName: string;
+
+  allowInputOption?: boolean;
 }
 
 export interface TextState {
@@ -119,7 +126,8 @@ export default class TextControl extends React.PureComponent<
     valueField: 'value',
     placeholder: '',
     allowInputText: true,
-    trimContents: true
+    trimContents: true,
+    allowInputOption: true,
   };
 
   componentWillReceiveProps(nextProps: TextProps) {
@@ -245,7 +253,12 @@ export default class TextControl extends React.PureComponent<
   }
 
   handleBlur(e: any) {
-    const {onBlur, trimContents, value, onChange} = this.props;
+    const {onBlur, trimContents, value, onChange, multiple, allowInputOption, selectedOptions} = this.props;
+
+    // 单选，且options模式时，失去焦点保存数据
+    if(!multiple && allowInputOption && selectedOptions && this.state.inputValue) {
+      onChange(this.state.inputValue.trim());
+    }
 
     this.setState(
       {

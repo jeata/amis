@@ -30,3 +30,29 @@ docker build -f ./examples/Dockerfile -t docker.jitalab.com/jeata/doc/amis .
 echo "docker pubsh ..."
 docker push docker.jitalab.com/jeata/doc/amis
 
+ServerUpdateShell="ssh bj-ecs-001.jitalab.com sudo /data/services/update-docker/jeata-doc-amis.sh"
+
+# 询问是否更新服务器
+echo "\033[31m"
+read -r -p "是否更新服务器 [Y/n] " isUpdate
+echo "\033[0m"
+
+# 是否更细服务器
+case $isUpdate in
+    [yY][eE][sS]|[yY])
+    echo "\033[34m更新服务器 ...\033[0m"
+	  eval $ServerUpdateShell
+	  ret=$?
+	  if [ $ret -ne 0 ]; then
+      echo "\033[31m错误:\033[0m 更新服务器失败"
+      exit $ret
+    fi
+	  echo "\033[1;32m更新服务器完成！ \033[0m"
+		;;
+    *)
+		echo "\033[33m不更新服务器\033[0m"
+		;;
+esac
+
+echo "\033[1;32m构建成功！ \033[0m"
+
