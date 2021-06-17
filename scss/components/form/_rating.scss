@@ -12,7 +12,7 @@
   }
 
   &.is-disabled {
-    cursor: not-allowed;
+    cursor: default; // disabled 使用箭头 bu xubin
   }
 
   &-half:before {
