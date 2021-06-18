@@ -30,11 +30,11 @@ import {HeadCellSearchDropDown} from './HeadCellSearchDropdown';
 import {TableContent} from './TableContent';
 import {
   BaseSchema,
-  SchemaClassName,
+  SchemaClassName, SchemaExpression,
   SchemaObject,
   SchemaTokenizeableString,
   SchemaType
-} from '../../Schema';
+} from "../../Schema";
 import {FormControlSchema, FormControlType} from '../Form/Item';
 import {SchemaPopOver} from '../PopOver';
 import {SchemaQuickEdit} from '../QuickEdit';
@@ -69,6 +69,11 @@ export type TableColumnObject = {
    * 配置查看详情功能
    */
   popOver?: SchemaPopOver;
+
+  /**
+   * 通过 JS 表达式来配置当前PopOver是否显示
+   */
+  popOverEnableOn?: SchemaExpression;
 
   /**
    * 配置快速编辑功能

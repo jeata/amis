@@ -72,6 +72,11 @@
   }
 
   > .fa,
+  > .fas,
+  > .far,
+  > .fal,
+  > .fad,
+  > .fab,
   > .iconfont,
   > .glyphicon {
     font-size: inherit;
@@ -288,6 +293,11 @@ fieldset:disabled a.#{$ns}Button {
     }
 
     > .fa,
+    > .fas,
+    > .far,
+    > .fal,
+    > .fad,
+    > .fab,
     > .iconfont {
       font-size: var(--fontSizeMd);
     }

@@ -46,6 +46,11 @@ export type CardBodyField = SchemaObject & {
   popOver?: SchemaPopOver;
 
   /**
+   * 通过 JS 表达式来配置当前PopOver是否显示
+   */
+  popOverEnableOn?: SchemaExpression;
+
+  /**
    * 配置快速编辑功能
    */
   quickEdit?: SchemaQuickEdit;

@@ -13,6 +13,7 @@ import PopOver, {Offset} from '../components/PopOver';
 import Overlay from '../components/Overlay';
 import {Icon} from '../components/icons';
 import {SchemaCollection, SchemaExpression} from '../Schema';
+import { evalExpression } from "../utils/tpl";
 
 export interface SchemaPopOverObject {
   /**
@@ -123,6 +124,7 @@ export interface PopOverProps extends RendererProps {
   name?: string;
   label?: string;
   popOver: boolean | SchemaPopOverObject;
+  popOverEnableOn?: string;
   onPopOverOpened: (popover: any) => void;
   onPopOverClosed: (popover: any) => void;
 }
@@ -326,14 +328,18 @@ export const HocPopOver = (
         className,
         noHoc,
         classnames: cx,
-        showIcon
+        showIcon,
+        popOverEnableOn, // by xubin
+        data,
       } = this.props;
 
       if (
         !popOver ||
         popOverEnabled === false ||
         noHoc ||
-        popOverEnable === false
+        popOverEnable === false ||
+        (popOverEnableOn && !evalExpression(popOverEnableOn, data)) ||
+        ((popOver as SchemaPopOverObject)?.popOverEnableOn && !evalExpression((popOver as SchemaPopOverObject).popOverEnableOn || '', data) )
       ) {
         return <Component {...this.props} />;
       }

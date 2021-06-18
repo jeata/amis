@@ -84,7 +84,7 @@ export class Drawer extends React.Component<DrawerProps, DrawerState> {
 
   handleEnter = () => {
     document.body.classList.add(`is-modalOpened`);
-    if (document.body.scrollHeight > window.innerHeight) {
+    if (document.body.scrollHeight > window.innerHeight && navigator.platform && navigator.platform.startsWith('Win')) {
       document.body.classList.add(`has-scrollbar`);
     }
   };

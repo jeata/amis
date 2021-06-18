@@ -6,7 +6,7 @@ import QuickEdit, {SchemaQuickEdit} from '../QuickEdit';
 import {Renderer} from '../../factory';
 import Copyable, {SchemaCopyable} from '../Copyable';
 import {extendObject} from '../../utils/helper';
-import {SchemaObject, SchemaTpl, SchemaType} from '../../Schema';
+import { SchemaExpression, SchemaObject, SchemaTpl, SchemaType } from "../../Schema";
 
 /**
  * Static
@@ -29,6 +29,11 @@ export interface StaticExactControlSchema extends FormBaseControl {
    * 配置查看详情功能
    */
   popOver?: SchemaPopOver;
+
+  /**
+   * 通过 JS 表达式来配置当前PopOver是否显示
+   */
+  popOverEnableOn?: SchemaExpression;
 
   /**
    * 配置快速编辑功能
