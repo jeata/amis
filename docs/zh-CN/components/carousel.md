@@ -36,7 +36,7 @@ order: 33
   "type": "page",
   "body": {
     "type": "service",
-    "api": "https://mock.jeata.com/api/options/carousel",
+    "api": "https://mock.jeata.com/options/carousel",
     "body": {
       "type": "carousel",
       "name": "imageList"

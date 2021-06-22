@@ -202,7 +202,7 @@ order: 2
             "label": "选项",
             "type": "select",
             "name": "select",
-            "source": "https://mock.jeata.com/api/options/getOptions?waitSeconds=1"
+            "source": "https://mock.jeata.com/options/getOptions?waitSeconds=1"
         }
     ]
 }

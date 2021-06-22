@@ -22,7 +22,7 @@ order: 7
             "name": "select3",
             "type": "chained-select",
             "label": "级联下拉",
-            "source": "https://mock.jeata.com/api/options/chainedOptions?waitSeconds=1&parentId=$parentId&level=$level&maxLevel=4",
+            "source": "https://mock.jeata.com/options/chainedOptions?waitSeconds=1&parentId=$parentId&level=$level&maxLevel=4",
             "value": "a,b"
         }
     ]

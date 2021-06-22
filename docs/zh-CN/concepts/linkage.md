@@ -219,7 +219,7 @@ order: 14
         "label": "Select",
         "source": {
           "method": "get",
-          "url": "https://mock.jeata.com/api/options/getOptions?waitSeconds=1",
+          "url": "https://mock.jeata.com/options/getOptions?waitSeconds=1",
           "data": {
             "a": "${keyword}"
           }

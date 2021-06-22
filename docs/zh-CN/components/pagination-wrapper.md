@@ -16,7 +16,7 @@ order: 59
 ```schema: scope="body"
 {
     "type": "service",
-    "api": "https://mock.jeata.com/api/crud/table",
+    "api": "https://mock.jeata.com/crud/sample",
     "body": [
         {
             "type": "pagination-wrapper",
