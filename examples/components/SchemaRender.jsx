@@ -110,6 +110,9 @@ export default function (schema, showCode, envOverrides) {
 
             return axios[method](url, data, config);
           },
+          ossUploader: ()=>{
+            return new Promise(async (resolve, reject) => {reject(new Error('文档中不支持演示云存储'))});
+          },
           isCancel: value => axios.isCancel(value),
           copy: content => {
             copy(content);

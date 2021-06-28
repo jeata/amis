@@ -74,6 +74,9 @@ class AMISComponent extends React.Component {
 
             return (axios as any)[method](url, data, config);
           },
+          ossUploader: ()=>{
+            return new Promise(async (resolve, reject) => {reject(new Error('文档中不支持演示云存储'))});
+          },
           isCancel: (value: any) => (axios as any).isCancel(value),
           copy: content => {
             copy(content);

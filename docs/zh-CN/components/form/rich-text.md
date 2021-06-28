@@ -62,7 +62,7 @@ order: 47
 | 属性名        | 类型                           | 默认值 | 说明                                                                                                                                                    |
 | ------------- | ------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | saveAsUbb     | `boolean`                      |        | 是否保存为 ubb 格式                                                                                                                                     |
+| ossAlias      | `string`                       |        | 使用OSS存储，指定项目管理中OSS别名或者ID                                                                                                 |
 | receiver      | [API](../../../docs/types/api) |        | 默认的图片保存 API                                                                                                                                      |
-| videoReceiver | [API](../../../docs/types/api) |        | 默认的视频保存 API                                                                                                                                      |
 | size          | `string`                       |        | 框的大小，可设置为 `md` 或者 `lg`                                                                                                                       |
 | options       | `object`                       |        | 需要参考 [tinymce](https://www.tiny.cloud/docs/configure/integration-and-setup/)  |

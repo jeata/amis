@@ -6,9 +6,12 @@ import {RendererConfig} from './factory';
 import {ThemeInstance} from './theme';
 import {Action, Api, Payload, Schema} from './types';
 import hoistNonReactStatic from 'hoist-non-react-statics';
+import { FormControlProps } from "./renderers/Form/Item";
 
 export interface RendererEnv {
   fetcher: (api: Api, data?: any, options?: object) => Promise<Payload>;
+  // OSS上传器 by xubin
+  ossUploader: (control: FormControlProps, data: Blob, onProgress?: (progress: number) => void) => Promise<Payload>;
   isCancel: (val: any) => boolean;
   notify: (
     type: 'error' | 'success' | 'warning' | 'info',

@@ -175,6 +175,11 @@ export interface ImageControlSchema extends FormBaseControl {
   receiver?: SchemaApi;
 
   /**
+   * 使用OSS存储，指定OSS别名或者ID
+   */
+  ossAlias?: string;
+
+  /**
    * 默认为 false, 开启后，允许用户输入压缩选项。
    *
    * @deprecated
@@ -973,7 +978,18 @@ export default class ImageControl extends React.Component<
     onProgress: (progress: number) => void
   ) {
     const __ = this.props.translate;
-    this._send(file, this.props.receiver as string, {}, onProgress)
+
+    // 如果有ossAlias,则使用oss上传. by xubin
+    const {ossAlias, env} = this.props;
+    if(ossAlias && (!env || !env.ossUploader)) {
+      cb('ossUploader is required', file);
+      return;
+    }
+    const _sender = !ossAlias ?
+      this._send(file, this.props.receiver as string, {}, onProgress):
+      env.ossUploader(this.props, file, onProgress);
+
+    _sender // 使用_sender
       .then((ret: Payload) => {
         if (ret.status) {
           throw new Error(ret.msg || __('File.errorRetry'));
@@ -987,7 +1003,7 @@ export default class ImageControl extends React.Component<
 
         cb(null, file, obj);
       })
-      .catch(error => cb(error.message || __('File.errorRetry'), file));
+      .catch((error: any) => cb(error.message || __('File.errorRetry'), file));
   }
 
   _send(

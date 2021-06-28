@@ -14,6 +14,12 @@ export interface RichTextControlSchema extends FormBaseControl {
   vendor?: 'froala' | 'tinymce';
 
   receiver?: string;
+
+  /**
+   * 使用OSS存储，指定OSS别名或者ID
+   */
+  ossAlias?: string;
+
   videoReceiver?: string;
 
   options?: any;
@@ -186,6 +192,26 @@ export default class RichTextControl extends React.Component<
           ok: (locaiton: string) => void,
           fail: (reason: string) => void
         ) => {
+
+          // 如果有ossAlias,则使用oss上传. by xubin
+          const {ossAlias, env} = props;
+          if(ossAlias) {
+            if(!env || !env.ossUploader) {
+              fail('ossUploader is required');
+              return;
+            }
+
+            env.ossUploader(props, blobInfo.blob()).then(payload=>{
+              if(payload.ok) {
+                ok(payload.data?.value || payload.data?.url);
+              } else {
+                fail(payload.msg);
+              }
+            }).catch(e => {fail(e.msg || e.message)});
+
+            return;
+          }
+
           const formData = new FormData();
           formData.append('file', blobInfo.blob(), blobInfo.filename());
           try {

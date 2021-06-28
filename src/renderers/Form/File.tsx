@@ -124,6 +124,11 @@ export interface FileControlSchema extends FormBaseControl {
   receiver?: SchemaApi;
 
   /**
+   * 使用OSS存储，指定OSS别名或者ID
+   */
+  ossAlias?: string;
+
+  /**
    * 默认 `/api/upload/startChunk` 想自己存储时才需要关注。
    *
    * @default /api/upload/startChunk
@@ -700,20 +705,30 @@ export default class FileControl extends React.Component<FileProps, FileState> {
         ? this.uploadBigFile
         : this.uploadFile;
 
-    fn(
-      file,
-      receiver as string,
-      {},
-      {
-        fieldName: fileField,
-        chunkSize,
-        startChunkApi,
-        chunkApi,
-        finishChunkApi,
-        data
-      },
-      onProgress
-    )
+    // 如果有ossAlias,则使用oss上传. by xubin
+    const {ossAlias, env} = this.props;
+    if(ossAlias && (!env || !env.ossUploader)) {
+      cb('ossUploader is required', file);
+      return;
+    }
+    const _sender = !ossAlias ?
+      fn(
+        file,
+        receiver as string,
+        {},
+        {
+          fieldName: fileField,
+          chunkSize,
+          startChunkApi,
+          chunkApi,
+          finishChunkApi,
+          data
+        },
+        onProgress
+      ):
+      env.ossUploader(this.props, file, onProgress);
+
+    _sender // 使用_sender
       .then(ret => {
         if (ret.status || !ret.data) {
           throw new Error(ret.msg || __('File.errorRetry'));

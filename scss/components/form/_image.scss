@@ -19,7 +19,7 @@
     @include button-variant(
       var(--ImageControl-addBtn-bg),
       var(--ImageControl-addBtn-border),
-      var(--ImageControl-addBtn-color),
+      var(--ImageControl-addBtn-onDisabled-color), // var(--ImageControl-addBtn-color), // change by xubin
       var(--ImageControl-addBtn-onHover-bg),
       var(--ImageControl-addBtn-onHover-border),
       var(--ImageControl-addBtn-onHover-color),

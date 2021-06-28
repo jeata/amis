@@ -278,6 +278,9 @@ export function embed(
               .then(attachmentAdpator)
               .then(responseAdpater(api));
           },
+          ossUploader: ()=>{
+            return new Promise(async (resolve, reject) => {reject(new Error('文档中不支持演示云存储'))});
+          },
           isCancel: (value: any) => (axios as any).isCancel(value),
           copy: (contents: string, options: any = {}) => {
             const ret = copy(contents, options);

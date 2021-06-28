@@ -122,6 +122,9 @@ export default class PlayGround extends React.Component {
 
         return axios[config.method](config.url, config.data, config);
       },
+      ossUploader: ()=>{
+        return new Promise(async (resolve, reject) => {reject(new Error('文档中不支持演示云存储'))});
+      },
       isCancel: value => axios.isCancel(value),
       notify: (type, msg) =>
         toast[type]
