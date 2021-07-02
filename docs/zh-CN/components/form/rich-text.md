@@ -48,7 +48,7 @@ order: 47
                     "searchreplace visualblocks code fullscreen",
                     "insertdatetime media table paste code help wordcount"
                 ],
-                "toolbar ": "undo redo | formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+                "toolbar": "undo redo | formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
             }
         }
     ]
@@ -63,6 +63,6 @@ order: 47
 | ------------- | ------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | saveAsUbb     | `boolean`                      |        | 是否保存为 ubb 格式                                                                                                                                     |
 | ossAlias      | `string`                       |        | 使用OSS存储，指定项目管理中OSS别名或者ID                                                                                                 |
-| receiver      | [API](../../../docs/types/api) |        | 默认的图片保存 API                                                                                                                                      |
+| receiver      | [API](../../../docs/types/api) |        | 默认的图片保存 API。若指定了ossAlias此项无效。                                                                                                             |
 | size          | `string`                       |        | 框的大小，可设置为 `md` 或者 `lg`                                                                                                                       |
 | options       | `object`                       |        | 需要参考 [tinymce](https://www.tiny.cloud/docs/configure/integration-and-setup/)  |

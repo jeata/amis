@@ -259,7 +259,7 @@
 
       // 防止出现滚动条时不能向上滚动
       max-height: 100%;
-      overflow-y: auto;
+      // overflow-y: auto;
     }
 
 
@@ -283,7 +283,7 @@
 
     // 防止出现滚动条时不能向上滚动
     max-height: 100%;
-    overflow-y: auto;
+    // overflow-y: auto;
   }
 }
 

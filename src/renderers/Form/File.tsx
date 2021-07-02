@@ -256,7 +256,7 @@ export function getNameFromUrl(url: string) {
 
 export default class FileControl extends React.Component<FileProps, FileState> {
   static defaultProps: Partial<FileProps> = {
-    maxSize: 10240,
+    maxSize: 100 * 1024*1024, // 默认100MB
     maxLength: 5,
     placeholder: '',
     receiver: '/api/upload/file',

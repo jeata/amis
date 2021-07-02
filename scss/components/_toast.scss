@@ -156,24 +156,64 @@
     color: var(--Toast--danger-color);
     border-color: var(--Toast--danger-borderColor);
     background: var(--Toast--danger-bgColor);
+
+    // change by xubin
+    a {
+      color: #fffb00;
+      border-bottom: 1px dashed var(--Toast--danger-color);
+
+      &:hover, &:focus, &:visited {
+        color: #fffb00;
+      }
+    }
   }
 
   &--warning {
     color: var(--Toast--warning-color);
     border-color: var(--Toast--warning-borderColor);
     background: var(--Toast--warning-bgColor);
+
+    // change by xubin
+    a {
+      color: #fffb00;
+      border-bottom: 1px dashed #fffb00;
+
+      &:hover, &:focus, &:visited {
+        color: #fffb00;
+      }
+    }
   }
 
   &--info {
     color: var(--Toast--info-color);
     border-color: var(--Toast--info-borderColor);
     background: var(--Toast--info-bgColor);
+
+    // change by xubin
+    a {
+      color: #fffb00;
+      border-bottom: 1px dashed #fffb00;
+    }
+
+    &:hover, &:focus, &:visited {
+      color: #fffb00;
+    }
   }
 
   &--success {
     color: var(--Toast--success-color);
     border-color: var(--Toast--success-borderColor);
     background: var(--Toast--success-bgColor);
+
+    // change by xubin
+    a {
+      color: #fffb00;
+      border-bottom: 1px dashed #fffb00;
+    }
+
+    &:hover, &:focus, &:visited {
+      color: #fffb00;
+    }
   }
 
   // positions
