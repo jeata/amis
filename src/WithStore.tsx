@@ -221,6 +221,8 @@ export function HocStoreFactory(renderer: {
           props.data === props.store!.data &&
           (shouldSync === true || prevProps.data !== props.data)
         ) {
+          // 只有父级数据变动的时候才应该进来，
+          // 目前看来这个 case 很少有情况下能进来
           store.initData(
             createObject(props.scope, {
               // ...nextProps.data,
