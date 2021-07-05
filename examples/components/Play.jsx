@@ -40,6 +40,20 @@ const scopes = {
         }
     }`,
 
+  'form2': `{
+      "type": "page",
+      "body": {
+          "title": "",
+          "type": "form",
+          "autoFocus": false,
+          "api": "/api/mock/saveForm?waitSeconds=1",
+          "mode": "horizontal",
+          "body": SCHEMA_PLACEHOLDER,
+          "submitText": null,
+          "actions": []
+      }
+  }`,
+
   'form-item': `{
         "type": "page",
         "body": {
@@ -53,7 +67,22 @@ const scopes = {
             "submitText": null,
             "actions": []
         }
-    }`
+    }`,
+
+  'form-item2': `{
+      "type": "page",
+      "body": {
+          "title": "",
+          "type": "form",
+          "mode": "horizontal",
+          "autoFocus": false,
+          "body": [
+              SCHEMA_PLACEHOLDER
+          ],
+          "submitText": null,
+          "actions": []
+      }
+  }`
 };
 
 export default class PlayGround extends React.Component {
@@ -102,13 +131,18 @@ export default class PlayGround extends React.Component {
           return;
         }
 
+        if (action && to && action.target) {
+          window.open(to, action.target);
+          return;
+        }
+
         if (/^https?:\/\//.test(to)) {
           window.location.replace(to);
         } else {
           router.push(to);
         }
       },
-      fetcher: config => {
+      fetcher: async config => {
         config = {
           dataType: 'json',
           ...config
@@ -120,7 +154,31 @@ export default class PlayGround extends React.Component {
           config.headers['Content-Type'] = 'application/json';
         }
 
-        return axios[config.method](config.url, config.data, config);
+        // 支持返回各种报错信息
+        config.validateStatus = function (status) {
+          return true;
+        };
+
+        const response = await axios[config.method](
+          config.url,
+          config.data,
+          config
+        );
+
+        if (response.status >= 400) {
+          if (response.data) {
+            if (response.data.msg) {
+              throw new Error(response.data.msg);
+            } else {
+              throw new Error(
+                '接口报错：' + JSON.stringify(response.data, null, 2)
+              );
+            }
+          } else {
+            throw new Error(`接口出错，状态码是 ${response.status}`);
+          }
+        }
+        return response;
       },
       ossUploader: ()=>{
         return new Promise(async (resolve, reject) => {reject(new Error('文档中不支持演示云存储'))});

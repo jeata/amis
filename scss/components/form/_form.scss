@@ -28,11 +28,17 @@
   font-size: var(--Form-fontSize);
   position: relative;
 
-  &--quickEdit .#{$ns}Form-item:last-child {
+  // 一般是快速编辑里的最后一个输入框
+  &--quickEdit > div:last-of-type {
     margin-bottom: 0;
   }
 
   &--inline {
+    > .#{$ns}Button {
+      margin-bottom: calc(var(--Form-item-gap) / 2);
+      margin-right: calc(var(--Form-item-gap) / 2);
+    }
+
     > .#{$ns}PlainField {
       display: inline-block;
       padding-top: var(--Form-input-paddingY);
@@ -55,7 +61,7 @@
 
 .#{$ns}Form-label {
   font-weight: var(--fontWeightNormal);
-  margin-bottom: px2rem(5px);
+  margin-bottom: var(--gap-xs);
   position: relative;
 
   > span {
@@ -323,6 +329,10 @@
       > .#{$ns}Form-value {
         display: inline-block;
         vertical-align: top;
+
+        > .#{$ns}Button--link {
+          padding-top: var(--Form-label-paddingTop);
+        }
 
         > .#{$ns}Form-control {
           vertical-align: top;

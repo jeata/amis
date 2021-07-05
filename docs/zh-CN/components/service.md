@@ -216,6 +216,61 @@ order: 63
 
 它将`data`返回的对象作为页面配置，进行了解析渲染，实现动态渲染页面的功能。
 
+## 动态渲染表单项
+
+默认 Service 可以通过配置`schemaApi` [动态渲染页面内容](../service#%E5%8A%A8%E6%80%81%E6%B8%B2%E6%9F%93%E9%A1%B5%E9%9D%A2)，但是如果想渲染表单项，请返回下面这种格式：
+
+```json
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+    "type": "container",
+    "body": [
+      {
+        "type": "input-text",
+        "name": "text",
+        "label": "文本输入"
+      }
+    ]
+  }
+}
+```
+
+例如下例：
+
+```schema: scope="form-item2"
+{
+  "type": "service",
+  "schemaApi": "https://mock.jeata.com/service/schema?type=controls"
+}
+```
+
+`schemaApi` 除了能返回表单项之外，还能同时返回表单数据，如果你这样返回接口
+
+```json
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+    "data": {
+      "a": "b" // 这样返回的选项会选中第二个选项B
+    },
+    "body": [
+      {
+        "type": "select",
+        "name": "a",
+        "label": "选项",
+        "options": [
+          {"label": "A", "value": "a"},
+          {"label": "B", "value": "b"}
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## 接口联动
 
 `api`和`schemaApi`都支持[接口联动](../../docs/concepts/linkage#%E6%8E%A5%E5%8F%A3%E8%81%94%E5%8A%A8)
@@ -226,7 +281,7 @@ order: 63
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=1",
     "mode": "horizontal",
-    "controls": [
+    "body": [
         {
         "label": "数据模板",
         "type": "select",
@@ -252,20 +307,20 @@ order: 63
         {
         "type": "service",
         "api": "https://mock.jeata.com/form/initData?tpl=${tpl}",
-        "controls": [
+        "body": [
             {
             "label": "名称",
-            "type": "text",
+            "type": "input-text",
             "name": "name"
             },
             {
             "label": "作者",
-            "type": "text",
+            "type": "input-text",
             "name": "author"
             },
             {
             "label": "请求时间",
-            "type": "datetime",
+            "type": "input-datetime",
             "name": "date"
             }
         ]

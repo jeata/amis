@@ -276,7 +276,6 @@ const table = {
 };
 
 export default {
-
   title: '固顶和列固定示例',
   remark: 'bla bla bla',
   body: [

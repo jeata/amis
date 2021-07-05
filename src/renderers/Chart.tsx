@@ -177,12 +177,13 @@ export class Chart extends React.Component<ChartProps> {
     this.refFn = this.refFn.bind(this);
     this.reload = this.reload.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.mounted = true;
+
+    props.config && this.renderChart(props.config);
   }
 
-  componentWillMount() {
-    const {config, api, data, initFetch, source} = this.props;
-
-    this.mounted = true;
+  componentDidMount() {
+    const {api, data, initFetch, source} = this.props;
 
     if (source && isPureVariable(source)) {
       const ret = resolveVariableAndFilter(source, data, '| raw');
@@ -190,8 +191,6 @@ export class Chart extends React.Component<ChartProps> {
     } else if (api && initFetch !== false) {
       this.reload();
     }
-
-    config && this.renderChart(config);
   }
 
   componentDidUpdate(prevProps: ChartProps) {
@@ -655,16 +654,16 @@ export class Chart extends React.Component<ChartProps> {
 }
 
 @Renderer({
-  test: /(^|\/)chart$/,
-  storeType: ServiceStore.name,
-  name: 'chart'
+  type: 'chart',
+  storeType: ServiceStore.name
 })
 export class ChartRenderer extends Chart {
   static contextType = ScopedContext;
 
-  componentWillMount() {
-    super.componentWillMount();
-    const scoped = this.context as IScopedContext;
+  constructor(props: ChartProps, context: IScopedContext) {
+    super(props);
+
+    const scoped = context;
     scoped.registerComponent(this);
   }
 

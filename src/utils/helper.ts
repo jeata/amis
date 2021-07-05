@@ -7,6 +7,11 @@ import qs from 'qs';
 import {IIRendererStore} from '../store';
 import {IFormStore} from '../store/form';
 import {autobindMethod} from './autobind';
+import {
+  isPureVariable,
+  resolveVariable,
+  resolveVariableAndFilter
+} from './tpl-builtin';
 
 // 方便取值的时候能够把上层的取到，但是获取的时候不会全部把所有的数据获取到。
 export function createObject(
@@ -96,7 +101,12 @@ export function syncDataFromSuper(
         .map(item => `${item.name}`.replace(/\..*$/, ''))
         .concat(Object.keys(obj))
     );
-  } else if (force) {
+  } else if (
+    force ||
+    (store &&
+      store.storeType === 'ServiceStore' &&
+      store.parentStore.storeType === 'FormStore')
+  ) {
     keys = Object.keys(obj);
   }
 
@@ -150,7 +160,7 @@ export function findIndex(
 
 export function getVariable(
   data: {[propName: string]: any},
-  key: string,
+  key: string | undefined,
   canAccessSuper: boolean = true
 ): any {
   if (!data || !key) {
@@ -437,6 +447,28 @@ export function isVisible(
     (schema.hiddenOn && evalExpression(schema.hiddenOn, data) === true) ||
     (schema.visibleOn && evalExpression(schema.visibleOn, data) === false)
   );
+}
+
+export function isUnfolded(
+  node: any,
+  config: {
+    foldedField?: string;
+    unfoldedField?: string;
+  }
+): boolean {
+  let {foldedField, unfoldedField} = config;
+
+  unfoldedField = unfoldedField || 'unfolded';
+  foldedField = foldedField || 'folded';
+
+  let ret: boolean = false;
+  if (unfoldedField && typeof node[unfoldedField] !== 'undefined') {
+    ret = !!node[unfoldedField];
+  } else if (foldedField && typeof node[foldedField] !== 'undefined') {
+    ret = !node[foldedField];
+  }
+
+  return ret;
 }
 
 /**
@@ -925,7 +957,7 @@ export function getTree<T extends TreeItem>(
  */
 export function filterTree<T extends TreeItem>(
   tree: Array<T>,
-  iterator: (item: T, key: number, level: number) => boolean,
+  iterator: (item: T, key: number, level: number) => any,
   level: number = 1,
   depthFirst: boolean = false
 ) {
@@ -935,7 +967,15 @@ export function filterTree<T extends TreeItem>(
         let children: TreeArray | undefined = item.children
           ? filterTree(item.children, iterator, level + 1, depthFirst)
           : undefined;
-        children && (item = {...item, children: children});
+
+        if (
+          Array.isArray(children) &&
+          Array.isArray(item.children) &&
+          children.length !== item.children.length
+        ) {
+          item = {...item, children: children};
+        }
+
         return item;
       })
       .filter((item, index) => iterator(item, index, level));
@@ -945,10 +985,20 @@ export function filterTree<T extends TreeItem>(
     .filter((item, index) => iterator(item, index, level))
     .map(item => {
       if (item.children && item.children.splice) {
-        item = {
-          ...item,
-          children: filterTree(item.children, iterator, level + 1, depthFirst)
-        };
+        let children = filterTree(
+          item.children,
+          iterator,
+          level + 1,
+          depthFirst
+        );
+
+        if (
+          Array.isArray(children) &&
+          Array.isArray(item.children) &&
+          children.length !== item.children.length
+        ) {
+          item = {...item, children: children};
+        }
       }
       return item;
     });
@@ -1242,8 +1292,14 @@ export function qsstringify(
   options: any = {
     arrayFormat: 'indices',
     encodeValuesOnly: true
-  }
+  },
+  keepEmptyArray?: boolean
 ) {
+  // qs会保留空字符串。fix: Combo模式的空数组，无法清空。改为存为空字符串；只转换一层
+  keepEmptyArray &&
+    Object.keys(data).forEach((key: any) => {
+      Array.isArray(data[key]) && !data[key].length && (data[key] = '');
+    });
   return qs.stringify(data, options);
 }
 
@@ -1316,7 +1372,12 @@ export function chainEvents(props: any, schema: any) {
       typeof schema[key] === 'function' &&
       schema[key] !== props[key]
     ) {
-      ret[key] = chainFunctions(schema[key], props[key]);
+      // 表单项里面的 onChange 很特殊，这个不要处理。
+      if (props.formStore && key === 'onChange') {
+        ret[key] = props[key];
+      } else {
+        ret[key] = chainFunctions(schema[key], props[key]);
+      }
     } else {
       ret[key] = props[key];
     }
@@ -1444,4 +1505,92 @@ export function findObjectsWithKey(obj: any, key: string) {
     return [];
   }
   return internalFindObjectsWithKey(obj, key);
+}
+
+let scrollbarWidth: number;
+
+/**
+ * 获取浏览器滚动条宽度 https://stackoverflow.com/a/13382873
+ */
+
+export function getScrollbarWidth() {
+  if (typeof scrollbarWidth !== 'undefined') {
+    return scrollbarWidth;
+  }
+  // Creating invisible container
+  const outer = document.createElement('div');
+  outer.style.visibility = 'hidden';
+  outer.style.overflow = 'scroll'; // forcing scrollbar to appear
+  // @ts-ignore
+  outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
+  document.body.appendChild(outer);
+
+  // Creating inner element and placing it in the container
+  const inner = document.createElement('div');
+  outer.appendChild(inner);
+
+  // Calculating difference between container's full width and the child width
+  scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+
+  // Removing temporary elements from the DOM
+  // @ts-ignore
+  outer.parentNode.removeChild(outer);
+
+  return scrollbarWidth;
+}
+
+function resolveValueByName(data: any, name?: string) {
+  return isPureVariable(name)
+    ? resolveVariableAndFilter(name, data)
+    : resolveVariable(name, data);
+}
+
+// 统一的获取 value 值方法
+export function getPropValue<
+  T extends {
+    value?: any;
+    name?: string;
+    data?: any;
+    defaultValue?: any;
+  }
+>(props: T, getter?: (props: T) => any) {
+  const {name, value, data, defaultValue} = props;
+  return (
+    value ?? getter?.(props) ?? resolveValueByName(data, name) ?? defaultValue
+  );
+}
+
+// 检测 value 是否有变化，有变化就执行 onChange
+export function detectPropValueChanged<
+  T extends {
+    value?: any;
+    name?: string;
+    data?: any;
+    defaultValue?: any;
+  }
+>(
+  props: T,
+  prevProps: T,
+  onChange: (value: any) => void,
+  getter?: (props: T) => any
+) {
+  let nextValue: any;
+  if (typeof props.value !== 'undefined') {
+    props.value !== prevProps.value && onChange(props.value);
+  } else if ((nextValue = getter?.(props)) !== undefined) {
+    nextValue !== getter!(prevProps) && onChange(nextValue);
+  } else if (
+    typeof props.name === 'string' &&
+    (nextValue = resolveValueByName(props.data, props.name)) !== undefined
+  ) {
+    nextValue !== resolveValueByName(prevProps.data, prevProps.name) &&
+      onChange(nextValue);
+  } else if (props.defaultValue !== prevProps.defaultValue) {
+    onChange(props.defaultValue);
+  }
+}
+
+// 去掉字符串中的 html 标签，不完全准确但效率比较高
+export function removeHTMLTag(str: string) {
+  return str.replace(/<\/?[^>]+(>|$)/g, '');
 }

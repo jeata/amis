@@ -1,5 +1,4 @@
 export default {
-
   title: '条件生成器',
   body: [
     {
@@ -21,7 +20,7 @@ export default {
           }
         }
       ],
-      controls: [
+      body: [
         {
           type: 'condition-builder',
           label: '条件组件',

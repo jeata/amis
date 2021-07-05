@@ -1,5 +1,4 @@
 export default {
-
   title: 'HBox & Grid',
   type: 'page',
   body: [

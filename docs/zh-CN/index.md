@@ -34,9 +34,9 @@ order: 8
     "filter": {
       "title": "筛选",
       "submitText": "",
-      "controls": [
+      "body": [
         {
-          "type": "text",
+          "type": "input-text",
           "name": "keywords",
           "placeholder": "关键字",
           "addOn": {
@@ -64,13 +64,13 @@ order: 8
           "body": {
             "type": "form",
             "api": "https://mock.jeata.com/crud/sample/bulkUpdate2",
-            "controls": [
+            "body": [
               {
                 "type": "hidden",
                 "name": "ids"
               },
               {
-                "type": "text",
+                "type": "input-text",
                 "name": "engine",
                 "label": "Engine"
               }
@@ -131,6 +131,7 @@ order: 8
         "name": "platform",
         "label": "平台",
         "popOver": {
+          "trigger": "hover",
           "body": {
             "type": "tpl",
             "tpl": "就是为了演示有个叫 popOver 的功能"
@@ -142,12 +143,8 @@ order: 8
       {
         "name": "grade",
         "label": "CSS 等级",
-        "quickEdit": {
-          "mode": "inline",
-          "type": "select",
-          "options": ["A", "B", "C", "D", "X"]
-        },
-        "type": "text"
+        "type": "select",
+        "options": ["A", "B", "C", "D", "X"]
       },
       {
         "type": "operation",
@@ -156,9 +153,8 @@ order: 8
         "buttons": [
           {
             "type": "button",
-            "icon": "fa fa-times text-danger",
             "actionType": "ajax",
-            "tooltip": "删除",
+            "label": "删除",
             "confirmText": "您确认要删除?",
             "api": "delete:https://mock.jeata.com/crud/sample/$id"
           }

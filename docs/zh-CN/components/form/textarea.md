@@ -14,7 +14,7 @@ order: 57
 {
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
         {
             "name": "textarea",
             "type": "textarea",

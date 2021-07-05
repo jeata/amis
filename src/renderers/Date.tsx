@@ -2,7 +2,7 @@ import React from 'react';
 import {Renderer, RendererProps} from '../factory';
 import moment from 'moment';
 import {BaseSchema} from '../Schema';
-import {filter} from '../utils/tpl';
+import {getPropValue} from '../utils/helper';
 
 /**
  * Date 展示渲染器。
@@ -91,24 +91,23 @@ export class DateField extends React.Component<DateProps, DateState> {
 
   render() {
     const {
-      value,
       valueFormat,
       format,
       placeholder,
       fromNow,
       className,
       classnames: cx,
-      translate: __,
-      data,
+      translate: __
     } = this.props;
     let viewValue: React.ReactNode = (
       <span className="text-muted">{placeholder}</span>
     );
 
+    const value = getPropValue(this.props);
+
     if (value) {
-      let v = (typeof value == 'string')?filter(value, data):value;
-      let ISODate = moment(v, moment.ISO_8601);
-      let NormalDate = moment(v, valueFormat);
+      let ISODate = moment(value, moment.ISO_8601);
+      let NormalDate = moment(value, valueFormat);
 
       viewValue = ISODate.isValid()
         ? ISODate.format(format)
@@ -132,8 +131,7 @@ export class DateField extends React.Component<DateProps, DateState> {
 }
 
 @Renderer({
-  test: /(^|\/)date$/,
-  name: 'date-field'
+  type: 'date'
 })
 export class DateFieldRenderer extends DateField {
   static defaultProps: Partial<DateProps> = {
@@ -143,8 +141,7 @@ export class DateFieldRenderer extends DateField {
 }
 
 @Renderer({
-  test: /(^|\/)datetime$/,
-  name: 'datetime-field'
+  type: 'datetime'
 })
 export class DateTimeFieldRenderer extends DateField {
   static defaultProps: Partial<DateProps> = {
@@ -154,8 +151,7 @@ export class DateTimeFieldRenderer extends DateField {
 }
 
 @Renderer({
-  test: /(^|\/)time$/,
-  name: 'time-field'
+  type: 'time'
 })
 export class TimeFieldRenderer extends DateField {
   static defaultProps: Partial<DateProps> = {
@@ -164,8 +160,7 @@ export class TimeFieldRenderer extends DateField {
   };
 }
 @Renderer({
-  test: /(^|\/)month$/,
-  name: 'month-field'
+  type: 'month'
 })
 export class MonthFieldRenderer extends DateField {
   static defaultProps: Partial<DateProps> = {

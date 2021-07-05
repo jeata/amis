@@ -13,8 +13,7 @@ import {
   PlaybackRateMenuButton
   // @ts-ignore
 } from 'video-react';
-import {padArr} from '../utils/helper';
-import cx from 'classnames';
+import {getPropValue, padArr} from '../utils/helper';
 import {Renderer, RendererProps} from '../factory';
 import {resolveVariable} from '../utils/tpl-builtin';
 import {filter} from '../utils/tpl';
@@ -548,7 +547,8 @@ export default class Video extends React.Component<VideoProps, VideoState> {
       columnsCount,
       data,
       jumpFrame,
-      classPrefix: ns
+      classPrefix: ns,
+      classnames: cx
     } = this.props;
 
     if (typeof frames === 'string' && frames[0] === '$') {
@@ -576,7 +576,7 @@ export default class Video extends React.Component<VideoProps, VideoState> {
 
     return (
       <div
-        className={cx(`pos-rlt ${ns}Video-frameList`, framesClassName)}
+        className={cx(`pos-rlt Video-frameList`, framesClassName)}
         ref={this.frameRef}
       >
         {padArr(items, columnsCount).map((items, i) => {
@@ -646,9 +646,7 @@ export default class Video extends React.Component<VideoProps, VideoState> {
     } = this.props;
 
     let source =
-      this.props.src ||
-      (name && data && (data as any)[name]) ||
-      (amisConfig && amisConfig.value);
+      filter(this.props.src, data, '| raw') || getPropValue(this.props);
     const videoState = this.state.videoState;
     let highlight =
       videoState.duration &&
@@ -765,13 +763,10 @@ export default class Video extends React.Component<VideoProps, VideoState> {
   }
 
   render() {
-    let {splitPoster, className, classPrefix: ns} = this.props;
+    let {splitPoster, className, classPrefix: ns, classnames: cx} = this.props;
 
     return (
-      <div
-        className={cx(`${ns}Video`, className)}
-        onClick={this.onClick as any}
-      >
+      <div className={cx(`Video`, className)} onClick={this.onClick as any}>
         {this.renderFrames()}
         {splitPoster ? this.renderPosterAndPlayer() : this.renderPlayer()}
       </div>
@@ -780,7 +775,6 @@ export default class Video extends React.Component<VideoProps, VideoState> {
 }
 
 @Renderer({
-  test: /(^|\/)video$/,
-  name: 'video'
+  type: 'video'
 })
 export class VideoRenderer extends Video {}

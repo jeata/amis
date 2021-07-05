@@ -2,7 +2,7 @@ import React from 'react';
 import {Renderer, RendererProps} from '../factory';
 
 import JSONTree from 'react-json-tree';
-import {autobind} from '../utils/helper';
+import {autobind, getPropValue} from '../utils/helper';
 import {BaseSchema} from '../Schema';
 import {resolveVariableAndFilter, isPureVariable} from '../utils/tpl-builtin';
 import JSON5 from 'json5';
@@ -154,13 +154,14 @@ export class JSONField extends React.Component<JSONProps, object> {
   render() {
     const {
       className,
-      value,
       jsonTheme,
       classnames: cx,
       hideRoot,
       placeholder,
       source
     } = this.props;
+
+    const value = getPropValue(this.props);
 
     let data = value;
     if (source !== undefined && isPureVariable(source)) {
@@ -196,7 +197,6 @@ export class JSONField extends React.Component<JSONProps, object> {
 }
 
 @Renderer({
-  test: /(^|\/)json$/,
-  name: 'json'
+  type: 'json'
 })
 export class JSONFieldRenderer extends JSONField {}

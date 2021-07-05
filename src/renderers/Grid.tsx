@@ -2,7 +2,12 @@ import React from 'react';
 import {Renderer, RendererProps} from '../factory';
 import {Schema} from '../types';
 import pick from 'lodash/pick';
-import {BaseSchema, SchemaClassName, SchemaObject} from '../Schema';
+import {
+  BaseSchema,
+  SchemaClassName,
+  SchemaCollection,
+  SchemaObject
+} from '../Schema';
 
 export const ColProps = ['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs'];
 
@@ -124,6 +129,8 @@ export type GridColumnObject = {
   mode?: string;
   horizontal?: any;
 
+  body?: SchemaCollection;
+
   /**
    * 列类名
    */
@@ -186,7 +193,12 @@ export default class Grid<T> extends React.Component<GridProps & T, object> {
   static propsList: Array<string> = ['columns'];
   static defaultProps = {};
 
-  renderChild(region: string, node: Schema, key: number, length: number) {
+  renderChild(
+    region: string,
+    node: SchemaCollection,
+    key: number,
+    length: number
+  ) {
     const {render, itemRender} = this.props;
 
     return itemRender
@@ -224,16 +236,23 @@ export default class Grid<T> extends React.Component<GridProps & T, object> {
             )}
           </div>
         ) : (
-          this.renderChild(`column/${key}`, column, key, length)
+          this.renderChild(
+            `column/${key}`,
+            column.type ? column : (column as any).body!,
+            key,
+            length
+          )
         )}
       </div>
     );
   }
 
   renderColumns(columns: ColumnArray) {
-    return columns.map((column, key) =>
-      this.renderColumn(column, key, columns.length)
-    );
+    return Array.isArray(columns)
+      ? columns.map((column, key) =>
+          this.renderColumn(column, key, columns.length)
+        )
+      : null;
   }
 
   render() {
@@ -247,7 +266,6 @@ export default class Grid<T> extends React.Component<GridProps & T, object> {
 }
 
 @Renderer({
-  test: /(^|\/)grid$/,
-  name: 'grid'
+  type: 'grid'
 })
 export class GridRenderer extends Grid<{}> {}

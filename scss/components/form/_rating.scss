@@ -13,6 +13,7 @@
 
   &.is-disabled {
     cursor: default; // disabled 使用箭头 bu xubin
+    pointer-events: none;
   }
 
   &-half:before {

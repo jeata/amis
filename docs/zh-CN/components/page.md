@@ -29,9 +29,9 @@ Page 组件是基塔后台页面 JSON 配置中顶级容器组件，是整个页
 {
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
       {
-        "type": "text",
+        "type": "input-text",
         "name": "name",
         "label": "姓名："
       }

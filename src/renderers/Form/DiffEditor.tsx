@@ -18,7 +18,7 @@ export interface DiffControlSchema extends FormBaseControl {
   /**
    * 指定为 Diff 编辑器
    */
-  type: 'diff';
+  type: 'diff-editor';
 
   /**
    * 左侧面板的值， 支持取变量。
@@ -280,13 +280,13 @@ export class DiffEditorControlRenderer extends DiffEditor {
   };
 }
 
-@Renderer({
-  test: /(^|\/)diff-editor$/,
-  name: 'diff-editor'
-})
-export class DiffEditorRenderer extends DiffEditor {
-  static defaultProps = {
-    ...DiffEditor.defaultProps,
-    disabled: true
-  };
-}
+// @Renderer({
+//   test: /(^|\/)diff-editor$/,
+//   name: 'diff-editor'
+// })
+// export class DiffEditorRenderer extends DiffEditor {
+//   static defaultProps = {
+//     ...DiffEditor.defaultProps,
+//     disabled: true
+//   };
+// }

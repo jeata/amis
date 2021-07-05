@@ -18,7 +18,7 @@ import matches from 'dom-helpers/query/matches';
 import Overlay from '../components/Overlay';
 import PopOver from '../components/PopOver';
 import {Icon} from '../components/icons';
-import {FormControlSchema} from './Form/Item';
+import {SchemaCollection, SchemaObject} from '../Schema';
 import { SchemaApi } from "../Schema";
 
 export type SchemaQuickEditObject =
@@ -40,7 +40,7 @@ export type SchemaQuickEditObject =
        * 是否直接内嵌
        */
       mode?: 'inline';
-    } & FormControlSchema)
+    } & SchemaObject)
 
   /**
    * 表单项集合
@@ -61,7 +61,7 @@ export type SchemaQuickEditObject =
        */
       mode?: 'inline';
 
-      controls: Array<FormControlSchema>;
+      body: SchemaCollection;
     };
 
 export type SchemaQuickEdit = boolean | SchemaQuickEditObject;
@@ -71,9 +71,7 @@ export interface QuickEditConfig {
   resetOnFailed?: boolean;
   mode?: 'inline' | 'dialog' | 'popOver' | 'append';
   type?: string;
-  controls?: any;
-  tabs?: any;
-  fieldSet?: any;
+  body?: any;
   focusable?: boolean;
   popOverClassName?: string;
   [propName: string]: any;
@@ -313,6 +311,8 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
         false,
         (quickEdit as QuickEditConfig).resetOnFailed
       );
+
+      return false;
     }
 
     handleInit(values: object) {
@@ -370,9 +370,9 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
           type: 'form',
           title: '',
           autoFocus: true,
-          controls: [
+          body: [
             {
-              type: 'text',
+              type: 'input-text',
               name,
               placeholder: label,
               label: false
@@ -381,18 +381,16 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
         };
       } else if (quickEdit) {
         if (
-          (quickEdit.controls &&
-            !~['combo', 'group', 'panel', 'fieldSet'].indexOf(
-              (quickEdit as any).type
-            )) ||
-          quickEdit.tabs ||
-          quickEdit.fieldSet
+          quickEdit.body &&
+          !~['combo', 'group', 'panel', 'fieldSet', 'fieldset'].indexOf(
+            (quickEdit as any).type
+          )
         ) {
           schema = {
             title: '',
             autoFocus: (quickEdit as QuickEditConfig).mode !== 'inline',
             ...quickEdit,
-            mode: 'noraml',
+            mode: 'normal',
             type: 'form'
           };
         } else {
@@ -402,9 +400,9 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
             type: 'form',
             autoFocus: (quickEdit as QuickEditConfig).mode !== 'inline',
             mode: 'normal',
-            controls: [
+            body: [
               {
-                type: quickEdit.type || 'text',
+                type: quickEdit.type || 'input-text',
                 name: quickEdit.name || name,
                 ...quickEdit,
                 mode: undefined
@@ -424,7 +422,7 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
               : [
                   {
                     type: 'button',
-                    label: __('cancle'),
+                    label: __('cancel'),
                     actionType: 'cancel'
                   },
 
@@ -468,6 +466,7 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
           className={cx((quickEdit as QuickEditConfig).className)}
         >
           {render('quick-edit-form', this.buildSchema(), {
+            value: undefined,
             onSubmit: this.handleSubmit,
             onAction: this.handleAction,
             onChange: null,
@@ -513,10 +512,17 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
         classnames: cx,
         render,
         noHoc,
-        canAccessSuperData
+        canAccessSuperData,
+        disabled
       } = this.props;
 
-      if (!quickEdit || !onQuickChange || quickEditEnabled === false || noHoc) {
+      if (
+        !quickEdit ||
+        !onQuickChange ||
+        quickEditEnabled === false ||
+        noHoc ||
+        disabled
+      ) {
         return <Component {...this.props} />;
       }
 
@@ -524,6 +530,7 @@ export const HocQuickEdit = (config: Partial<QuickEditConfig> = {}) => (
         return (
           <Component {...this.props}>
             {render('inline-form', this.buildSchema(), {
+              value: undefined,
               wrapperComponent: 'div',
               className: cx('Form--quickEdit'),
               ref: this.formRef,

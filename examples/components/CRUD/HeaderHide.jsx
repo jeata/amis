@@ -1,5 +1,4 @@
 export default {
-
   title: '当 column 每一项的 label 值都为空字符时，可以隐藏表头',
   body: [
     {

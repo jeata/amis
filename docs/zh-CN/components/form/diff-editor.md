@@ -14,7 +14,7 @@ order: 17
 {
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
         {
             "type": "diff-editor",
             "name": "diff",
@@ -34,7 +34,7 @@ order: 17
 {
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
         {
             "type": "diff-editor",
             "name": "diff",
@@ -64,7 +64,7 @@ order: 17
         "value1": "hello world",
         "value2": "hello wrold"
     },
-    "controls": [
+    "body": [
         {
             "type": "diff-editor",
             "name": "value2",

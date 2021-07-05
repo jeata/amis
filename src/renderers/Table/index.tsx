@@ -15,9 +15,14 @@ import {
   noop,
   autobind,
   isArrayChildrenModified,
-  getVariable
+  getVariable,
+  removeHTMLTag
 } from '../../utils/helper';
-import {resolveVariable} from '../../utils/tpl-builtin';
+import {
+  isPureVariable,
+  resolveVariable,
+  resolveVariableAndFilter
+} from '../../utils/tpl-builtin';
 import debounce from 'lodash/debounce';
 import Sortable from 'sortablejs';
 import {resizeSensor} from '../../utils/resize-sensor';
@@ -35,7 +40,6 @@ import {
   SchemaTokenizeableString,
   SchemaType
 } from "../../Schema";
-import {FormControlSchema, FormControlType} from '../Form/Item';
 import {SchemaPopOver} from '../PopOver';
 import {SchemaQuickEdit} from '../QuickEdit';
 import {SchemaCopyable} from '../Copyable';
@@ -44,7 +48,7 @@ import {toDataURL, getImageDimensions} from '../../utils/image';
 import {TableBody} from './TableBody';
 import {TplSchema} from '../Tpl';
 import {MappingSchema} from '../Mapping';
-import {isAlive} from 'mobx-state-tree';
+import {isAlive, getSnapshot} from 'mobx-state-tree';
 
 /**
  * 表格列，不指定类型时默认为文本类型。
@@ -225,6 +229,11 @@ export interface TableSchema extends BaseSchema {
   combineNum?: number;
 
   /**
+   * 合并单元格配置，配置从第几列开始合并。
+   */
+  combineFromIndex?: number;
+
+  /**
    * 顶部总结行
    */
   prefixRow?: Array<SchemaObject>;
@@ -260,6 +269,7 @@ export interface TableProps extends RendererProps {
   affixHeader?: boolean;
   affixColumns?: boolean;
   combineNum?: number;
+  combineFromIndex?: number;
   footable?:
     | boolean
     | {
@@ -282,7 +292,7 @@ export interface TableProps extends RendererProps {
   onSave?: (
     items: Array<object> | object,
     diff: Array<object> | object,
-    rowIndexes: Array<number> | number,
+    rowIndexes: Array<string> | string,
     unModifiedItems?: Array<object>,
     rowOrigins?: Array<object> | object,
     resetOnFailed?: boolean
@@ -339,6 +349,7 @@ export default class Table extends React.Component<TableProps, object> {
     'hideCheckToggler',
     'itemActions',
     'combineNum',
+    'combineFromIndex',
     'items',
     'columns',
     'valueField',
@@ -417,37 +428,7 @@ export default class Table extends React.Component<TableProps, object> {
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.subFormRef = this.subFormRef.bind(this);
-  }
 
-  static syncRows(
-    store: ITableStore,
-    props: TableProps,
-    prevProps?: TableProps
-  ) {
-    const source = props.source;
-    const value = props.value || props.items;
-    let rows: Array<object> = [];
-    let updateRows = true;
-
-    if (Array.isArray(value)) {
-      rows = value;
-    } else if (typeof source === 'string') {
-      const resolved = resolveVariable(source, props.data);
-      const prev = prevProps ? resolveVariable(source, prevProps.data) : null;
-
-      if (prev && prev === resolved) {
-        updateRows = false;
-      } else if (Array.isArray(resolved)) {
-        rows = resolved;
-      }
-    }
-
-    updateRows && store.initRows(rows, props.getEntryId);
-    typeof props.selected !== 'undefined' &&
-      store.updateSelected(props.selected, props.valueField);
-  }
-
-  componentWillMount() {
     const {
       store,
       columns,
@@ -463,11 +444,12 @@ export default class Table extends React.Component<TableProps, object> {
       itemDraggableOn,
       hideCheckToggler,
       combineNum,
+      combineFromIndex,
       expandConfig,
       formItem,
       keepItemSelectionOnPageChange,
       maxKeepItemSelectionLength
-    } = this.props;
+    } = props;
 
     store.update({
       selectable,
@@ -484,13 +466,49 @@ export default class Table extends React.Component<TableProps, object> {
       itemDraggableOn,
       hideCheckToggler,
       combineNum,
+      combineFromIndex,
       keepItemSelectionOnPageChange,
       maxKeepItemSelectionLength
     });
 
     formItem && isAlive(formItem) && formItem.setSubStore(store);
-    Table.syncRows(store, this.props);
-    this.syncSelected();
+    Table.syncRows(store, this.props) && this.syncSelected();
+  }
+
+  static syncRows(
+    store: ITableStore,
+    props: TableProps,
+    prevProps?: TableProps
+  ) {
+    const source = props.source;
+    const value = props.value || props.items;
+    let rows: Array<object> = [];
+    let updateRows = false;
+
+    if (
+      Array.isArray(value) &&
+      (!prevProps || (prevProps.value || prevProps.items) !== value)
+    ) {
+      updateRows = true;
+      rows = value;
+    } else if (typeof source === 'string') {
+      const resolved = resolveVariableAndFilter(source, props.data, '| raw');
+      const prev = prevProps
+        ? resolveVariableAndFilter(source, prevProps.data, '| raw')
+        : null;
+
+      if (prev && prev === resolved) {
+        updateRows = false;
+      } else if (Array.isArray(resolved)) {
+        updateRows = true;
+        rows = resolved;
+      }
+    }
+
+    updateRows && store.initRows(rows, props.getEntryId);
+    typeof props.selected !== 'undefined' &&
+      store.updateSelected(props.selected, props.valueField);
+    return updateRows;
   }
 
   componentDidMount() {
@@ -515,9 +533,9 @@ export default class Table extends React.Component<TableProps, object> {
     window.addEventListener('resize', this.affixDetect);
   }
 
-  componentWillReceiveProps(nextProps: TableProps) {
+  componentDidUpdate(prevProps: TableProps) {
     const props = this.props;
-    const store = nextProps.store;
+    const store = props.store;
 
     if (
       anyChanged(
@@ -534,48 +552,50 @@ export default class Table extends React.Component<TableProps, object> {
           'itemDraggableOn',
           'hideCheckToggler',
           'combineNum',
+          'combineFromIndex',
           'expandConfig'
         ],
-        props,
-        nextProps
+        prevProps,
+        props
       )
     ) {
       store.update({
-        selectable: nextProps.selectable,
-        columnsTogglable: nextProps.columnsTogglable,
-        draggable: nextProps.draggable,
-        orderBy: nextProps.orderBy,
-        orderDir: nextProps.orderDir,
-        multiple: nextProps.multiple,
-        primaryField: nextProps.primaryField,
-        footable: nextProps.footable,
-        itemCheckableOn: nextProps.itemCheckableOn,
-        itemDraggableOn: nextProps.itemDraggableOn,
-        hideCheckToggler: nextProps.hideCheckToggler,
-        combineNum: nextProps.combineNum,
-        expandConfig: nextProps.expandConfig
+        selectable: props.selectable,
+        columnsTogglable: props.columnsTogglable,
+        draggable: props.draggable,
+        orderBy: props.orderBy,
+        orderDir: props.orderDir,
+        multiple: props.multiple,
+        primaryField: props.primaryField,
+        footable: props.footable,
+        itemCheckableOn: props.itemCheckableOn,
+        itemDraggableOn: props.itemDraggableOn,
+        hideCheckToggler: props.hideCheckToggler,
+        combineNum: props.combineNum,
+        combineFromIndex: props.combineFromIndex,
+        expandConfig: props.expandConfig
       });
     }
 
-    if (props.columns !== nextProps.columns) {
+    if (prevProps.columns !== props.columns) {
       store.update({
-        columns: nextProps.columns
+        columns: props.columns
       });
     }
 
     if (
-      anyChanged(['source', 'value', 'items'], props, nextProps) ||
-      (!nextProps.value && !nextProps.items && nextProps.data !== props.data)
+      anyChanged(['source', 'value', 'items'], prevProps, props) ||
+      (!props.value &&
+        !props.items &&
+        (props.data !== prevProps.data ||
+          (typeof props.source === 'string' && isPureVariable(props.source))))
     ) {
-      Table.syncRows(store, nextProps, props);
-      this.syncSelected();
-    } else if (isArrayChildrenModified(props.selected!, nextProps.selected!)) {
-      store.updateSelected(nextProps.selected || [], nextProps.valueField);
+      Table.syncRows(store, props, prevProps) && this.syncSelected();
+    } else if (isArrayChildrenModified(prevProps.selected!, props.selected!)) {
+      store.updateSelected(props.selected || [], props.valueField);
       this.syncSelected();
     }
-  }
 
-  componentDidUpdate() {
     this.updateTableInfoLazy();
   }
 
@@ -625,6 +645,10 @@ export default class Table extends React.Component<TableProps, object> {
     savePristine?: boolean,
     resetOnFailed?: boolean
   ) {
+    if (!isAlive(item)) {
+      return;
+    }
+
     const {
       onSave,
       saveImmediately: propsSaveImmediately,
@@ -659,7 +683,7 @@ export default class Table extends React.Component<TableProps, object> {
     onSave(
       item.data,
       difference(item.data, item.pristine, ['id', primaryField]),
-      item.index,
+      item.path,
       undefined,
       item.pristine,
       resetOnFailed
@@ -686,7 +710,7 @@ export default class Table extends React.Component<TableProps, object> {
     }
 
     const rows = store.modifiedRows.map(item => item.data);
-    const rowIndexes = store.modifiedRows.map(item => item.index);
+    const rowIndexes = store.modifiedRows.map(item => item.path);
     const diff = store.modifiedRows.map(item =>
       difference(item.data, item.pristine, ['id', primaryField])
     );
@@ -769,12 +793,15 @@ export default class Table extends React.Component<TableProps, object> {
     const clip = (this.table as HTMLElement).getBoundingClientRect();
     const offsetY =
       this.props.affixOffsetTop ?? this.props.env.affixOffsetTop ?? 0;
+    const headingHeight =
+      dom.querySelector(`.${ns}Table-heading`)?.getBoundingClientRect()
+        .height || 0;
+    const headerHeight =
+      dom.querySelector(`.${ns}Table-headToolbar`)?.getBoundingClientRect()
+        .height || 0;
 
-    // 50 是 headerToolbar 的高度
-    const toolbarHeight =
-      this.renderedToolbars.length || this.props.headerToolbarRender ? 50 : 0;
     const affixed =
-      clip.top - toolbarHeight < offsetY &&
+      clip.top - headerHeight - headingHeight < offsetY &&
       clip.top + clip.height - 40 > offsetY;
     const affixedDom = dom.querySelector(`.${ns}Table-fixedTop`) as HTMLElement;
 
@@ -838,17 +865,18 @@ export default class Table extends React.Component<TableProps, object> {
       ),
       (table: HTMLTableElement) => {
         let totalWidth = 0;
-
         forEach(
           table.querySelectorAll('thead>tr:last-child>th'),
           (item: HTMLElement) => {
             const width = widths[item.getAttribute('data-index') as string];
-
             item.style.cssText += `width: ${width}px; height: ${heights.header}px`;
             totalWidth += width;
           }
         );
-
+        forEach(table.querySelectorAll('colgroup>col'), (item: HTMLElement) => {
+          const width = widths[item.getAttribute('data-index') as string];
+          item.setAttribute('width', `${width}`);
+        });
         forEach(
           table.querySelectorAll('tbody>tr'),
           (item: HTMLElement, index) => {
@@ -1578,6 +1606,11 @@ export default class Table extends React.Component<TableProps, object> {
         </div>
         <div className={cx('Table-wrapper')}>
           <table ref={this.affixedTableRef} className={tableClassName}>
+            <colgroup>
+              {store.filteredColumns.map(column => (
+                <col key={column.index} data-index={column.index} />
+              ))}
+            </colgroup>
             <thead>
               {store.columnGroup.length ? (
                 <tr>
@@ -1627,7 +1660,6 @@ export default class Table extends React.Component<TableProps, object> {
       rowClassName
     } = this.props;
     const hideHeader = store.filteredColumns.every(column => !column.label);
-
     return (
       <table
         className={cx(
@@ -1723,7 +1755,8 @@ export default class Table extends React.Component<TableProps, object> {
       this.renderedToolbars.push(type);
       return this.renderDragToggler();
     } else if (type === 'export-excel') {
-      return this.renderExportExcel();
+      this.renderedToolbars.push(type);
+      return this.renderExportExcel(toolbar);
     }
 
     return void 0;
@@ -1754,6 +1787,7 @@ export default class Table extends React.Component<TableProps, object> {
           env && env.getModalContainer ? env.getModalContainer : undefined
         }
         align={config ? config.align : 'left'}
+        isActived={store.hasColumnHidden()}
         classnames={cx}
         classPrefix={ns}
         key="columns-toggable"
@@ -1805,13 +1839,15 @@ export default class Table extends React.Component<TableProps, object> {
     );
   }
 
-  renderExportExcel() {
+  renderExportExcel(toolbar: SchemaNode) {
     const {
       store,
+      env,
       classPrefix: ns,
       classnames: cx,
       translate: __,
-      columns
+      columns,
+      data
     } = this.props;
 
     if (!columns) {
@@ -1823,9 +1859,38 @@ export default class Table extends React.Component<TableProps, object> {
         classPrefix={ns}
         onClick={() => {
           import('exceljs').then(async (ExcelJS: any) => {
-            if (!store.data.items || store.data.items.length === 0) {
+            let rows = [];
+            let tmpStore;
+            let filename = 'data';
+            // 支持配置 api 远程获取
+            if (typeof toolbar === 'object' && (toolbar as Schema).api) {
+              const res = await env.fetcher((toolbar as Schema).api, data);
+              if (!res.data) {
+                env.notify('warning', __('placeholder.noData'));
+                return;
+              }
+              if (Array.isArray(res.data)) {
+                rows = res.data;
+              } else {
+                rows = res.data.rows || res.data.items;
+              }
+              // 因为很多方法是 store 里的，所以需要构建 store 来处理
+              tmpStore = TableStore.create(getSnapshot(store));
+              tmpStore.initRows(rows);
+              rows = tmpStore.rows;
+            } else {
+              rows = store.rows;
+            }
+
+            if (typeof toolbar === 'object' && (toolbar as Schema).filename) {
+              filename = filter((toolbar as Schema).filename, data, '| raw');
+            }
+
+            if (rows.length === 0) {
+              env.notify('warning', __('placeholder.noData'));
               return;
             }
+
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('sheet', {
               properties: {defaultColWidth: 15}
@@ -1849,7 +1914,7 @@ export default class Table extends React.Component<TableProps, object> {
             };
             // 数据从第二行开始
             let rowIndex = 1;
-            for (const row of store.rows) {
+            for (const row of rows) {
               rowIndex += 1;
               const sheetRow = worksheet.getRow(rowIndex);
               let columIndex = 0;
@@ -1954,9 +2019,8 @@ export default class Table extends React.Component<TableProps, object> {
                   }
                 } else {
                   if ((column as TplSchema).tpl) {
-                    sheetRow.getCell(columIndex).value = filter(
-                      (column as TplSchema).tpl,
-                      row.data
+                    sheetRow.getCell(columIndex).value = removeHTMLTag(
+                      filter((column as TplSchema).tpl, row.data)
                     );
                   } else {
                     sheetRow.getCell(columIndex).value = value;
@@ -1972,13 +2036,13 @@ export default class Table extends React.Component<TableProps, object> {
                 type:
                   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
               });
-              saveAs(blob, 'data.xlsx');
+              saveAs(blob, filename + '.xlsx');
             }
           });
         }}
         size="sm"
       >
-        {__('CRUD.exportExcel')}
+        {(toolbar as Schema).label || __('CRUD.exportExcel')}
       </Button>
     );
   }
@@ -2227,6 +2291,10 @@ export default class Table extends React.Component<TableProps, object> {
       affixRow,
       translate
     } = this.props;
+
+    // 理论上来说 store.rows 应该也行啊
+    // 不过目前看来只有这样写它才会重新更新视图
+    store.rows.length;
 
     return (
       <TableContent

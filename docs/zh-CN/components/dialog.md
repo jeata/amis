@@ -127,9 +127,9 @@ Dialog 弹框 主要由 [Action](./action) 触发，主要展示一个对话框�
           {
             "type": "form",
             "api": "/api/sample/$id",
-            "controls": [
+            "body": [
               {
-                "type": "text",
+                "type": "input-text",
                 "name": "engine",
                 "label": "Engine"
               }
@@ -187,9 +187,9 @@ Dialog 弹框 主要由 [Action](./action) 触发，主要展示一个对话框�
           {
             "type": "form",
             "api": "/api/sample/$id",
-            "controls": [
+            "body": [
               {
-                "type": "text",
+                "type": "input-text",
                 "name": "engine2",
                 "label": "Engine"
               }
@@ -335,17 +335,17 @@ Dialog 弹框 主要由 [Action](./action) 触发，主要展示一个对话框�
         "title": "在弹框中的表单",
         "body": {
             "type": "form",
-            "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=2",
-            "controls": [
+            "api": "https://mock.jeata.com/api/form/saveForm",
+            "body": [
                 {
-                    "type": "text",
+                    "type": "input-text",
                     "name": "username",
                     "required": true,
                     "placeholder": "请输入用户名",
                     "label": "用户名"
                 },
                 {
-                    "type": "password",
+                    "type": "input-password",
                     "name": "password",
                     "label": "密码",
                     "required": true,
@@ -391,16 +391,16 @@ Dialog 弹框 主要由 [Action](./action) 触发，主要展示一个对话框�
         "body": {
             "type": "form",
             "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=2",
-            "controls": [
+            "body": [
                 {
-                    "type": "text",
+                    "type": "input-text",
                     "name": "text",
                     "required": true,
                     "label": "用户名",
                     "placeholder": "请输入用户名"
                 },
                 {
-                    "type": "password",
+                    "type": "input-password",
                     "name": "password",
                     "label": "密码",
                     "placeholder": "请输入密码",
@@ -447,16 +447,16 @@ Dialog 弹框 主要由 [Action](./action) 触发，主要展示一个对话框�
         "body": {
             "type": "form",
             "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=2",
-            "controls": [
+            "body": [
                 {
-                    "type": "text",
+                    "type": "input-text",
                     "name": "text",
                     "required": true,
                     "label": "用户名",
                     "placeholder": "请输入用户名"
                 },
                 {
-                    "type": "password",
+                    "type": "input-password",
                     "name": "password",
                     "label": "密码",
                     "required": true,
@@ -513,16 +513,16 @@ feedback 反馈弹框是指，在 ajax 请求后，可以显示一个弹框，�
      "body": {
             "type": "form",
             "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=2",
-            "controls": [
+            "body": [
                 {
-                    "type": "text",
+                    "type": "input-text",
                     "name": "text",
                     "required": true,
                     "label": "用户名",
                     "placeholder": "请输入用户名"
                 },
                 {
-                    "type": "password",
+                    "type": "input-password",
                     "name": "password",
                     "label": "密码",
                     "required": true,
@@ -586,16 +586,16 @@ feedback 反馈弹框是指，在 ajax 请求后，可以显示一个弹框，�
     "body": {
         "type": "form",
         "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=2",
-        "controls": [
+        "body": [
             {
-                "type": "text",
+                "type": "input-text",
                 "name": "text",
                 "required": true,
                 "label": "用户名",
                 "placeholder": "请输入用户名"
             },
             {
-                "type": "password",
+                "type": "input-password",
                 "name": "password",
                 "label": "密码",
                 "required": true,
@@ -617,7 +617,7 @@ feedback 反馈弹框是指，在 ajax 请求后，可以显示一个弹框，�
           "body": {
             "type": "form",
             "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=1",
-            "controls": [
+            "body": [
               {
                 "type": "tpl",
                 "tpl": "点击确认，请求接口，接口请求成功后，关闭弹框"
@@ -644,7 +644,7 @@ feedback 反馈弹框是指，在 ajax 请求后，可以显示一个弹框，�
           "body": {
             "type": "form",
             "api": "https://mock.jeata.com/api/form/saveForm?waitSeconds=1",
-            "controls": [
+            "body": [
               {
                 "type": "tpl",
                 "tpl": "点击确认，请求接口，接口请求成功后，关闭弹框"
@@ -682,7 +682,7 @@ feedback 反馈弹框是指，在 ajax 请求后，可以显示一个弹框，�
     "body": {
       "type": "form",
       "api": "https://mock.jeata.com/form/initData?waitSeconds=1",
-      "controls": [
+      "body": [
         {
           "type": "tpl",
           "tpl": "这是一个简单的弹框"
@@ -729,6 +729,47 @@ feedback 反馈弹框是指，在 ajax 请求后，可以显示一个弹框，�
         "visibleOn": "!(this.date % 2)",
         "title": "操作成功",
         "body": "当前时间戳: <code>${date}</code>"
+    }
+}
+```
+
+## 配置 Esc 键和点击外部关闭弹框
+
+可以通过配置 `closeOnEsc` 和 `closeOnOutside` 支持用 esc 键和点击其它区域关闭弹框。
+
+```schema: scope="body"
+{
+    "label": "点击弹框",
+    "type": "button",
+    "actionType": "dialog",
+    "dialog": {
+      "closeOnEsc": true,
+      "closeOnOutside": true,
+      "title": "弹框标题",
+      "body": [
+        {
+        "type": "input-text",
+        "label": "更复杂的标签提示",
+        "labelRemark": {
+          "trigger": ["click"],
+          "type": "remark",
+          "title": "提示",
+          "content": "<pre>first \nsecond\n${text1}</pre>"
+        },
+        "name": "text3"
+      },
+        {
+          "label": "点击弹框2",
+          "type": "button",
+          "actionType": "dialog",
+          "dialog": {
+            "closeOnEsc": true,
+            "closeOnOutside": true,
+            "title": "弹框标题2",
+            "body": "内容"
+          }
+        }
+      ]
     }
 }
 ```

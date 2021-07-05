@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 import Overlay from '../../components/Overlay';
 import PopOver from '../../components/PopOver';
 
@@ -21,6 +20,7 @@ import Spinner from '../../components/Spinner';
 import ResultBox from '../../components/ResultBox';
 import {autobind, getTreeAncestors} from '../../utils/helper';
 import {findDOMNode} from 'react-dom';
+import {normalizeOptions} from '../../components/Select';
 
 /**
  * Tree 下拉选择框。
@@ -348,7 +348,7 @@ export default class TreeSelectControl extends React.Component<
 
   mergeOptions(options: Array<object>) {
     const {selectedOptions} = this.props;
-    let combinedOptions = options.concat();
+    let combinedOptions = normalizeOptions(options).concat();
 
     if (Array.isArray(selectedOptions) && selectedOptions.length) {
       selectedOptions.forEach(option => {
@@ -448,7 +448,8 @@ export default class TreeSelectControl extends React.Component<
       maxLength,
       minLength,
       labelField,
-      translate: __
+      translate: __,
+      deferLoad
     } = this.props;
 
     let filtedOptions =
@@ -466,9 +467,7 @@ export default class TreeSelectControl extends React.Component<
           classPrefix={ns}
           className={`${ns}TreeSelect-popover`}
           style={{
-            minWidth: this.target
-              ? this.target.getBoundingClientRect().width
-              : undefined
+            minWidth: this.target ? this.target.offsetWidth : undefined
           }}
           onHide={this.close}
           overlay
@@ -500,6 +499,7 @@ export default class TreeSelectControl extends React.Component<
             value={value || ''}
             maxLength={maxLength}
             minLength={minLength}
+            onDeferLoad={deferLoad}
           />
         </PopOver>
       </Overlay>

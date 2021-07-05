@@ -8,6 +8,7 @@ import Button from '../components/Button';
 import Checkbox from '../components/Checkbox';
 import {ListStore, IListStore, IItem} from '../store/list';
 import {observer} from 'mobx-react';
+import omit = require('lodash/omit');
 import {
   anyChanged,
   getScrollParent,
@@ -16,7 +17,11 @@ import {
   isDisabled,
   noop
 } from '../utils/helper';
-import {resolveVariable} from '../utils/tpl-builtin';
+import {
+  isPureVariable,
+  resolveVariable,
+  resolveVariableAndFilter
+} from '../utils/tpl-builtin';
 import QuickEdit, {SchemaQuickEdit} from './QuickEdit';
 import PopOver, {SchemaPopOver} from './PopOver';
 import Sortable from 'sortablejs';
@@ -295,33 +300,7 @@ export default class List extends React.Component<ListProps, object> {
     this.affixDetect = this.affixDetect.bind(this);
     this.bodyRef = this.bodyRef.bind(this);
     this.renderToolbar = this.renderToolbar.bind(this);
-  }
 
-  static syncItems(store: IListStore, props: ListProps, prevProps?: ListProps) {
-    const source = props.source;
-    const value = props.value || props.items;
-    let items: Array<object> = [];
-    let updateItems = true;
-
-    if (Array.isArray(value)) {
-      items = value;
-    } else if (typeof source === 'string') {
-      const resolved = resolveVariable(source, props.data);
-      const prev = prevProps ? resolveVariable(source, prevProps.data) : null;
-
-      if (prev && prev === resolved) {
-        updateItems = false;
-      } else if (Array.isArray(resolved)) {
-        items = resolved;
-      }
-    }
-
-    updateItems && store.initItems(items);
-    Array.isArray(props.selected) &&
-      store.updateSelected(props.selected, props.valueField);
-  }
-
-  componentWillMount() {
     const {
       store,
       selectable,
@@ -332,7 +311,7 @@ export default class List extends React.Component<ListProps, object> {
       hideCheckToggler,
       itemCheckableOn,
       itemDraggableOn
-    } = this.props;
+    } = props;
 
     store.update({
       multiple,
@@ -345,8 +324,39 @@ export default class List extends React.Component<ListProps, object> {
       itemDraggableOn
     });
 
-    List.syncItems(store, this.props);
-    this.syncSelected();
+    List.syncItems(store, this.props) && this.syncSelected();
+  }
+
+  static syncItems(store: IListStore, props: ListProps, prevProps?: ListProps) {
+    const source = props.source;
+    const value = props.value || props.items;
+    let items: Array<object> = [];
+    let updateItems = false;
+
+    if (
+      Array.isArray(value) &&
+      (!prevProps || (prevProps.value || prevProps.items) !== value)
+    ) {
+      items = value;
+      updateItems = true;
+    } else if (typeof source === 'string') {
+      const resolved = resolveVariableAndFilter(source, props.data, '| raw');
+      const prev = prevProps
+        ? resolveVariableAndFilter(source, prevProps.data, '| raw')
+        : null;
+
+      if (prev && prev === resolved) {
+        updateItems = false;
+      } else if (Array.isArray(resolved)) {
+        items = resolved;
+        updateItems = true;
+      }
+    }
+
+    updateItems && store.initItems(items);
+    Array.isArray(props.selected) &&
+      store.updateSelected(props.selected, props.valueField);
+    return updateItems;
   }
 
   componentDidMount() {
@@ -363,9 +373,9 @@ export default class List extends React.Component<ListProps, object> {
     window.addEventListener('resize', this.affixDetect);
   }
 
-  componentWillReceiveProps(nextProps: ListProps) {
+  componentDidUpdate(prevProps: ListProps) {
     const props = this.props;
-    const store = nextProps.store;
+    const store = props.store;
 
     if (
       anyChanged(
@@ -379,30 +389,32 @@ export default class List extends React.Component<ListProps, object> {
           'itemCheckableOn',
           'itemDraggableOn'
         ],
-        props,
-        nextProps
+        prevProps,
+        props
       )
     ) {
       store.update({
-        multiple: nextProps.multiple,
-        selectable: nextProps.selectable,
-        draggable: nextProps.draggable,
-        orderBy: nextProps.orderBy,
-        orderDir: nextProps.orderDir,
-        hideCheckToggler: nextProps.hideCheckToggler,
-        itemCheckableOn: nextProps.itemCheckableOn,
-        itemDraggableOn: nextProps.itemDraggableOn
+        multiple: props.multiple,
+        selectable: props.selectable,
+        draggable: props.draggable,
+        orderBy: props.orderBy,
+        orderDir: props.orderDir,
+        hideCheckToggler: props.hideCheckToggler,
+        itemCheckableOn: props.itemCheckableOn,
+        itemDraggableOn: props.itemDraggableOn
       });
     }
 
     if (
-      anyChanged(['source', 'value', 'items'], props, nextProps) ||
-      (!nextProps.value && !nextProps.items && nextProps.data !== props.data)
+      anyChanged(['source', 'value', 'items'], prevProps, props) ||
+      (!props.value &&
+        !props.items &&
+        (props.data !== prevProps.data ||
+          (typeof props.source === 'string' && isPureVariable(props.source))))
     ) {
-      List.syncItems(store, nextProps, props);
-      this.syncSelected();
-    } else if (props.selected !== nextProps.selected) {
-      store.updateSelected(nextProps.selected || [], nextProps.valueField);
+      List.syncItems(store, props, prevProps) && this.syncSelected();
+    } else if (prevProps.selected !== props.selected) {
+      store.updateSelected(props.selected || [], props.valueField);
     }
   }
 
@@ -432,12 +444,7 @@ export default class List extends React.Component<ListProps, object> {
     const clip = (this.body as HTMLElement).getBoundingClientRect();
     const offsetY =
       this.props.affixOffsetTop ?? this.props.env.affixOffsetTop ?? 0;
-    // 50 是 headerToolbar 的高度
-    const toolbarHeight =
-      this.renderedToolbars.length || this.props.headerToolbarRender ? 50 : 0;
-    const affixed =
-      clip.top - toolbarHeight < offsetY &&
-      clip.top + clip.height - 40 > offsetY;
+    const affixed = clip.top < offsetY && clip.top + clip.height - 40 > offsetY;
 
     this.body.offsetWidth &&
       (afixedDom.style.cssText = `top: ${offsetY}px;width: ${this.body.offsetWidth}px;`);
@@ -991,9 +998,8 @@ export default class List extends React.Component<ListProps, object> {
 }
 
 @Renderer({
-  test: /(^|\/)(?:list|list-group)$/,
-  storeType: ListStore.name,
-  name: 'list'
+  type: 'list',
+  storeType: ListStore.name
 })
 export class ListRenderer extends List {
   dragging: boolean;
@@ -1309,8 +1315,7 @@ export class ListItemRenderer extends ListItem {
 }
 
 @Renderer({
-  test: /(^|\/)list-item-field$/,
-  name: 'list-item-field'
+  type: 'list-item-field'
 })
 @QuickEdit()
 @PopOver()
@@ -1357,7 +1362,7 @@ export class ListItemFieldRenderer extends TableCell {
     let body = children
       ? children
       : render('field', schema, {
-          ...rest,
+          ...omit(rest, Object.keys(schema)),
           value,
           data
         });

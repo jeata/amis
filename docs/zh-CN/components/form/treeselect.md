@@ -14,7 +14,7 @@ order: 60
 {
   "type": "form",
   "api": "https://mock.jeata.com/api/form/saveForm",
-  "controls": [
+  "body": [
     {
       "type": "tree-select",
       "name": "tree",
@@ -67,4 +67,4 @@ order: 60
 }
 ```
 
-更多用法，见 [Tree](./tree)
+更多用法，见 [InputTree](./input-tree)

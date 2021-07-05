@@ -6,9 +6,9 @@ export default {
       mode: 'inline',
       target: 'window',
       title: '',
-      controls: [
+      body: [
         {
-          type: 'text',
+          type: 'input-text',
           name: 'keywords',
           addOn: {
             type: 'submit',

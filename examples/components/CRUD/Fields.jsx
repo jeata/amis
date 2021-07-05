@@ -1,5 +1,4 @@
 export default {
-
   title: '增删改查列类型汇总',
   body: {
     type: 'crud',

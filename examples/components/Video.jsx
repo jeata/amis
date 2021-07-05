@@ -1,5 +1,4 @@
 export default {
-
   title: '视频播放器',
   body: [
     '<p class="text-danger">另外还支持直播流， flv 和 hls 格式</p>',

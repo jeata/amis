@@ -14,9 +14,9 @@ order: 35
 {
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
         {
-            "type": "password",
+            "type": "input-password",
             "name": "password",
             "label": "密码"
         }

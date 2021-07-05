@@ -17,7 +17,7 @@ order: 7
     "type": "form",
     "debug": true,
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
         {
             "name": "select3",
             "type": "chained-select",

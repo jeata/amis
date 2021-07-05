@@ -13,7 +13,7 @@ icon:
 {
   "type": "form",
   "api": "https://mock.jeata.com/api/form/saveForm",
-  "controls": [
+  "body": [
     {
     "label": "组合穿梭器",
     "type": "tabs-transfer",

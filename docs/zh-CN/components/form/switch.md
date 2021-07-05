@@ -14,7 +14,7 @@ order: 51
 {
     "type": "form",
     "api": "https://mock.jeata.com/api/form/saveForm",
-    "controls": [
+    "body": [
         {
             "name": "switch",
             "type": "switch",
@@ -36,7 +36,7 @@ order: 51
 {
     "type": "form",
     "debug": true,
-    "controls": [
+    "body": [
         {
             "name": "switch",
             "type": "switch",
@@ -52,7 +52,7 @@ order: 51
 {
     "type": "form",
     "debug": true,
-    "controls": [
+    "body": [
         {
             "name": "switch",
             "type": "switch",
@@ -71,7 +71,7 @@ order: 51
 ```schema: scope="body"
 {
     "type": "form",
-    "controls": [
+    "body": [
         {
             "name": "switch",
             "type": "switch",

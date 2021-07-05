@@ -1,6 +1,7 @@
-import React from "react";
-import { Renderer, RendererProps } from "../factory";
-import { BaseSchema, SchemaTooltip, SchemaTpl } from "../Schema";
+import React from 'react';
+import {Renderer, RendererProps} from '../factory';
+import { BaseSchema, SchemaTooltip, SchemaTpl } from '../Schema';
+import {getPropValue} from '../utils/helper';
 import { filter } from "../utils/tpl";
 import { Links } from "./Nav";
 import { Action } from "../types";
@@ -83,10 +84,11 @@ export class LinkField extends React.Component<LinkProps, object> {
       tooltip,
       tooltipPlacement,
       env,
-      translate: __
+      translate: __,
+      title
     } = this.props;
 
-    let value = this.props.value;
+    let value = getPropValue(this.props);
     const finnalHref = href ? filter(href, data, '| raw') : '';
 
     if (tooltip) {
@@ -101,7 +103,7 @@ export class LinkField extends React.Component<LinkProps, object> {
           <a onClick={this.handleClick.bind(this)}
              className={cx("Link", className)}
           >
-            {body ? render("body", body) : filter(value.toString(), data) || __("link")}
+            {body ? render("body", body) : value || __("link")}
           </a>
         </TooltipWrapper>
       );
@@ -113,7 +115,7 @@ export class LinkField extends React.Component<LinkProps, object> {
         <a onClick={this.handleClick.bind(this)}
            className={cx("Link", className)}
         >
-          {body ? render("body", body) : filter(value.toString(), data) || finnalHref || __("link")}
+          {body ? render("body", body) : value || finnalHref || __("link")}
         </a>
       );
     }
@@ -123,6 +125,7 @@ export class LinkField extends React.Component<LinkProps, object> {
         href={finnalHref || value}
         target={htmlTarget || (blank ? '_blank' : '_self')}
         className={cx('Link', className)}
+        title={title}
       >
         {body ? render('body', body) : finnalHref || value || __('link')}
       </a>
@@ -131,7 +134,6 @@ export class LinkField extends React.Component<LinkProps, object> {
 }
 
 @Renderer({
-  test: /(^|\/)link$/,
-  name: 'link'
+  type: 'link'
 })
 export class LinkFieldRenderer extends LinkField {}

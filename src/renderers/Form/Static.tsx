@@ -6,7 +6,8 @@ import QuickEdit, {SchemaQuickEdit} from '../QuickEdit';
 import {Renderer} from '../../factory';
 import Copyable, {SchemaCopyable} from '../Copyable';
 import {extendObject} from '../../utils/helper';
-import { SchemaExpression, SchemaObject, SchemaTpl, SchemaType } from "../../Schema";
+import omit = require('lodash/omit');
+import {SchemaExpression, SchemaObject, SchemaTpl, SchemaType} from '../../Schema';
 
 /**
  * Static
@@ -46,13 +47,6 @@ export interface StaticExactControlSchema extends FormBaseControl {
   copyable?: SchemaCopyable;
 }
 
-export type StaticControlRestSchema = Omit<StaticExactControlSchema, 'type'> &
-  SchemaObject;
-
-export type StaticControlSchema =
-  | StaticControlRestSchema
-  | StaticExactControlSchema;
-
 export interface StaticProps extends FormControlProps {
   placeholder?: string;
   tpl?: string;
@@ -70,20 +64,22 @@ export default class StaticControl extends React.Component<StaticProps, any> {
     this.handleQuickChange = this.handleQuickChange.bind(this);
   }
 
-  handleQuickChange(values: any, saveImmediately: boolean | any) {
+  async handleQuickChange(values: any, saveImmediately: boolean | any) {
     const {onBulkChange, onAction, data} = this.props;
 
-    onBulkChange(values, saveImmediately === true);
     if (saveImmediately && saveImmediately.api) {
-      onAction(
+      await onAction(
         null,
         {
           actionType: 'ajax',
           api: saveImmediately.api
         },
-        extendObject(data, values)
+        extendObject(data, values),
+        true
       );
     }
+
+    onBulkChange(values, saveImmediately === true);
   }
 
   render() {
@@ -97,6 +93,7 @@ export default class StaticControl extends React.Component<StaticProps, any> {
       data,
       classnames: cx,
       name,
+      disabled,
       ...rest
     } = this.props;
 
@@ -113,53 +110,38 @@ export default class StaticControl extends React.Component<StaticProps, any> {
 
     return (
       <div className={cx('Form-static')}>
-        {render(
-          'field',
-          {
-            ...field,
-            type: 'static-field',
-            field
-          },
-          {
+        <StaticFieldRenderer
+          {...{
+            ...(rest as any),
+            name,
+            render,
+            field,
             value,
             className,
-            onQuickChange: this.handleQuickChange
-          }
-        )}
+            onQuickChange: this.handleQuickChange,
+            data,
+            disabled,
+            classnames: cx
+          }}
+        />
       </div>
     );
   }
 }
 
 @FormItem({
-  test: (path, schema, resolveRenderer) => {
-    if (/(^|\/)form(?:\/.+)?\/control\/static(\-[^\/]+)?$/.test(path)) {
-      return true;
-    } else if (
-      /(^|\/)form(?:\/.+)?\/control\/[^\/]+$/.test(path) &&
-      schema &&
-      schema.type &&
-      (schema.name || schema.label) &&
-      resolveRenderer &&
-      resolveRenderer(`${path}/static-field/${schema.type}`)
-    ) {
-      // 不一定
-      return true;
-    }
-    return false;
-  },
+  test: /(^|\/)static(\-[^\/]+)?$/,
   weight: -90,
   strictMode: false,
   sizeMutable: false,
-  name: 'static-control'
+  name: 'static'
 })
 export class StaticControlRenderer extends StaticControl {}
 
-@Renderer({
-  test: /(^|\/)static\-field$/
-})
 @QuickEdit()
-@PopOver()
+@PopOver({
+  position: 'right'
+})
 @Copyable()
 export class StaticFieldRenderer extends TableCell {
   static defaultProps = {
@@ -196,7 +178,7 @@ export class StaticFieldRenderer extends TableCell {
     let body = children
       ? children
       : render('field', schema, {
-          ...rest,
+          ...omit(rest, Object.keys(schema)),
           value,
           data
         });

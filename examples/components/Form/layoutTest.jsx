@@ -1993,7 +1993,6 @@ const options = [
 ];
 
 export default {
-
   title: '各种表单项的不同模式样式测试，记得切到小屏幕测试',
   body: [
     {

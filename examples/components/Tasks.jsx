@@ -1,5 +1,4 @@
 export default {
-
   title: '异步任务',
   body: [
     '<p class="text-danger"></p>',

@@ -16,7 +16,24 @@ order: 51
 {
     "type": "iframe",
     "src": "https://www.jeata.com",
-    "height": 600
+    "height": 300
+}
+```
+
+## src 也可以从上下文获取
+
+
+```schema:
+{
+  "type": "page",
+  "data": {
+    "iframeSrc": "https://www.jeata.com"
+  },
+  "body": {
+    "type": "iframe",
+    "src": "${iframeSrc}",
+    "height": 300
+  }
 }
 ```
 

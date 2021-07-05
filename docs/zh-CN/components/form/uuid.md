@@ -17,7 +17,7 @@ order: 30
   "type": "form",
   "api": "https://mock.jeata.com/api/form/saveForm",
   "debug": true,
-  "controls": [
+  "body": [
     {
       "type": "uuid",
       "name": "uuid"
@@ -37,7 +37,7 @@ order: 30
   "type": "form",
   "api": "https://mock.jeata.com/api/form/saveForm",
   "debug": true,
-  "controls": [
+  "body": [
     {
       "type": "uuid",
       "name": "uuid",

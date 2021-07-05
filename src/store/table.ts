@@ -25,7 +25,8 @@ import {
   difference,
   immutableExtends,
   extendObject,
-  hasVisibleExpression
+  hasVisibleExpression,
+  filterTree
 } from '../utils/helper';
 import {evalExpression} from '../utils/tpl';
 import {IFormStore} from './form';
@@ -83,6 +84,7 @@ export const Row = types
     rowSpans: types.frozen({} as any),
     index: types.number,
     newIndex: types.number,
+    path: '', // 行数据的位置
     expandable: false,
     checkdisable: false,
     isHover: false,
@@ -151,11 +153,21 @@ export const Row = types
     },
 
     get locals(): any {
+      let children: Array<any> | null = null;
+      if (self.children.length) {
+        children = self.children.map(item => item.locals);
+      }
+
       return createObject(
         extendObject((getParent(self, self.depth * 2) as ITableStore).data, {
           index: self.index
         }),
-        self.data
+        children
+          ? {
+              ...self.data,
+              children
+            }
+          : self.data
       );
     },
 
@@ -221,7 +233,11 @@ export const Row = types
         let index = 0;
         const len = self.children.length;
         while (pool.length) {
-          const item = pool.shift()!;
+          // 因为父级id未更新，所以需要将子级的parentId正确指向父级id
+          const item = {
+            ...pool.shift(),
+            parentId: self.id
+          }!;
 
           if (index < len) {
             self.children[index].replaceWith(item);
@@ -244,7 +260,7 @@ export const TableStore = iRendererStore
     columns: types.array(Column),
     rows: types.array(Row),
     selectedRows: types.array(types.reference(Row)),
-    expandedRows: types.array(types.reference(Row)),
+    expandedRows: types.array(types.string),
     primaryField: 'id',
     orderBy: '',
     orderDir: types.optional(
@@ -266,6 +282,7 @@ export const TableStore = iRendererStore
     itemDraggableOn: '',
     hideCheckToggler: false,
     combineNum: 0,
+    combineFromIndex: 0,
     formsRef: types.optional(types.array(types.frozen()), []),
     maxKeepItemSelectionLength: 0,
     keepItemSelectionOnPageChange: false
@@ -345,7 +362,7 @@ export const TableStore = iRendererStore
     }
 
     function isExpanded(row: IRow): boolean {
-      return !!~self.expandedRows.indexOf(row);
+      return self.expandedRows.includes(row.id);
     }
 
     function getTogglable() {
@@ -407,6 +424,10 @@ export const TableStore = iRendererStore
         selectedItems: self.selectedRows.map(item => item.data),
         unSelectedItems: getUnSelectedRows().map(item => item.data)
       });
+    }
+
+    function hasColumnHidden() {
+      return self.columns.findIndex(column => !column.toggled) !== -1;
     }
 
     function getColumnGroup(): Array<{
@@ -510,7 +531,8 @@ export const TableStore = iRendererStore
 
       get allExpanded() {
         return !!(
-          self.expandedRows.length === self.rows.length && self.rows.length
+          self.expandedRows.length === this.expandableRows.length &&
+          this.expandableRows.length
         );
       },
 
@@ -534,6 +556,10 @@ export const TableStore = iRendererStore
 
       get checkableRows() {
         return self.rows.filter(item => item.checkable);
+      },
+
+      get expandableRows() {
+        return self.rows.filter(item => item.expandable);
       },
 
       get moved() {
@@ -573,6 +599,23 @@ export const TableStore = iRendererStore
         return this.forms
           .filter(form => form.rowIndex === parseInt(name, 10))
           .map(item => item.store);
+      },
+
+      // 是否隐藏了某列
+      hasColumnHidden() {
+        return hasColumnHidden();
+      },
+
+      getExpandedRows() {
+        const list: Array<IRow> = [];
+
+        eachTree(self.rows, i => {
+          if (self.expandedRows.includes(i.id)) {
+            list.push(i as any);
+          }
+        });
+
+        return list;
       }
     };
   })
@@ -605,11 +648,15 @@ export const TableStore = iRendererStore
 
       config.combineNum !== void 0 &&
         (self.combineNum = parseInt(config.combineNum as any, 10) || 0);
+      config.combineFromIndex !== void 0 &&
+        (self.combineFromIndex =
+          parseInt(config.combineFromIndex as any, 10) || 0);
 
       config.maxKeepItemSelectionLength !== void 0 &&
         (self.maxKeepItemSelectionLength = config.maxKeepItemSelectionLength);
       config.keepItemSelectionOnPageChange !== void 0 &&
-        (self.keepItemSelectionOnPageChange = config.keepItemSelectionOnPageChange);
+        (self.keepItemSelectionOnPageChange =
+          config.keepItemSelectionOnPageChange);
 
       if (config.columns && Array.isArray(config.columns)) {
         let columns: Array<SColumn> = config.columns
@@ -693,14 +740,22 @@ export const TableStore = iRendererStore
     function autoCombineCell(
       arr: Array<SRow>,
       columns: Array<IColumn>,
-      maxCount: number
+      maxCount: number,
+      fromIndex = 0
     ): Array<SRow> {
       if (!columns.length || !maxCount || !arr.length) {
         return arr;
       }
+      // 如果是嵌套模式，通常第一列都是存在差异的，所以从第二列开始。
+      fromIndex =
+        fromIndex ||
+        (arr.some(item => Array.isArray(item.children) && item.children.length)
+          ? 1
+          : 0);
 
       const keys: Array<string> = [];
-      for (let i = 0; i < maxCount; i++) {
+      const len = columns.length;
+      for (let i = 0; i < len; i++) {
         const column = columns[i];
 
         // maxCount 可能比实际配置的 columns 还有多。
@@ -720,6 +775,14 @@ export const TableStore = iRendererStore
         keys.push(key);
       }
 
+      while (fromIndex--) {
+        keys.shift();
+      }
+
+      while (keys.length > maxCount) {
+        keys.pop();
+      }
+
       return combineCell(arr, keys);
     }
 
@@ -727,10 +790,11 @@ export const TableStore = iRendererStore
       children: Array<any>,
       depth: number,
       pindex: number,
-      parentId: string
+      parentId: string,
+      path: string = ''
     ): any {
       depth += 1;
-      return children.map((item, key) => {
+      return children.map((item, index) => {
         item = isObject(item)
           ? item
           : {
@@ -742,16 +806,23 @@ export const TableStore = iRendererStore
           // id: String(item && (item as any)[self.primaryField] || `${pindex}-${depth}-${key}`),
           id: id,
           parentId,
-          key: String(`${pindex}-${depth}-${key}`),
+          key: String(`${pindex}-${depth}-${index}`),
+          path: `${path}${index}`,
           depth: depth,
-          index: key,
-          newIndex: key,
+          index: index,
+          newIndex: index,
           pristine: item,
           data: item,
           rowSpans: {},
           children:
             item && Array.isArray(item.children)
-              ? initChildren(item.children, depth, key, id)
+              ? initChildren(
+                  item.children,
+                  depth,
+                  index,
+                  id,
+                  `${path}${index}.`
+                )
               : [],
           expandable: !!(
             (item && Array.isArray(item.children) && item.children.length) ||
@@ -766,23 +837,24 @@ export const TableStore = iRendererStore
       getEntryId?: (entry: any, index: number) => string
     ) {
       self.selectedRows.clear();
-      self.expandedRows.clear();
+      // self.expandedRows.clear();
 
-      let arr: Array<SRow> = rows.map((item, key) => {
-        let id = getEntryId ? getEntryId(item, key) : guid();
+      let arr: Array<SRow> = rows.map((item, index) => {
+        let id = getEntryId ? getEntryId(item, index) : guid();
         return {
           // id: getEntryId ? getEntryId(item, key) : String(item && (item as any)[self.primaryField] || `${key}-1-${key}`),
           id: id,
-          key: String(`${key}-1-${key}`),
+          key: String(`${index}-1-${index}`),
           depth: 1, // 最大父节点默认为第一层，逐层叠加
-          index: key,
-          newIndex: key,
+          index: index,
+          newIndex: index,
           pristine: item,
+          path: `${index}`,
           data: item,
           rowSpans: {},
           children:
             item && Array.isArray(item.children)
-              ? initChildren(item.children, 1, key, id)
+              ? initChildren(item.children, 1, index, id, `${index}.`)
               : [],
           expandable: !!(
             (item && Array.isArray(item.children) && item.children.length) ||
@@ -792,7 +864,12 @@ export const TableStore = iRendererStore
       });
 
       if (self.combineNum) {
-        arr = autoCombineCell(arr, self.columns, self.combineNum);
+        arr = autoCombineCell(
+          arr,
+          self.columns,
+          self.combineNum,
+          self.combineFromIndex
+        );
       }
 
       replaceRow(arr);
@@ -803,14 +880,14 @@ export const TableStore = iRendererStore
         expand === 'first' ||
         (self.expandConfig && self.expandConfig.expand === 'first')
       ) {
-        self.rows.length && self.expandedRows.push(self.rows[0]);
+        self.rows.length && self.expandedRows.push(self.rows[0].id);
       } else if (
         (expand === 'all' && !self.footable.accordion) ||
         (self.expandConfig &&
           self.expandConfig.expand === 'all' &&
           !self.expandConfig.accordion)
       ) {
-        self.expandedRows.replace(self.rows);
+        self.expandedRows.replace(self.rows.map(item => item.id));
       }
 
       self.dragging = false;
@@ -868,13 +945,21 @@ export const TableStore = iRendererStore
       } else {
         const selectedItems = self.data?.selectedItems;
 
-        if (keep && maxLength && selectedItems && maxLength >= selectedItems.length) {
-          const restCheckableRows = self.checkableRows.filter(item => !item.checked);
-          const checkableRows = restCheckableRows.filter((item, i) => i < maxLength - selectedItems.length);
+        if (
+          keep &&
+          maxLength &&
+          selectedItems &&
+          maxLength >= selectedItems.length
+        ) {
+          const restCheckableRows = self.checkableRows.filter(
+            item => !item.checked
+          );
+          const checkableRows = restCheckableRows.filter(
+            (item, i) => i < maxLength - selectedItems.length
+          );
 
           self.selectedRows.replace([...self.selectedRows, ...checkableRows]);
-        }
-        else {
+        } else {
           self.selectedRows.replace(self.checkableRows);
         }
       }
@@ -905,10 +990,13 @@ export const TableStore = iRendererStore
 
       self.selectedRows.map(item => item.setCheckdisable(false));
       if (maxLength && maxLength <= selectedItems.length) {
-        self.unSelectedRows.map(item => !item.checked && item.setCheckdisable(true));
-      }
-      else {
-        self.unSelectedRows.map(item => item.checkdisable && item.setCheckdisable(false));
+        self.unSelectedRows.map(
+          item => !item.checked && item.setCheckdisable(true)
+        );
+      } else {
+        self.unSelectedRows.map(
+          item => item.checkdisable && item.setCheckdisable(false)
+        );
       }
     }
 
@@ -920,29 +1008,33 @@ export const TableStore = iRendererStore
       if (self.allExpanded) {
         self.expandedRows.clear();
       } else {
-        self.expandedRows.replace(self.rows);
+        self.expandedRows.replace(
+          self.rows.filter(item => item.expandable).map(item => item.id)
+        );
       }
     }
 
     function toggleExpanded(row: IRow) {
-      const idx = self.expandedRows.indexOf(row);
+      const idx = self.expandedRows.indexOf(row.id);
 
       if (~idx) {
         self.expandedRows.splice(idx, 1);
       } else if (self.footable && self.footable.accordion) {
-        self.expandedRows.replace([row]);
+        self.expandedRows.replace([row.id]);
       } else if (self.expandConfig && self.expandConfig.accordion) {
-        let rows = self.expandedRows.filter(item => item.depth !== row.depth);
+        let rows = self
+          .getExpandedRows()
+          .filter(item => item.depth !== row.depth);
         rows.push(row);
-        self.expandedRows.replace(rows);
+        self.expandedRows.replace(rows.map(item => item.id));
       } else {
-        self.expandedRows.push(row);
+        self.expandedRows.push(row.id);
       }
     }
 
     function collapseAllAtDepth(depth: number) {
-      let rows = self.expandedRows.filter(item => item.depth !== depth);
-      self.expandedRows.replace(rows);
+      let rows = self.getExpandedRows().filter(item => item.depth !== depth);
+      self.expandedRows.replace(rows.map(item => item.id));
     }
 
     function setOrderByInfo(key: string, direction: 'asc' | 'desc') {
