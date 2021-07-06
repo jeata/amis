@@ -324,11 +324,11 @@ export default class DateControl extends React.PureComponent<
       const date = filterDate(props.defaultValue, props.data, props.format);
       if(props.toNumber && props.format && ['M', 'Q', 'D', 'DDD', 'd', 'e', 'E', 'w', 'W', 'YYYY', 'Y', 'H', 'h', 'k', 'm', 's', 'S', 'X','x'].indexOf(props.format) != -1) {
         props.setPrinstineValue(
-          parseInt((nextProps.utc ? moment.utc(date) : date).format(props.format))
+          parseInt((props.utc ? moment.utc(date) : date).format(props.format))
         );
       } else {
         props.setPrinstineValue(
-          (nextProps.utc ? moment.utc(date) : date).format(props.format)
+          (props.utc ? moment.utc(date) : date).format(props.format)
         );
       }
     }
