@@ -4,6 +4,6 @@ export default {
   body: {
     type: 'crud',
     api:
-      'https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/crud/dynamic?waitSeconds=1'
+      'https://mock.jeata.com/crud/dynamic?waitSeconds=1'
   }
 };

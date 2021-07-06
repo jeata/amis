@@ -83,14 +83,14 @@ export default {
           url: '/form',
           icon: 'fa fa-plus',
           schemaApi:
-            'https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/service/schema?type=form'
+            'https://mock.jeata.com/service/schema?type=form'
         },
         {
           label: '列表',
           url: '/crud/list',
           icon: 'fa fa-list',
           schemaApi:
-            'https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/service/schema?type=crud'
+            'https://mock.jeata.com/service/schema?type=crud'
         }
       ]
     },

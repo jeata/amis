@@ -1279,6 +1279,7 @@ export default class Form extends React.Component<FormProps, object> {
     // 后续可以删除。
     if (!body && schema.controls) {
       console.warn('请用 body 代替 controls');
+      debugger;
       body = [
         {
           size: 'none',

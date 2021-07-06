@@ -956,7 +956,7 @@ export default class ComboControl extends React.Component<ComboProps> {
       translate: __
     } = this.props;
 
-    let items = this.props.items || this.props.controls;
+    let items = this.props.items;
     let value = this.props.value;
 
     if (flat && typeof value === 'string') {
@@ -1054,7 +1054,7 @@ export default class ComboControl extends React.Component<ComboProps> {
 
           if (Array.isArray(conditions) && conditions.length) {
             condition = this.pickCondition(data);
-            items = condition ? condition.items || condition.controls : undefined;
+            items = condition ? condition.items : undefined;
           }
 
           let finnalControls =
@@ -1178,7 +1178,7 @@ export default class ComboControl extends React.Component<ComboProps> {
       translate: __
     } = this.props;
 
-    let items = this.props.items || this.props.controls;
+    let items = this.props.items;
     let value = this.props.value;
 
     if (flat && typeof value === 'string') {
@@ -1236,7 +1236,7 @@ export default class ComboControl extends React.Component<ComboProps> {
 
               if (Array.isArray(conditions) && conditions.length) {
                 condition = this.pickCondition(data);
-                items = condition ? condition.items || condition.controls : undefined;
+                items = condition ? condition.items : undefined;
               }
 
               let finnalControls =
@@ -1393,13 +1393,13 @@ export default class ComboControl extends React.Component<ComboProps> {
       translate: __
     } = this.props;
 
-    let items = this.props.items || this.props.controls;
+    let items = this.props.items;
     const data = isObject(value) ? this.formatValue(value) : this.defaultValue;
     let condition: ComboCondition | null = null;
 
     if (Array.isArray(conditions) && conditions.length) {
       condition = this.pickCondition(data);
-      items = condition ? condition.items || condition.controls : undefined;
+      items = condition ? condition.items : undefined;
     }
 
     return (

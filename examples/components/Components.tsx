@@ -663,7 +663,7 @@ export const components = [
         path: '/zh-CN/components/form/input-tag',
         getComponent: () =>
           // @ts-ignore
-          import('../../docs/zh-CN/components/form/tag.md').then(
+          import('../../docs/zh-CN/components/form/input-tag.md').then(
             makeMarkdownRenderer
           )
       },

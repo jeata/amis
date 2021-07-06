@@ -151,14 +151,14 @@ order: 21
 {
   "type": "form",
   "debug": true,
-  "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "body": [
     {
       "type": "input-file",
       "name": "file",
       "label": "File",
       "multiple": true,
-      "receiver": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/upload/file",
+      "receiver": "https://mock.jeata.com/api/upload/file",
       "autoFill": {
         "myUrl": "${items|pick:url}",
         "lastUrl": "${items|last|pick:url}"

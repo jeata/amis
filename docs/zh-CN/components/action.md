@@ -408,7 +408,7 @@ icon 也可以是 url 地址，比如
 ```schema: scope="body"
 {
   "type": "page",
-  "initApi": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/mail/mailInfo",
+  "initApi": "https://mock.jeata.com/mail/mailInfo",
   "body": {
     "label": "发送邮件",
     "type": "button",

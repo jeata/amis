@@ -671,10 +671,14 @@ export const resolveVariable = (path?: string, data: any = {}): any => {
   }
 
   if (ns === 'window') {
-    data = window;
+    // data = window;
+    // 可能有安全问题，强制只能使用子对象 _jtc_public change by xubin
+    // @ts-ignore
+    data = window.jtc_public;
   } else if (ns === 'ls' || ns === 'ss') {
     let parts = keyToPath(varname.replace(/^{|}$/g, ''));
-    const key = parts.shift()!;
+    // const key = parts.shift()!;
+    const key = 'jtc/public/' + parts.shift()!; // change by xubin
     const raw =
       ns === 'ss' ? sessionStorage.getItem(key) : localStorage.getItem(key);
 
@@ -690,7 +694,8 @@ export const resolveVariable = (path?: string, data: any = {}): any => {
 
     return undefined;
   } else if (ns === 'cookie') {
-    const key = varname.replace(/^{|}$/g, '').trim();
+    // const key = varname.replace(/^{|}$/g, '').trim();
+    const key = 'jtc_public_' + varname.replace(/^{|}$/g, '').trim();  // change by xubin
     return getCookie(key);
   }
 

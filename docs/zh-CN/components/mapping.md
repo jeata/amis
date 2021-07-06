@@ -165,8 +165,6 @@ List 的内容、Card 卡片的内容配置同上
 
 ### 远程拉取字典
 
-> since 1.1.6
-
 通过配置 `source` 接口来实现，接口返回字典对象即可，数据格式参考 map 配置。
 
 ```schema: scope="body"
@@ -180,7 +178,7 @@ List 的内容、Card 卡片的内容配置同上
             "type": "mapping",
             "name": "type",
             "label": "映射",
-            "source": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mapping"
+            "source": "https://mock.jeata.com/mapping"
         }
     ]
 }
@@ -190,15 +188,13 @@ List 的内容、Card 卡片的内容配置同上
 
 ### 关联上下文变量
 
-> since 1.1.6
-
 同样通过配置 `source` 来实现，只是格式是取变量。
 
 ```schema: scope="body"
 {
     "type": "form",
     "initApi": {
-        "url": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mapping",
+        "url": "https://mock.jeata.com/mapping",
         "method": "get",
         "responseData": {
             "zidian": "$$$$",

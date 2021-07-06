@@ -86,7 +86,7 @@ export interface FileControlSchema extends FormBaseControl {
    * 可以支持加前缀如：`http://xx.dom/filename=` ，
    * 如果不希望这样，可以把当前配置项设置为 `false`。
    *
-   * 1.1.6 版本开始将支持变量 ${xxx} 来自己拼凑个下载地址，并且支持配置成 post.
+   * 支持变量 ${xxx} 来自己拼凑个下载地址，并且支持配置成 post.
    */
   downloadUrl?: SchemaApi;
 

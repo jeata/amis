@@ -8,8 +8,6 @@ icon:
 order: 58
 ---
 
-> 1.1.6 版本开始
-
 ## 基本用法
 
 ```schema
@@ -31,7 +29,7 @@ order: 58
 ```schema: scope="body"
 {
     "type": "form",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+    "api": "https://mock.jeata.com/api/form/saveForm",
     "body": [
         {
             "type": "group",

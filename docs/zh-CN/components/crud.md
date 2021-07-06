@@ -780,8 +780,8 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 {
     "type": "crud",
     "syncLocation": false,
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample",
-    "quickSaveApi": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample/bulkUpdate",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
     "columns": [
         {
             "name": "id",
@@ -930,8 +930,8 @@ Cards 模式支持 [Cards](./cards) 中的所有功能。
 {
     "type": "crud",
     "syncLocation": false,
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample",
-    "quickSaveApi": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample/bulkUpdate",
+    "api": "https://mock.jeata.com/crud/sample",
+    "quickSaveApi": "https://mock.jeata.com/crud/sample/bulkUpdate",
     "columns": [
         {
             "name": "id",
@@ -1043,7 +1043,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
     "type": "crud",
     "name": "myCRUD",
     "syncLocation": false,
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample",
+    "api": "https://mock.jeata.com/crud/sample",
     "headerToolbar": [
         {
             "label": "点击弹框",
@@ -1980,15 +1980,10 @@ CRUD 中不限制有多少个单条操作、添加一个操作对应的添加一
 
 ## 动态列
 
-> since 1.1.6
-
-在 1.1.6 之前的版本，只能通过 service + schemaApi 让后端返回 schema 配置来实现，1.1.6 版本之后可以直接通过 crud 的数据接口返回了。
-用这种方式可以简化动态列的实现，与 items 并列返回 columns 数组即即可。
-
 ```schema: scope="body"
 {
     "type": "crud",
-    "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/crud/dynamic?waitSeconds=1"
+    "api": "https://mock.jeata.com/crud/dynamic?waitSeconds=1"
 }
 ```
 

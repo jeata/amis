@@ -52,8 +52,6 @@ API 类型用于配置请求接口的格式，涉及请求方式、请求地址�
 
 **`status`**、**`msg`** 和 **`data`** 字段为接口返回的必要字段。
 
-> 1.1.7
-
 为了方便更多场景使用，还兼容了以下这些错误返回格式：
 
 1. errorCode 作为 status、errorMessage 作为 msg
@@ -812,8 +810,6 @@ Content-Disposition: attachment; filename="download.pdf"
 
 ## 跟踪数据自动刷新
 
-> since 1.1.6
-
 之前的版本，配置的 api 默认就会具备自动刷新功能，除非显式的配置 `autoRefresh: false` 来关闭。自动刷新主要通过跟踪 api 的 url 属性来完成的，如果 url 中了使用了某个变量，而这个变量发生变化则会触发自动刷新。
 也就说这个 url 地址，既能控制 api 请求的 query 参数，同时又起到跟踪变量重新刷新接口的作用。这个设定大部分情况下都是合理的，但是有时候想要跟踪 url 参数以外的变量就做不到了。所以新增了此属性 `trackExpression`，显式的配置需要跟踪的变量如：
 
@@ -850,7 +846,7 @@ Content-Disposition: attachment; filename="download.pdf"
         "name": "b",
         "source": {
           "method": "get",
-          "url": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/options/level2",
+          "url": "https://mock.jeata.com/options/level2",
           "trackExpression": "${a}"
         },
         "description": "切换<code>选项1</code>的值，会触发<code>选项2</code>的<code>source</code> 接口重新拉取"

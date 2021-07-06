@@ -104,14 +104,12 @@ order: 59
 
 ## 是否显示展开线
 
-> 1.1.6 版本
-
 通过 `showOutline` 来控制是否显示展开线。
 
 ```schema: scope="body"
 {
   "type": "form",
-  "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "body": [
     {
       "type": "input-tree",
@@ -571,21 +569,19 @@ order: 59
 
 ## 懒加载
 
-> since 1.1.6
-
 需要懒加载的选项请配置 `defer` 为 true，然后配置 `deferApi` 即可完成懒加载。如果不配置 `deferApi` 会使用 `source` 接口。
 `deferApi` 中可以用到当前选项中的任何字段，比如以下这个例子是把 label 传给了 defer 接口
 
 ```schema: scope="body"
 {
   "type": "form",
-  "api": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/saveForm",
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "body": [
     {
       "type": "input-tree",
       "name": "tree",
       "label": "Tree",
-      "deferApi": "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/form/deferOptions?label=${label}&waitSeconds=2",
+      "deferApi": "https://mock.jeata.com/form/deferOptions?label=${label}&waitSeconds=2",
       "options": [
         {
           "label": "Folder A",
