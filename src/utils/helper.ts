@@ -1,5 +1,6 @@
 import isPlainObject from 'lodash/isPlainObject';
 import isEqual from 'lodash/isEqual';
+import isNaN from 'lodash/isNaN';
 import uniq from 'lodash/uniq';
 import {Schema, PlainObject, FunctionPropertyNames} from '../types';
 import {evalExpression} from './tpl';
@@ -101,12 +102,7 @@ export function syncDataFromSuper(
         .map(item => `${item.name}`.replace(/\..*$/, ''))
         .concat(Object.keys(obj))
     );
-  } else if (
-    force ||
-    (store &&
-      store.storeType === 'ServiceStore' &&
-      store.parentStore.storeType === 'FormStore')
-  ) {
+  } else if (force) {
     keys = Object.keys(obj);
   }
 
@@ -313,6 +309,8 @@ export function isObjectShallowModified(
             ignoreUndefined
           )
         );
+  } else if (isNaN(prev) && isNaN(next)) {
+    return false;
   } else if (
     null == prev ||
     null == next ||
@@ -338,9 +336,7 @@ export function isObjectShallowModified(
   for (let i: number = keys.length - 1; i >= 0; i--) {
     let key = keys[i];
     if (
-      strictMode
-        ? next[key] !== prev[key]
-        : isObjectShallowModified(next[key], prev[key], false, ignoreUndefined)
+      isObjectShallowModified(next[key], prev[key], strictMode, ignoreUndefined)
     ) {
       return true;
     }
