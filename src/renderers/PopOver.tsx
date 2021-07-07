@@ -14,6 +14,7 @@ import Overlay from '../components/Overlay';
 import {Icon} from '../components/icons';
 import {SchemaCollection, SchemaExpression} from '../Schema';
 import { evalExpression } from "../utils/tpl";
+import Spinner from "../components/Spinner";
 
 export interface SchemaPopOverObject {
   /**
@@ -116,6 +117,11 @@ export interface SchemaPopOverObject {
   title?: string;
 
   body?: SchemaCollection;
+
+  /**
+   * 图标
+   */
+  icon?: string;
 }
 
 export type SchemaPopOver = boolean | SchemaPopOverObject;
@@ -139,8 +145,12 @@ export const HocPopOver = (
     position?: string;
   } = {}
 ) => (Component: React.ComponentType<any>): any => {
+
   let lastOpenedInstance: PopOverComponent | null = null;
   class PopOverComponent extends React.Component<PopOverProps, PopOverState> {
+    static defaultProps = {
+      icon: 'zoom-in',
+    };
     target: HTMLElement;
     timer: ReturnType<typeof setTimeout>;
     static ComposedComponent = Component;
@@ -370,7 +380,7 @@ export const HocPopOver = (
                 {...triggerProps}
                 ref={config.targetOutter ? undefined : this.targetRef}
               >
-                <Icon icon="zoom-in" className="icon" />
+                <Icon icon={(popOver as SchemaPopOverObject)?.icon || 'zoom-in'} className="icon" />
               </span>
               {this.state.isOpened ? this.renderPopOver() : null}
             </>

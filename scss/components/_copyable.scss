@@ -3,8 +3,10 @@
   margin-left: var(--gap-xs);
   display: inline-block;
   cursor: pointer;
+  opacity: 0.4; // change by xubin
 
   &:hover {
     color: var(--Copyable-onHover-iconColor);
+    opacity: 1; // change by xubin
   }
 }

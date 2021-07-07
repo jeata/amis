@@ -4,11 +4,15 @@
   display: inline-block;
   vertical-align: text-top;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.4; // change by xubin
 
   &:hover {
     color: var(--QuickEdit-onHover-iconColor);
     opacity: 1;
+  }
+
+  svg.icon {
+    top: 0;
   }
 }
 

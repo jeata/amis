@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-		<polyline id="Stroke-1" stroke="currentColor" points="2.5 9.5 0.5 9.5 0.5 0.5 9.5 0.5 9.5 2.5">
-		</polyline>
-		<polygon id="Stroke-3" stroke="currentColor" points="2.5 11.5 11.5 11.5 11.5 2.5 2.5 2.5">
-		</polygon>
+<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<g  fill="currentColor">
+		<path d="M153.6 153.6h563.2a102.4 102.4 0 0 1 102.4 102.4v665.6a102.4 102.4 0 0 1-102.4 102.4H153.6a102.4 102.4 0 0 1-102.4-102.4V256a102.4 102.4 0 0 1 102.4-102.4z m0 51.2a51.2 51.2 0 0 0-51.2 51.2v665.6a51.2 51.2 0 0 0 51.2 51.2h563.2a51.2 51.2 0 0 0 51.2-51.2V256a51.2 51.2 0 0 0-51.2-51.2H153.6z"
+			  stroke="currentColor"></path>
+		<path d="M870.4 870.4v-51.2a51.2 51.2 0 0 0 51.2-51.2V102.4a51.2 51.2 0 0 0-51.2-51.2H307.2a51.2 51.2 0 0 0-51.2 51.2H204.8a102.4 102.4 0 0 1 102.4-102.4h563.2a102.4 102.4 0 0 1 102.4 102.4v665.6a102.4 102.4 0 0 1-102.4 102.4z"
+			  stroke="currentColor"></path>
+		<path d="M204.8 400.8m25.6 0l409.6 0q25.6 0 25.6 25.6l0 0q0 25.6-25.6 25.6l-409.6 0q-25.6 0-25.6-25.6l0 0q0-25.6 25.6-25.6Z"
+			  stroke="currentColor"></path>
+		<path d="M204.8 584.4m25.6 0l409.6 0q25.6 0 25.6 25.6l0 0q0 25.6-25.6 25.6l-409.6 0q-25.6 0-25.6-25.6l0 0q0-25.6 25.6-25.6Z"
+			  stroke="currentColor"></path>
+		<path d="M204.8 768m25.6 0l409.6 0q25.6 0 25.6 25.6l0 0q0 25.6-25.6 25.6l-409.6 0q-25.6 0-25.6-25.6l0 0q0-25.6 25.6-25.6Z"
+			  stroke="currentColor"></path>
 	</g>
 </svg>

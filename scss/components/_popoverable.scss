@@ -3,12 +3,16 @@
   margin-left: var(--gap-xs);
   display: inline-block;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.4; // change by xubin
   vertical-align: middle;
 
   &:hover {
     color: var(--PopOverAble-onHover-iconColor);
     opacity: 1;
+  }
+
+  svg.icon {
+    top: 0.015em;
   }
 }
 
