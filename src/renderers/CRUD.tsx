@@ -2049,6 +2049,10 @@ export default class CRUD extends React.Component<CRUDProps, any> {
               },
               {
                 key: 'filter',
+                panelClassName: cx(
+                  'Crud-filter',
+                  filter.panelClassName || 'Panel--default'
+                ),
                 data: store.filterData,
                 onReset: this.handleFilterReset,
                 onSubmit: this.handleFilterSubmit,

@@ -118,6 +118,11 @@ export interface TabsSchema extends BaseSchema {
   contentClassName?: SchemaClassName;
 
   /**
+   * 链接外层类名
+   */
+  linksClassName?: SchemaClassName;
+
+  /**
    * 卡片是否只有在点开的时候加载？
    */
   mountOnEnter?: boolean;
@@ -244,7 +249,12 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
           prevKey: this.state.activeKey
         });
       }
-    } else if (preProps.tabs !== props.tabs) {
+    } else if (
+      Array.isArray(props.tabs) &&
+      Array.isArray(preProps.tabs) &&
+      JSON.stringify(props.tabs.map(item => item.hash)) !==
+        JSON.stringify(preProps.tabs.map(item => item.hash))
+    ) {
       let activeKey: any = this.state.activeKey;
       const location = props.location;
       let tab: TabSchema | null = null;
@@ -425,6 +435,7 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
       classnames: cx,
       classPrefix: ns,
       contentClassName,
+      linksClassName,
       tabRender,
       className,
       render,
@@ -526,6 +537,7 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
         mode={mode}
         className={className}
         contentClassName={contentClassName}
+        linksClassName={linksClassName}
         onSelect={this.handleSelect}
         activeKey={this.state.activeKey}
         toolbar={this.renderToolbar()}
@@ -539,7 +551,6 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
     return this.renderTabs();
   }
 }
-
 @Renderer({
   type: 'tabs'
 })

@@ -842,17 +842,22 @@ export default class Table extends React.Component<TableProps, object> {
     } = (this.heights = {});
 
     heights.header ||
-      (heights.header = table.querySelector('thead')!.offsetHeight);
+      (heights.header = table
+        .querySelector('thead')!
+        .getBoundingClientRect().height);
 
     forEach(
       table.querySelectorAll('thead>tr:last-child>th'),
       (item: HTMLElement) => {
-        widths[item.getAttribute('data-index') as string] = item.offsetWidth;
+        widths[
+          item.getAttribute('data-index') as string
+        ] = item.getBoundingClientRect().width;
       }
     );
     forEach(
       table.querySelectorAll('tbody>tr>*:last-child'),
-      (item: HTMLElement, index: number) => (heights[index] = item.offsetHeight)
+      (item: HTMLElement, index: number) =>
+        (heights[index] = item.getBoundingClientRect().height)
     );
 
     // 让 react 去更新非常慢，还是手动更新吧。
@@ -1582,8 +1587,8 @@ export default class Table extends React.Component<TableProps, object> {
           'is-fakeHide': hideHeader
         })}
       >
-        {this.renderHeading()}
         {this.renderHeader(false)}
+        {this.renderHeading()}
         <div className={cx('Table-fixedLeft')}>
           {store.leftFixedColumns.length
             ? this.renderFixedColumns(
@@ -2350,8 +2355,8 @@ export default class Table extends React.Component<TableProps, object> {
           'Table--unsaved': !!store.modified || !!store.moved
         })}
       >
-        {heading}
         {header}
+        {heading}
         <div
           className={cx('Table-contentWrap')}
           onMouseLeave={this.handleMouseLeave}
@@ -2393,8 +2398,7 @@ export default class Table extends React.Component<TableProps, object> {
 }
 
 @Renderer({
-  test: (path: string) =>
-    /(^|\/)table$/.test(path) /* && !/(^|\/)table$/.test(path)*/,
+  type: 'table',
   storeType: TableStore.name,
   name: 'table'
 })

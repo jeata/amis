@@ -903,12 +903,12 @@ export default class Cards extends React.Component<GridProps, object> {
       >
         {affixHeader ? (
           <div className={cx('Cards-fixedTop')}>
-            {heading}
             {header}
+            {heading}
           </div>
         ) : null}
-        {heading}
         {header}
+        {heading}
         {store.items.length ? (
           <div
             ref={this.itemsRef}
@@ -966,8 +966,7 @@ export default class Cards extends React.Component<GridProps, object> {
 }
 
 @Renderer({
-  test: /(^|\/)(?:crud\/body\/grid|cards)$/,
-  name: 'cards',
+  type: 'cards',
   storeType: ListStore.name,
   weight: -100 // 默认的 grid 不是这样，这个只识别 crud 下面的 grid
 })
