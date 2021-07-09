@@ -8,8 +8,8 @@
 
     > svg {
       margin-right: 10px;
-      width: pxrem(16px);
-      height: pxrem(16px);
+      width: px2rem(16px);
+      height: px2rem(16px);
     }
   }
 
@@ -77,7 +77,8 @@
 
   &-itemInfoText {
     white-space: nowrap;
-    max-width: 170px;
+    // max-width: 170px;
+    max-width: calc(100% - 50px);
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;

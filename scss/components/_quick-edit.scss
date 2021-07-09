@@ -23,18 +23,19 @@
   &:focus {
     position: relative;
 
-    &:after {
-      content: '';
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      position: absolute;
-      pointer-events: none;
-      z-index: 1;
-      border: var(--QuickEdit-onFocus-borderWidth) dashed
-        var(--QuickEdit-onFocus-borderColor);
-    }
+    // 去掉快速编辑外边框 change by xubin
+    //&:after {
+    //  content: '';
+    //  left: 0;
+    //  top: 0;
+    //  right: 0;
+    //  bottom: 0;
+    //  position: absolute;
+    //  pointer-events: none;
+    //  z-index: 1;
+    //  border: var(--QuickEdit-onFocus-borderWidth) dashed
+    //    var(--QuickEdit-onFocus-borderColor);
+    //}
   }
 
   &:hover .#{$ns}Field-quickEditBtn {

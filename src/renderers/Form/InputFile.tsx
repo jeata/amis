@@ -1165,6 +1165,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
 
   render() {
     const {
+      readOnly, // change by xubin
       btnLabel,
       accept,
       disabled,
@@ -1201,15 +1202,15 @@ export default class FileControl extends React.Component<FileProps, FileState> {
       });
 
     return (
-      <div className={cx('FileControl', className)}>
+      <div className={cx('FileControl',{ 'Form-static': readOnly && files.length === 0 }, className)}>
         <DropZone
-          disabled={disabled}
+          disabled={disabled || readOnly}
           key="drop-zone"
           ref={this.dropzone}
-          onDrop={this.handleDrop}
+          onDrop={this.handleDrop}Form-static
           onDropRejected={this.handleDropRejected}
           accept={accept === '*' ? '' : accept}
-          multiple={multiple}
+          multiple={multiple && maxLength !== 1}
         >
           {({getRootProps, getInputProps, isDragActive}) => (
             <div
@@ -1222,7 +1223,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                 'is-active': isDragActive
               })}
             >
-              <input disabled={disabled} {...getInputProps()} />
+              <input disabled={disabled || readOnly} {...getInputProps()} />
 
               {isDragActive ? (
                 <div className={cx('FileControl-acceptTip')}>
@@ -1230,8 +1231,8 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                 </div>
               ) : (
                 <>
-                  {(multiple && (!maxLength || files.length < maxLength)) ||
-                  !multiple ? (
+                  {(multiple && (!maxLength || files.length < maxLength) && !readOnly) ||
+                  !multiple && !readOnly ? (
                     <Button
                       level="default"
                       disabled={disabled}
@@ -1249,6 +1250,13 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                     </Button>
                   ) : null}
 
+                  {/* add readOnly change by xubin */}
+                  {readOnly && files.length === 0 ? (
+                    <div className={cx('PlainField')}>
+                      <span className="text-muted">-</span>
+                    </div>
+                  ):null}
+
                   {description
                     ? render('desc', description!, {
                         className: cx('FileControl-description')
@@ -1256,7 +1264,9 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                     : null}
 
                   {Array.isArray(files) ? (
-                    <ul className={cx('FileControl-list')}>
+                    <ul className={cx('FileControl-list', {
+                      'm-t-xs m-b-none': readOnly
+                    })}>
                       {files.map((file, index) => (
                         <li key={file.id}>
                           <div
@@ -1277,7 +1287,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                                 href="#"
                                 onClick={this.handleClickFile.bind(this, file)}
                               >
-                                {file[nameField as keyof typeof file] ||
+                                {file[valueField as keyof typeof file]  || file[urlField as keyof typeof file] || file[nameField as keyof typeof file] ||
                                   (file as FileValue).filename}
                               </a>
                             ) : (
@@ -1296,7 +1306,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                                 </span>
                               </>
                             ) : null}
-                            {!disabled ? (
+                            {!disabled && !readOnly ? (
                               <a
                                 data-tooltip={__('Select.clear')}
                                 className={cx('FileControl-clear')}
