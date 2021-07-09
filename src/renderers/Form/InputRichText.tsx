@@ -212,6 +212,16 @@ export default class RichTextControl extends React.Component<
             return;
           }
 
+          // 禁止使用默认地址上传 change by xubin
+          if(props.receiver &&
+            (
+              (typeof props.receiver === 'string' && props.receiver.startsWith('/')) ||
+              (typeof props.receiver === 'object' && props.receiver.url.startsWith('/'))
+            )) {
+            fail('请设置正确的receiver地址 或 建议使用云对象存储上传');
+            return;
+          }
+
           const formData = new FormData();
           formData.append('file', blobInfo.blob(), blobInfo.filename());
           try {

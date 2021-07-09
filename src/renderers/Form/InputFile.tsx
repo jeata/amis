@@ -764,6 +764,17 @@ export default class FileControl extends React.Component<FileProps, FileState> {
       cb('ossUploader is required', file);
       return;
     }
+
+    // 禁止使用默认地址上传 change by xubin
+    if(!ossAlias && receiver &&
+      (
+        (typeof receiver === 'string' && receiver.startsWith('/')) ||
+        (typeof receiver === 'object' && receiver.url.startsWith('/'))
+      )) {
+      cb('请设置正确的receiver地址 或 建议使用云对象存储上传', file);
+      return;
+    }
+
     const _sender = !ossAlias ?
       fn(
         file,
@@ -1232,7 +1243,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
               ) : (
                 <>
                   {(multiple && (!maxLength || files.length < maxLength) && !readOnly) ||
-                  !multiple && !readOnly ? (
+                  (!multiple && !readOnly && files.length === 0) ? (
                     <Button
                       level="default"
                       disabled={disabled}

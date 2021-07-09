@@ -1010,6 +1010,17 @@ export default class ImageControl extends React.Component<
       cb('ossUploader is required', file);
       return;
     }
+
+    // 禁止使用默认地址上传 change by xubin
+    if(!ossAlias && this.props.receiver &&
+      (
+        (typeof this.props.receiver === 'string' && this.props.receiver.startsWith('/')) ||
+        (typeof this.props.receiver === 'object' && this.props.receiver.url.startsWith('/'))
+      )) {
+      cb('请设置正确的receiver地址 或 建议使用云对象存储上传', file);
+      return;
+    }
+
     const _sender = !ossAlias ?
       this._send(file, this.props.receiver as string, {}, onProgress):
       env.ossUploader(this.props, file, onProgress);
