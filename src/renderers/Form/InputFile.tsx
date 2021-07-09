@@ -1207,7 +1207,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
           disabled={disabled || readOnly}
           key="drop-zone"
           ref={this.dropzone}
-          onDrop={this.handleDrop}Form-static
+          onDrop={this.handleDrop}
           onDropRejected={this.handleDropRejected}
           accept={accept === '*' ? '' : accept}
           multiple={multiple && maxLength !== 1}
