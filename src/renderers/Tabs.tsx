@@ -24,6 +24,7 @@ import {filter} from '../utils/tpl';
 import {resolveVariable, tokenize} from '../utils/tpl-builtin';
 import isEqual from "lodash/isEqual";
 import qs from "qs";
+import {FormSchemaHorizontal} from './Form/index';
 
 export interface TabSchema extends Omit<BaseSchema, 'type'> {
   /**
@@ -83,6 +84,15 @@ export interface TabSchema extends Omit<BaseSchema, 'type'> {
    * 默认激活的tab
    */
   activeKey?: any;
+  
+  /**
+   * 配置子表单项默认的展示方式。
+   */
+  subFormMode?: 'normal' | 'inline' | 'horizontal';
+  /**
+   * 如果是水平排版，这个属性可以细化水平排版的左右宽度占比。
+   */
+  subFormHorizontal?: FormSchemaHorizontal;
 }
 
 /**
@@ -136,6 +146,15 @@ export interface TabsSchema extends BaseSchema {
    * 可以在右侧配置点其他功能按钮。
    */
   toolbar?: ActionSchema | Array<ActionSchema>;
+
+  /**
+   * 配置子表单项默认的展示方式。
+   */
+  subFormMode?: 'normal' | 'inline' | 'horizontal';
+  /**
+   * 如果是水平排版，这个属性可以细化水平排版的左右宽度占比。
+   */
+  subFormHorizontal?: FormSchemaHorizontal;
 }
 
 export interface TabsProps
@@ -444,7 +463,11 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
       tabsMode,
       unmountOnExit,
       source,
-      formStore
+      formStore,
+      formMode,
+      formHorizontal,
+      subFormMode,
+      subFormHorizontal
     } = this.props;
 
     const mode = tabsMode || dMode;
@@ -494,7 +517,12 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
                   `item/${index}/${tabIndex}`,
                   tab.tab || tab.body || '',
                   {
-                    data: ctx
+                    data: ctx,
+                    formMode: tab.subFormMode || subFormMode || formMode,
+                    formHorizontal:
+                      tab.subFormHorizontal ||
+                      subFormHorizontal ||
+                      formHorizontal
                   }
                 )}
               </Tab>
@@ -524,7 +552,11 @@ export default class Tabs extends React.Component<TabsProps, TabsState> {
               ? this.renderTab(tab, this.props, index)
               : tabRender
               ? tabRender(tab, this.props, index)
-              : render(`tab/${index}`, tab.tab || tab.body || '')}
+              : render(`tab/${index}`, tab.tab || tab.body || '', {
+                  formMode: tab.subFormMode || subFormMode || formMode,
+                  formHorizontal:
+                    tab.subFormHorizontal || subFormHorizontal || formHorizontal
+                })}
           </Tab>
         ) : null
       );
