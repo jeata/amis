@@ -1,0 +1,2 @@
+# 需要刷新的目录列表，一行一个
+https://doc.jeata.com/amis/

@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-
 echo "生成搜索数据 ..."
 node ./scripts/generate-search-data.js
 
@@ -53,6 +52,11 @@ case $isUpdate in
 		echo "\033[33m不更新服务器\033[0m"
 		;;
 esac
+
+if [[ $isUpdate =~ ^[yY][eE][sS]|[yY]$ ]]; then
+  echo "\033[34m刷新CDN目录 ...\033[0m"
+  ./refresh-cdn.py -i ${ALIYUN_CDN_REFRESH_AK} -k ${ALIYUN_CDN_REFRESH_SK} -r ./refresh-cdn-list.txt -t clear -o Directory
+fi
 
 echo "\033[1;32m构建成功！ \033[0m"
 
