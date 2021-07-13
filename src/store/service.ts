@@ -426,6 +426,7 @@ export const ServiceStore = iRendererStore
               ? json.data
               : {
                   type: 'wrapper',
+                  wrap: false,
                   ...json.data
                 };
             self.schemaKey = '' + Date.now();
