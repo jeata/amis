@@ -7,8 +7,8 @@
 
   &-addBtn {
     margin: 0;
-    width: px2rem(80px);
-    height: px2rem(80px);
+    width: px2rem(108px + 8px); // 保持和图片缩略图一样的尺寸 change by xubin
+    height: px2rem(108px + 8px);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -19,7 +19,7 @@
     @include button-variant(
       var(--ImageControl-addBtn-bg),
       var(--ImageControl-addBtn-border),
-      var(--ImageControl-addBtn-onDisabled-color), // var(--ImageControl-addBtn-color), // change by xubin
+      var(--borderColor), // var(--ImageControl-addBtn-color), // change by xubin
       var(--ImageControl-addBtn-onHover-bg),
       var(--ImageControl-addBtn-onHover-border),
       var(--ImageControl-addBtn-onHover-color),

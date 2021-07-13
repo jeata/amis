@@ -1242,7 +1242,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                 </div>
               ) : (
                 <>
-                  {(multiple && (!maxLength || files.length < maxLength) && !readOnly) ||
+                  {(multiple && !readOnly && (!maxLength || files.length < maxLength) && !readOnly) ||
                   (!multiple && !readOnly && files.length === 0) ? (
                     <Button
                       level="default"

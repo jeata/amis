@@ -302,7 +302,7 @@ export default class ImageControl extends React.Component<
 > {
   static defaultProps = {
     limit: undefined,
-    accept: 'image/jpeg, image/jpg, image/png, image/gif',
+    accept: 'image/*',
     receiver: '/api/upload',
     hideUploadButton: false,
     placeholder: 'Image.placeholder',
@@ -310,6 +310,7 @@ export default class ImageControl extends React.Component<
     extractValue: false,
     delimiter: ',',
     autoUpload: true,
+    readOnly: false,
     multiple: false
   };
 
@@ -1195,6 +1196,7 @@ export default class ImageControl extends React.Component<
 
   render() {
     const {
+      readOnly, // change by xubin
       className,
       classnames: cx,
       placeholder,
@@ -1259,9 +1261,9 @@ export default class ImageControl extends React.Component<
             ref={this.dropzone}
             onDrop={this.handleDrop}
             onDropRejected={this.handleDropRejected}
-            accept={accept}
+            accept={accept === '*' ? '' : accept}
             multiple={multiple}
-            disabled={disabled}
+            disabled={disabled || readOnly}
           >
             {({
               getRootProps,
@@ -1435,7 +1437,7 @@ export default class ImageControl extends React.Component<
 
                                       {!!crop &&
                                       reCropable !== false &&
-                                      !disabled ? (
+                                      !disabled && !readOnly ? (
                                         <a
                                           data-tooltip={__('Image.crop')}
                                           data-position="bottom"
@@ -1450,7 +1452,7 @@ export default class ImageControl extends React.Component<
                                           />
                                         </a>
                                       ) : null}
-                                      {!disabled ? (
+                                      {!disabled && !readOnly ? (
                                         <a
                                           data-tooltip={__('Select.clear')}
                                           data-position="bottom"
@@ -1484,9 +1486,8 @@ export default class ImageControl extends React.Component<
                           </div>
                         ))
                       : null}
-
-                    {(multiple && (!maxLength || files.length < maxLength)) ||
-                    (!multiple && !files.length) ? (
+                    {(multiple && !readOnly && (!maxLength || files.length < maxLength)) ||
+                    (!multiple && !readOnly && !files.length) ? (
                       <label
                         className={cx(
                           'ImageControl-addBtn',
@@ -1535,6 +1536,13 @@ export default class ImageControl extends React.Component<
                         {__(uploading ? 'File.pause' : 'File.start')}
                       </Button>
                     ) : null}
+
+                    {/* add readOnly change by xubin */}
+                    {readOnly && files.length === 0 ? (
+                      <div className={cx('PlainField')}>
+                        <span className="text-muted">-</span>
+                      </div>
+                    ):null}
 
                     {error ? (
                       <div className={cx('ImageControl-errorMsg')}>{error}</div>
