@@ -965,21 +965,14 @@ export function dataMapping(
   return ret;
 }
 
-const _isSupportRegPrefix = (()=>{
-  try {
-
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
-
 export function register(): Enginer & {name: string} {
   const r1 = new RegExp(/^\$\S/);
   const r2 = new RegExp(/[^\\]\$[\w{]/);
   return {
     name: 'builtin',
     test: (str: string) => typeof str === 'string' && !!~str.indexOf('$') && r1.test(str) && r2.test(str),
+    removeEscapeToken: (str: string) =>
+      typeof str === 'string' ? str.replace(/\\\$/g, '$') : str,
     compile: (str: string, data: object, defaultFilter = '| html') =>
       tokenize(str, data, defaultFilter)
   };

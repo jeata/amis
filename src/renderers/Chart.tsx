@@ -148,7 +148,7 @@ export interface ChartProps
   extends RendererProps,
     Omit<ChartSchema, 'type' | 'className'> {
   chartRef?: (echart: any) => void;
-  onDataFilter?: (config: any, echarts: any) => any;
+  onDataFilter?: (config: any, echarts: any, data?: any) => any;
   onChartWillMount?: (echarts: any) => void | Promise<void>;
   onChartMount?: (chart: any, echarts: any) => void;
   onChartUnMount?: (chart: any, echarts: any) => void;
@@ -571,7 +571,12 @@ export class Chart extends React.Component<ChartProps> {
     const dataFilter = this.props.dataFilter;
 
     if (!onDataFilter && typeof dataFilter === 'string') {
-      onDataFilter = new Function('config', 'echarts', dataFilter) as any;
+      onDataFilter = new Function(
+        'config',
+        'echarts',
+        'data',
+        dataFilter
+      ) as any;
     }
 
     config = config || this.pending;
@@ -582,7 +587,8 @@ export class Chart extends React.Component<ChartProps> {
     }
     try {
       onDataFilter &&
-        (config = onDataFilter(config, (window as any).echarts) || config);
+        (config =
+          onDataFilter(config, (window as any).echarts, data) || config);
     } catch (e) {
       console.warn(e);
     }
@@ -628,10 +634,10 @@ export class Chart extends React.Component<ChartProps> {
     height && (style.height = height);
 
     return (
-      <LazyComponent
-        unMountOnHidden={unMountOnHidden}
-        placeholder={
-          <div className={cx(`${ns}Chart`, className)} style={style}>
+      <div className={cx(`${ns}Chart`, className)} style={style}>
+        <LazyComponent
+          unMountOnHidden={unMountOnHidden}
+          placeholder={
             <div className={`${ns}Chart-placeholder`}>
               <Spinner
                 show
@@ -639,16 +645,12 @@ export class Chart extends React.Component<ChartProps> {
                 spinnerClassName={cx('Chart-spinner')}
               />
             </div>
-          </div>
-        }
-        component={() => (
-          <div
-            className={cx(`${ns}Chart`, className)}
-            style={style}
-            ref={this.refFn}
-          />
-        )}
-      />
+          }
+          component={() => (
+            <div className={`${ns}Chart-content`} ref={this.refFn}></div>
+          )}
+        />
+      </div>
     );
   }
 }
