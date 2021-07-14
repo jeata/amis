@@ -148,14 +148,14 @@ export default class Code extends React.Component<CodeProps> {
     const props = this.props;
 
     const sourceCode = getPropValue(this.props);
-    const preSourceCode = getPropValue(this.props);
+    const preSourceCode = getPropValue(preProps);
 
     if (
       sourceCode !== preSourceCode ||
       (props.customLang && !isEqual(props.customLang, preProps.customLang))
     ) {
       const dom = this.codeRef.current!;
-      dom.innerHTML = sourceCode;
+      // dom.innerText = sourceCode;
       const theme = this.registTheme() || this.props.editorTheme || 'vs';
       setTimeout(() => {
         this.monaco.editor.colorizeElement(dom, {

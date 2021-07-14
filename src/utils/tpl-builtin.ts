@@ -966,8 +966,8 @@ export function dataMapping(
 }
 
 export function register(): Enginer & {name: string} {
-  const r1 = new RegExp(/^\$[\w{]/);
-  const r2 = new RegExp(/[^\\]\$[\w{]/);
+  const r1 = new RegExp(/^\$[\w{$&]/);
+  const r2 = new RegExp(/[^\\]\$[\w{$&]/);
   return {
     name: 'builtin',
     test: (str: string) => typeof str === 'string' && !!~str.indexOf('$') && (r1.test(str) || r2.test(str)),
