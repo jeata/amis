@@ -29,7 +29,8 @@ docker build -f ./examples/Dockerfile -t docker.jitalab.com/jeata/doc/amis .
 echo "docker pubsh ..."
 docker push docker.jitalab.com/jeata/doc/amis
 
-ServerUpdateShell="ssh bj-ecs-001.jitalab.com sudo /data/services/update-docker/jeata-doc-amis.sh"
+ServerUpdateShell="ssh bj-ecs-001.n.jitalab.com sudo /data/services/update-docker/jeata-doc-amis.sh"
+SchemaUpdateShell="scp ./schema.json bj-ecs-001.n.jitalab.com:/data/webapps/schema.jeata.com/schemas/schema.json"
 
 # 询问是否更新服务器
 echo "\033[31m"
@@ -54,6 +55,14 @@ case $isUpdate in
 esac
 
 if [[ $isUpdate =~ ^[yY][eE][sS]|[yY]$ ]]; then
+  echo "\033[34m更新Schema ...\033[0m"
+	eval $SchemaUpdateShell
+  ret=$?
+  if [ $ret -ne 0 ]; then
+    echo "\033[31m错误:\033[0m 更新Schema失败"
+    exit $ret
+  fi
+
   echo "\033[34m刷新CDN目录 ...\033[0m"
   ./refresh-cdn.py -i ${ALIYUN_CDN_REFRESH_AK} -k ${ALIYUN_CDN_REFRESH_SK} -r ./refresh-cdn-list.txt -t clear -o Directory
 fi

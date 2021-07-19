@@ -1,2 +1,2 @@
-# 需要刷新的目录列表，一行一个
 https://doc.jeata.com/amis/
+# https://schema.jeata.com/v2/

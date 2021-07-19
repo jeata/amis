@@ -1177,6 +1177,8 @@ export default class FileControl extends React.Component<FileProps, FileState> {
   render() {
     const {
       readOnly, // change by xubin
+      asBase64,
+      asBlob,
       btnLabel,
       accept,
       disabled,
@@ -1278,7 +1280,15 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                     <ul className={cx('FileControl-list', {
                       'm-t-xs m-b-none': readOnly
                     })}>
-                      {files.map((file, index) => (
+                      {files.map((file, index) => {
+                        let filename = file[nameField as keyof typeof file] || (file as FileValue).filename;
+                        if (!asBase64 && !asBlob) {
+                          let tmpValue = file[valueField as keyof typeof file];
+                          if(typeof tmpValue === 'string' && tmpValue && !tmpValue.startsWith('data:')) {
+                            filename = tmpValue;
+                          }
+                        }
+                        return (
                         <li key={file.id}>
                           <div
                             className={cx('FileControl-itemInfo', {
@@ -1288,9 +1298,9 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                             })}
                           >
                             <Icon icon="file" className="icon" />
-                            {(file as FileValue)[urlField] ||
+                            {(!asBase64 && !asBlob) && ((file as FileValue)[urlField] ||
                             (file as FileValue)[valueField] ||
-                            downloadUrl ? (
+                            downloadUrl) ? (
                               <a
                                 className={cx('FileControl-itemInfoText')}
                                 target="_blank"
@@ -1298,8 +1308,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                                 href="#"
                                 onClick={this.handleClickFile.bind(this, file)}
                               >
-                                {file[valueField as keyof typeof file]  || file[urlField as keyof typeof file] || file[nameField as keyof typeof file] ||
-                                  (file as FileValue).filename}
+                                {filename}
                               </a>
                             ) : (
                               <span className={cx('FileControl-itemInfoText')}>
@@ -1352,7 +1361,7 @@ export default class FileControl extends React.Component<FileProps, FileState> {
                             </div>
                           ) : null}
                         </li>
-                      ))}
+                      )})}
                     </ul>
                   ) : null}
                 </>

@@ -1005,6 +1005,21 @@ export default class ImageControl extends React.Component<
   ) {
     const __ = this.props.translate;
 
+    if (this.props.asBase64) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+
+        cb(null, file, {
+          [this.props.valueField || 'value']: reader.result as string,
+          [this.props.nameField || 'name']: (file as File).name,
+          state: 'uploaded',
+        });
+      };
+      reader.onerror = (error: any) => cb(error.message.toString(), file);
+      return;
+    }
+
     // 如果有ossAlias,则使用oss上传. by xubin
     const {ossAlias, env} = this.props;
     if(ossAlias && (!env || !env.ossUploader)) {

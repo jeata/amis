@@ -66,7 +66,7 @@ order: 21
 
 ## 手动上传
 
-如果不希望 File 组件上传，可以配置 `asBlob` 或者 `asBase64`，采用这种方式后，组件不再自己上传了，而是直接把文件数据作为表单项的值，文件内容会在 Form 表单提交的接口里面一起带上。
+如果不希望 File 组件上传，可以配置 `asBase64`，采用这种方式后，组件不再自己上传了，而是直接把文件数据作为表单项的值，文件内容会在 Form 表单提交的接口里面一起带上。
 
 ```schema: scope="body"
 {
@@ -79,7 +79,7 @@ order: 21
             "name": "file",
             "label": "File",
             "accept": "*",
-            "asBlob": true
+            "asBase64": true
         }
     ]
 }
@@ -178,7 +178,6 @@ order: 21
 | receiver         | [API](../../../docs/types/api) |                                                                                                            | 上传文件接口。若指定了ossAlias此项无效。                                                                                                 |
 | accept           | `string`                       | `text/plain`                                                                                               | 默认只支持纯文本，要支持其他类型，请配置此属性为文件后缀`.xxx`                                                                       |
 | asBase64         | `boolean`                      | `false`                                                                                                    | 将文件以`base64`的形式，赋值给当前组件                                                                                               |
-| asBlob           | `boolean`                      | `false`                                                                                                    | 将文件以二进制的形式，赋值给当前组件                                                                                                 |
 | maxSize          | `number`                       |                                                                                                            | 默认没有限制，当设置后，文件大小大于此值将不允许上传。单位为`B`                                                                      |
 | maxLength        | `number`                       |                                                                                                            | 默认没有限制，当设置后，一次只允许上传指定数量文件。                                                                                 |
 | multiple         | `boolean`                      | `false`                                                                                                    | 是否多选。                                                                                                                           |

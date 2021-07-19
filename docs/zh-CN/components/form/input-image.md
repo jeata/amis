@@ -190,6 +190,7 @@ order: 27
 | ossAlias           | `string`                        |                        | 使用OSS存储，指定项目管理中OSS别名或者ID                                                                                                 |
 | receiver           | [API](../../../docs/types/api)  |                        | 上传文件接口。若指定了ossAlias此项无效。                                                                                                                |
 | accept             | `string`                        | `image/*`              | 支持的图片类型格式，请配置此属性为图片后缀，例如`.jpg,.png`                                                                                      |
+| asBase64           | `boolean`                       | `false`                | 将文件以`base64`的形式，赋值给当前组件                                                                                                      |
 | maxSize            | `number`                        |                        | 默认没有限制，当设置后，文件大小大于此值将不允许上传。单位为`B`                                                                                  |
 | maxLength          | `number`                        |                        | 默认没有限制，当设置后，一次只允许上传指定数量文件。                                                                                             |
 | multiple           | `boolean`                       | `false`                | 是否多选。                                                                                                                                       |
