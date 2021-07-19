@@ -173,15 +173,16 @@ export const components = [
             makeMarkdownRenderer
           )
       },
-      {
-        label: 'Custom 自定义组件',
-        path: '/zh-CN/components/custom',
-        getComponent: () =>
-          // @ts-ignore
-          import('../../docs/zh-CN/components/custom.md').then(
-            makeMarkdownRenderer
-          )
-      },
+      // 不支持
+      // {
+      //   label: 'Custom 自定义组件',
+      //   path: '/zh-CN/components/custom',
+      //   getComponent: () =>
+      //     // @ts-ignore
+      //     import('../../docs/zh-CN/components/custom.md').then(
+      //       makeMarkdownRenderer
+      //     )
+      // },
       {
         label: 'DropDownButton 下拉按钮',
         path: '/zh-CN/components/dropdown-button',

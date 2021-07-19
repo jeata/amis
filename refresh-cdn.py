@@ -199,7 +199,7 @@ class doTask(object):
             while True:
                 count = 0
                 taskreq.set_accept_format('json')
-                taskreq.set_TaskId(int(response[taskID]))
+                taskreq.set_TaskId(int(response[taskID].split(',')[0]))
                 taskresp = json.loads(client.do_action_with_exception(taskreq))
                 print("[" + response[taskID] + "]" + "is doing... ...")
                 for t in taskresp['Tasks']['CDNTask']:

@@ -15,7 +15,7 @@ order: 6
 ```schema: scope="body"
 {
   "type": "form",
-  "api": "https://mock.jeata.com/api/form/saveForm,
+  "api": "https://mock.jeata.com/api/form/saveForm",
   "debug": true,
   "body": [
     {
