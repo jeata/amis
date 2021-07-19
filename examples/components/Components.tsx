@@ -124,7 +124,6 @@ export const components = [
       }
     ]
   },
-
   {
     label: '功能',
     children: [
