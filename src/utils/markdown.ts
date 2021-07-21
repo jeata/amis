@@ -15,7 +15,7 @@ const markdown = markdownIt({
           '<pre class="hljs language-' +
           escapeHtml(lang.toLowerCase()) +
           '"><code>' +
-          hljs.highlight(lang, str, true).value +
+          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
           '</code></pre>'
         );
       } catch (__) {}

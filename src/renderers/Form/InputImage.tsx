@@ -1483,16 +1483,18 @@ export default class ImageControl extends React.Component<
                                           />
                                         </a>
                                       ) : null}
-                                      <a
-                                        data-tooltip={
-                                          file.name ||
-                                          getNameFromUrl(file.value || file.url)
-                                        }
-                                        data-position="bottom"
-                                        target="_blank"
-                                      >
-                                        <Icon icon="info" className="icon" />
-                                      </a>
+                                      {
+                                        file.name ? ( <a
+                                          data-tooltip={
+                                            file.name ||
+                                            getNameFromUrl(file.value || file.url)
+                                          }
+                                          data-position="bottom"
+                                          target="_blank"
+                                        >
+                                          <Icon icon="info" className="icon" />
+                                        </a> ): null
+                                      }
                                     </>
                                   }
                                 />

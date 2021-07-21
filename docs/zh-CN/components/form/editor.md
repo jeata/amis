@@ -8,7 +8,7 @@ icon:
 order: 19
 ---
 
-用于实现代码编辑，如果要实现富文本编辑请使用 [Rich-Text](./rich-text)。
+用于实现代码编辑，如果要实现富文本编辑请使用 [Rich-Text](./input-rich-text)。
 
 ## 基本用法
 
