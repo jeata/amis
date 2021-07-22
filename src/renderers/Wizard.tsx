@@ -620,6 +620,9 @@ export default class Wizard extends React.Component<WizardProps, WizardState> {
   handleInit(values: any) {
     const step = this.state.currentStep;
     this.initalValues[step] = this.initalValues[step] || values;
+    const store = this.props.store;
+
+    store.updateData(values);
   }
 
   @autobind
@@ -1102,6 +1105,7 @@ export class WizardRenderer extends Wizard {
     scoped.reload(target, data);
   }
 
+  @autobind
   handleDialogConfirm(values: object[], action: Action, targets: Array<any>) {
     super.handleDialogConfirm(values, action, targets);
 
