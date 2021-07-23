@@ -52,10 +52,10 @@ const entityMap: {
   '>': '&gt;',
   '"': '&quot;',
   "'": '&#39;',
-  '/': '&#x2F;'
+  // '/': '&#x2F;' change by xubin
 };
 export const escapeHtml = (str: string) =>
-  String(str).replace(/[&<>"'\/]/g, function (s) {
+  String(str).replace(/[&<>"']/g, function (s) {
     return entityMap[s];
   });
 

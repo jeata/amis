@@ -60,8 +60,8 @@ export class LinkField extends React.Component<LinkProps, object> {
 
     let action = {
       actionType: link ? "link" : "url",
-      link: link ? filter(link.toString(), data) : undefined,
-      url: href ? filter(href.toString(), data) : undefined,
+      link: link ? filter(link.toString(), data, '| raw') : undefined,
+      url: href ? filter(href.toString(), data, '| raw') : undefined,
       blank,
       replaced
     };
@@ -90,6 +90,10 @@ export class LinkField extends React.Component<LinkProps, object> {
 
     let value = getPropValue(this.props);
     const finnalHref = href ? filter(href, data, '| raw') : '';
+
+    if(!finnalHref && !link) {
+      return ('-')
+    }
 
     if (tooltip) {
       return (
